@@ -1,0 +1,5116 @@
+{
+ "source": "https://optoplus.ro/produs/rama-optofarm-acetat/ (APF Pro, grup 21069), citit public 2026-10-29",
+ "note": "Extras din HTML-ul public al paginii de produs. Nu include regulile interne ale pluginului (de ex. formule, reguli de coș). Prețurile sunt cele afișate public; nu sunt confirmate ca reguli de fabricație.",
+ "applies_to": "identic pe 20/20 produse verificate (hash al regulilor egal)",
+ "fields": [
+  {
+   "id": "baf8e6d",
+   "type": "radio",
+   "label": "Adaugi lentile?",
+   "required": true,
+   "conditions": [],
+   "options": [
+    {
+     "value": "h6jm4",
+     "label": "Da",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "qv0fp",
+     "label": "Nu",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": []
+  },
+  {
+   "id": "3940b0c",
+   "type": "p",
+   "label": "Pasul 1 – Alege tipul de ochelari",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "",
+   "conditions_readable": [
+    [
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "eb53804",
+   "type": "radio",
+   "label": "Tip ochelari",
+   "required": true,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "96i47",
+     "label": "Ochelari de vedere",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "3mroh",
+     "label": "Ochelari de citit",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "rw80c",
+     "label": "Multifocali",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "e0baf30",
+   "type": "select",
+   "label": "Tip lentile",
+   "required": true,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "96i47",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "3mroh",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "vx3om",
+     "label": "Standard",
+     "price": 200.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "nkmeo",
+     "label": "Premium",
+     "price": 280.0,
+     "price_type": "fixed"
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip ochelari == Ochelari de vedere",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Ochelari de citit",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "aa6c395",
+   "type": "radio",
+   "label": "Grosime lentilă",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "e0baf30",
+       "condition": "==",
+       "value": "nkmeo",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "3mroh",
+       "generated": false
+      },
+      {
+       "field": "e0baf30",
+       "condition": "==",
+       "value": "nkmeo",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "96i47",
+       "generated": false
+      },
+      {
+       "field": "e0baf30",
+       "condition": "==",
+       "value": "nkmeo",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "7u548",
+     "label": "Standard 1.5",
+     "price": 0.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "v1j2p",
+     "label": "Subțire 1.6",
+     "price": 120.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "h6sak",
+     "label": "Super subțire 1.67",
+     "price": 250.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "td0pz",
+     "label": "Ultra subțire 1.74",
+     "price": 400.0,
+     "price_type": "fixed"
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip lentile == Premium",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Ochelari de citit",
+     "Tip lentile == Premium",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Ochelari de vedere",
+     "Tip lentile == Premium",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "ce0d1e1",
+   "type": "p",
+   "label": "Info grosime lentile standard",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "aa6c395",
+       "condition": "==",
+       "value": "7u548",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile monofocale cu indice de subtiere 1.5 recomandate pentru dioptrii\nmici(0-3dpt) cu grosime si greutate standard",
+   "conditions_readable": [
+    [
+     "Grosime lentilă == Standard 1.5"
+    ]
+   ]
+  },
+  {
+   "id": "0b11e0c",
+   "type": "p",
+   "label": "Info grosime lentile subtire",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "aa6c395",
+       "condition": "==",
+       "value": "v1j2p",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile, realizate din material subțiat cu rezistență mecanică crescută,\nadecvate si pentru montaj pe rame pe fir (nylor) și cu prindere în capse, asigurând\nstabilitate, siguranță și estetică moderna Recomandate pentru dioptrii mici-medii( 3-\n6dpt)",
+   "conditions_readable": [
+    [
+     "Grosime lentilă == Subțire 1.6"
+    ]
+   ]
+  },
+  {
+   "id": "5029dcd",
+   "type": "p",
+   "label": "Info grosime lentile subtiere 1.67",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "aa6c395",
+       "condition": "==",
+       "value": "h6sak",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile cu subțiere avansată, grosime redusă, greutate mai mică și\nclaritate optică ridicată, ideal pentru un echilibru între confort și estetică.\nRecomandate pentru dioptrii medii-mari.",
+   "conditions_readable": [
+    [
+     "Grosime lentilă == Super subțire 1.67"
+    ]
+   ]
+  },
+  {
+   "id": "ad91441",
+   "type": "p",
+   "label": "Info grosime lentile ultra subtire 1.74",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "aa6c395",
+       "condition": "==",
+       "value": "h6sak",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile cu subțiere maximă, cea mai mică grosime posibilă,\ngreutate minimă și claritate superioară, Recomandate pentru dioptrii\nmari(>6dpt)",
+   "conditions_readable": [
+    [
+     "Grosime lentilă == Super subțire 1.67"
+    ]
+   ]
+  },
+  {
+   "id": "a2f1f5c",
+   "type": "radio",
+   "label": "Tip lentile multifocale",
+   "required": true,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "2p7y0",
+     "label": "Progresive",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "u9ciq",
+     "label": "Degresive",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "9gbrn",
+     "label": "Bifocal rotund",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip ochelari == Multifocali",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "d322b94",
+   "type": "p",
+   "label": "Info Lentile progesive",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "2p7y0",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile multifocale cu tranziție continuă a dioptriilor (canal de progresie), fără delimitări vizibile pe suprafața lentilei. Asigură o vedere naturală la toate distanțele și un aspect estetic superior. Disponibile cu indici de subțiere între 1.5 și 1.74.",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Progresive"
+    ]
+   ]
+  },
+  {
+   "id": "92c7d4a",
+   "type": "p",
+   "label": "Info Progresive Grosime standard",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "2p7y0",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "af4p0",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile progresive cu grosime standard și canal de progresie bine definit. Oferă claritate uniformă și o adaptare ușoară.\nRecomandat pentru: Dioptrii mici (<3D) și rame cu cadru complet (întreg)",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Progresive",
+     "Grosime lentilă Multifocali == 1.5"
+    ]
+   ]
+  },
+  {
+   "id": "eec533e",
+   "type": "p",
+   "label": "Info Progresive Grosime subtiere 1.6",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "2p7y0",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "wpnkj",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile progresive cu o subțiere echilibrată, grosime redusă și canal de progresie larg, ce asigură tranziții line între distanțe, claritate stabilă și confort crescut. Este o opțiune versatilă, potrivită pentru majoritatea purtătorilor.\nRecomandat pentru: Dioptrii mici și medii (3 - 6D) și orice tip de ramă.",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Progresive",
+     "Grosime lentilă Multifocali == 1.6"
+    ]
+   ]
+  },
+  {
+   "id": "ec58552",
+   "type": "p",
+   "label": "Info Progresive Grosime subtiere subtiere 1.67",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "2p7y0",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "da2cd",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile progresive cu subțiere avansată, grosime semnificativ redusă și canal de progresie optimizat. Oferă câmpuri vizuale mai largi, claritate excelentă și adaptare rapidă.\nRecomandat pentru: Dioptrii medii sau mari (6 - 9D).",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Progresive",
+     "Grosime lentilă Multifocali == 1.67"
+    ]
+   ]
+  },
+  {
+   "id": "ea1fe54",
+   "type": "p",
+   "label": "Info Progresive Grosime subtiere subtiere subtiere 1.74",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "2p7y0",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "o6m2m",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile progresive ultra-subțiri, cu cea mai mică grosime și greutate minimă. Canalul de progresie de înaltă precizie asigură o claritate superioară, stabilitate vizuală maximă și confort excelent la adaptare.\nRecomandat pentru: Dioptrii mari (>6D), cazuri complexe sau pentru cei care își doresc un aspect estetic premium.",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Progresive",
+     "Grosime lentilă Multifocali == 1.74"
+    ]
+   ]
+  },
+  {
+   "id": "1fcf20a",
+   "type": "p",
+   "label": "Info lentile Degresive",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "u9ciq",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile multifocale optimizate pentru vederea de aproape și intermediară. \nSunt recomandate special pentru citit, lucrul la calculator și activități indoor (birou, săli de ședință, săli de curs etc.). Nu sunt destinate purtării în exterior (la distanță).",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Degresive"
+    ]
+   ]
+  },
+  {
+   "id": "0adf9cb",
+   "type": "p",
+   "label": "Info Bifocal Rotund",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "9gbrn",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile multifocale cu doua zone optice distincte , pentru vederea la distanta si aproape, cu segrment de citit rotund, vizil.",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Bifocal rotund"
+    ]
+   ]
+  },
+  {
+   "id": "abe7bfb",
+   "type": "radio",
+   "label": "Grosime lentilă Multifocali",
+   "required": true,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "2p7y0",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "u9ciq",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "af4p0",
+     "label": "1.5",
+     "price": 1020.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "wpnkj",
+     "label": "1.6",
+     "price": 1130.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "da2cd",
+     "label": "1.67",
+     "price": 1340.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "o6m2m",
+     "label": "1.74",
+     "price": 1790.0,
+     "price_type": "fixed"
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Progresive",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip lentile multifocale == Degresive",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "1433e0c",
+   "type": "p",
+   "label": "Info Degresive Grosime standard 1.5",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "u9ciq",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "af4p0",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile degresive cu grosime standard, ce oferă o claritate bună în zona de aproape și intermediar, tranziții line și adaptare ușoară.\nRecomandat pentru: Dioptrii mici (<3D) și montaj în rame cu cadru complet (întreg).",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Degresive",
+     "Grosime lentilă Multifocali == 1.5"
+    ]
+   ]
+  },
+  {
+   "id": "0fd571a",
+   "type": "p",
+   "label": "Info Degresive Grosime subtiere medie 1.6",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "u9ciq",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "wpnkj",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile degresive cu subțiere moderată, greutate redusă și un câmp vizual confortabil pentru aproape și intermediar. Oferă stabilitate vizuală și adaptare rapidă.\nRecomandat pentru: Dioptrii mici și medii (3 - 6D), fiind potrivite pentru toate tipurile de rame.",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Degresive",
+     "Grosime lentilă Multifocali == 1.6"
+    ]
+   ]
+  },
+  {
+   "id": "0bc0efe",
+   "type": "p",
+   "label": "Info Degresive Grosime subtiere 1.67 (Subțiere Avansată)",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "u9ciq",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "da2cd",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile degresive cu o subțiere avansată și grosime semnificativ redusă. Asigură o claritate excelentă în zona de lucru, câmpuri vizuale largi și un confort sporit.\nRecomandat pentru: Dioptrii medii (3 - 6D)",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Degresive",
+     "Grosime lentilă Multifocali == 1.67"
+    ]
+   ]
+  },
+  {
+   "id": "a1434dc",
+   "type": "p",
+   "label": "Info Degresive Grosime subtiere 1.74 (Subțiere Maximă)",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "u9ciq",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "o6m2m",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile degresive cu subțiere maximă, greutate minimă și claritate optică superioară în zonele de aproape și intermediar. Oferă un confort excepțional de adaptare și un rezultat estetic premium.\nRecomandat pentru: Dioptrii mari (>6D).",
+   "conditions_readable": [
+    [
+     "Tip lentile multifocale == Degresive",
+     "Grosime lentilă Multifocali == 1.74"
+    ]
+   ]
+  },
+  {
+   "id": "aef2500",
+   "type": "radio",
+   "label": "Grosime lentilă Bifocal Rotund",
+   "required": true,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "a2f1f5c",
+       "condition": "==",
+       "value": "9gbrn",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "d1d75",
+     "label": "1.5",
+     "price": 830.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "dy1sd",
+     "label": "1.6",
+     "price": 930.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "09a2m",
+     "label": "1.67",
+     "price": 1040.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "xs3x4",
+     "label": "1.74",
+     "price": 1780.0,
+     "price_type": "fixed"
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip ochelari == Multifocali",
+     "Tip lentile multifocale == Bifocal rotund",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "6f51cf6",
+   "type": "p",
+   "label": "Info bifocal Indice 1.5",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "aef2500",
+       "condition": "==",
+       "value": "d1d75",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Ce înseamnă indice 1.5?\nLentile bifocale cu grosime standard, claritate bună pentru distanță și aproape, cu segment rotund bine delimitat. Recomandat pentru dioptrii mici (<3 dpt) și montaj în rame clasice, cu cadru întreg",
+   "conditions_readable": [
+    [
+     "Grosime lentilă Bifocal Rotund == 1.5"
+    ]
+   ]
+  },
+  {
+   "id": "baec1ed",
+   "type": "p",
+   "label": "Info bifocal Indice 1.6",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "aef2500",
+       "condition": "==",
+       "value": "dy1sd",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Ce înseamnă indice 1.6?\nLentile cu subțiere moderată, grosime vizibil redusă și greutate mai mică, oferind un echilibru bun între estetică și performanță. Recomandate pentru dioptrii medii (3-6 dpt) și montaj în toate tipurile de rame",
+   "conditions_readable": [
+    [
+     "Grosime lentilă Bifocal Rotund == 1.6"
+    ]
+   ]
+  },
+  {
+   "id": "fc8eb23",
+   "type": "p",
+   "label": "Info bifocal Indice 1.67",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "aef2500",
+       "condition": "==",
+       "value": "09a2m",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Ce înseamnă indice 1.67?\nLentile cu subțiere avansată, grosime semnificativ redusă și transparență optică foarte bună. Recomandate pentru dioptrii medii si mari, în special când se dorește reducerea vizibilă a grosimii.",
+   "conditions_readable": [
+    [
+     "Grosime lentilă Bifocal Rotund == 1.67"
+    ]
+   ]
+  },
+  {
+   "id": "e6ba9af",
+   "type": "p",
+   "label": "Info bifocal Indice 1.74",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "aef2500",
+       "condition": "==",
+       "value": "xs3x4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Ce înseamnă indice 1.74?\nLentile cu subțiere maximă, cea mai mică grosime posibilă, greutate minimă și claritate optică superioară, chiar și în cazul segmentului rotund. Recomandate pentru dioptrii mari (>6dpt) și pentru pacienți care urmăresc un rezultat estetic premium.",
+   "conditions_readable": [
+    [
+     "Grosime lentilă Bifocal Rotund == 1.74"
+    ]
+   ]
+  },
+  {
+   "id": "cd326f5",
+   "type": "checkboxes",
+   "label": "Tratamente disponibile",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "e0baf30",
+       "condition": "==",
+       "value": "nkmeo",
+       "generated": false
+      },
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "96i47",
+       "generated": false
+      },
+      {
+       "field": "e0baf30",
+       "condition": "==",
+       "value": "nkmeo",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "vi2wh",
+     "label": "Antireflex Super hidrofob",
+     "price": 60.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "fwt4p",
+     "label": "Blue-Light",
+     "price": 90.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "vyoyx",
+     "label": "Fotocromatice",
+     "price": 250.0,
+     "price_type": "fixed"
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip lentile == Premium",
+     "Tip ochelari == Multifocali",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Multifocali",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Ochelari de vedere",
+     "Tip lentile == Premium",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "fc2314c",
+   "type": "p",
+   "label": "Info tratament antireflex super hidrofob",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vi2wh",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Tratament multistrat avansat care elimină reflexiile deranjante, optimizează transmisia luminii și oferă proprietăți hidrofobe, oleofobe și antistatice. Lentilele se murdăresc mai greu și sunt mult mai ușor de curățat.",
+   "conditions_readable": [
+    [
+     "Tratamente disponibile == Antireflex Super hidrofob"
+    ]
+   ]
+  },
+  {
+   "id": "7f4273e",
+   "type": "p",
+   "label": "Info tratament blue-light",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "fwt4p",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Tratament de top conceput pentru filtrarea selectivă a luminii albastre nocive. Reduce oboseala oculară, durerile de cap și disconfortul vizual asociat cu utilizarea prelungită a dispozitivelor digitale (telefon, laptop, TV).",
+   "conditions_readable": [
+    [
+     "Tratamente disponibile == Blue-Light"
+    ]
+   ]
+  },
+  {
+   "id": "ece3b11",
+   "type": "p",
+   "label": "Info tratament fotocromatice",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "text": "Lentile cu tehnologie fotoactivă care se închid automat la exterior, sub influența razelor UV (la lumina soarelui), și devin complet clare în interior. Oferă protecție UV totală și confort vizual optim în orice condiții de luminozitate.",
+   "conditions_readable": [
+    [
+     "Tratamente disponibile == Fotocromatice"
+    ]
+   ]
+  },
+  {
+   "id": "aa24bbc",
+   "type": "checkboxes",
+   "label": "Tratamente disponibile ochelari citit",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "3mroh",
+       "generated": false
+      },
+      {
+       "field": "e0baf30",
+       "condition": "==",
+       "value": "nkmeo",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "09adi",
+     "label": "Antireflex Super hidrofob",
+     "price": 60.0,
+     "price_type": "fixed"
+    },
+    {
+     "value": "e0uzc",
+     "label": "Blue-Light",
+     "price": 90.0,
+     "price_type": "fixed"
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip ochelari == Ochelari de citit",
+     "Tip lentile == Premium",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "fb5fea0",
+   "type": "select",
+   "label": "Tip fotocromatic 1.5",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "96i47",
+       "generated": false
+      },
+      {
+       "field": "e0baf30",
+       "condition": "==",
+       "value": "nkmeo",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "aa6c395",
+       "condition": "==",
+       "value": "7u548",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "af4p0",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "aef2500",
+       "condition": "==",
+       "value": "d1d75",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "iit9h",
+     "label": "Maro 65%",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6w8u6",
+     "label": "Maro 85%",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "x1cdt",
+     "label": "Gri 65%",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yqunw",
+     "label": "Gri 85%",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip ochelari == Ochelari de vedere",
+     "Tip lentile == Premium",
+     "Tratamente disponibile == Fotocromatice",
+     "Grosime lentilă == Standard 1.5",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Multifocali",
+     "Grosime lentilă Multifocali == 1.5",
+     "Tratamente disponibile == Fotocromatice",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Multifocali",
+     "Grosime lentilă Bifocal Rotund == 1.5",
+     "Tratamente disponibile == Fotocromatice",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "b336eb1",
+   "type": "select",
+   "label": "Tip fotocromatic 1.6",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "96i47",
+       "generated": false
+      },
+      {
+       "field": "e0baf30",
+       "condition": "==",
+       "value": "nkmeo",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "aa6c395",
+       "condition": "==",
+       "value": "v1j2p",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "wpnkj",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "aef2500",
+       "condition": "==",
+       "value": "dy1sd",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "heiuw",
+     "label": "Maro 85%",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0j1uy",
+     "label": "Gri 85%",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip ochelari == Ochelari de vedere",
+     "Tip lentile == Premium",
+     "Tratamente disponibile == Fotocromatice",
+     "Grosime lentilă == Subțire 1.6",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Multifocali",
+     "Grosime lentilă Multifocali == 1.6",
+     "Tratamente disponibile == Fotocromatice",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Multifocali",
+     "Grosime lentilă Bifocal Rotund == 1.6",
+     "Tratamente disponibile == Fotocromatice",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "b22acca",
+   "type": "select",
+   "label": "Tip fotocromatic 1.67",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "96i47",
+       "generated": false
+      },
+      {
+       "field": "e0baf30",
+       "condition": "==",
+       "value": "nkmeo",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "aa6c395",
+       "condition": "==",
+       "value": "h6sak",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "da2cd",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "aef2500",
+       "condition": "==",
+       "value": "09a2m",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "tt0xb",
+     "label": "Maro 65%",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ar6ta",
+     "label": "Maro 85%",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5m57f",
+     "label": "Gri 65%",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "j3oyt",
+     "label": "Gri 85%",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip ochelari == Ochelari de vedere",
+     "Tip lentile == Premium",
+     "Tratamente disponibile == Fotocromatice",
+     "Grosime lentilă == Super subțire 1.67",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Multifocali",
+     "Grosime lentilă Multifocali == 1.67",
+     "Tratamente disponibile == Fotocromatice",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Multifocali",
+     "Grosime lentilă Bifocal Rotund == 1.67",
+     "Tratamente disponibile == Fotocromatice",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "faf1fe0",
+   "type": "select",
+   "label": "Tip fotocromatic 1.74",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "96i47",
+       "generated": false
+      },
+      {
+       "field": "e0baf30",
+       "condition": "==",
+       "value": "nkmeo",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "aa6c395",
+       "condition": "==",
+       "value": "td0pz",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "abe7bfb",
+       "condition": "==",
+       "value": "o6m2m",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    },
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "aa6c395",
+       "condition": "==",
+       "value": "td0pz",
+       "generated": false
+      },
+      {
+       "field": "cd326f5",
+       "condition": "==",
+       "value": "vyoyx",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "exut1",
+     "label": "Maro 85%",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "2o48b",
+     "label": "Gri 85%",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip ochelari == Ochelari de vedere",
+     "Tip lentile == Premium",
+     "Tratamente disponibile == Fotocromatice",
+     "Grosime lentilă == Ultra subțire 1.74",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Multifocali",
+     "Grosime lentilă Multifocali == 1.74",
+     "Tratamente disponibile == Fotocromatice",
+     "Adaugi lentile? == Da"
+    ],
+    [
+     "Tip ochelari == Multifocali",
+     "Grosime lentilă == Ultra subțire 1.74",
+     "Tratamente disponibile == Fotocromatice",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "9d6f510",
+   "type": "select",
+   "label": "SPH Ochi drept",
+   "required": true,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "85pqh",
+     "label": "-6.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6rgn4",
+     "label": "-5.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7czwi",
+     "label": "-5.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "4rjw3",
+     "label": "-5.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "cwkmq",
+     "label": "-5.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "v635s",
+     "label": "-4.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "euuk7",
+     "label": "-4.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "zwwkl",
+     "label": "-4.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "f8b4g",
+     "label": "-4.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "e5mty",
+     "label": "-3.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "p1fkg",
+     "label": "-3.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "rlhjk",
+     "label": "-3.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "nof1u",
+     "label": "-3.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wqf36",
+     "label": "-2.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "x73qr",
+     "label": "-2.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "kfl57",
+     "label": "-2.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mjdgz",
+     "label": "-2.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1opox",
+     "label": "-1.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "dcpt3",
+     "label": "-1.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "4n3f0",
+     "label": "-1.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tccmq",
+     "label": "-1.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "k89hc",
+     "label": "-0.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "z488s",
+     "label": "-0.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yk1nm",
+     "label": "-0.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "le38l",
+     "label": "0.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0qhxx",
+     "label": "0.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wg7vx",
+     "label": "0.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "597ki",
+     "label": "0.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vcffm",
+     "label": "1.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "i7rvf",
+     "label": "1.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "insss",
+     "label": "1.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "g9vtf",
+     "label": "1.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "t5g88",
+     "label": "2.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "myalj",
+     "label": "2.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7b6ag",
+     "label": "2.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ldt04",
+     "label": "2.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "myf1h",
+     "label": "3.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "p80qf",
+     "label": "3.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5hclf",
+     "label": "3.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7cs3f",
+     "label": "3.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8ljjl",
+     "label": "4.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "lxeiv",
+     "label": "4.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "3jpys",
+     "label": "4.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wj51f",
+     "label": "4.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "d9odd",
+     "label": "5.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "dd6dw",
+     "label": "5.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1hicf",
+     "label": "5.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "iw3c3",
+     "label": "5.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tetmo",
+     "label": "6.00",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "2bc81b6",
+   "type": "select",
+   "label": "CYL Ochi Drept",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "6nzwy",
+     "label": "-2.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "19ris",
+     "label": "-2.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hz5vr",
+     "label": "-2.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "v9jk4",
+     "label": "-1.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "82gvg",
+     "label": "-1.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "gyeit",
+     "label": "-1.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "p89z7",
+     "label": "-1.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "otc8n",
+     "label": "-0.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "p7yzj",
+     "label": "-0.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ludju",
+     "label": "-0.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "uj0g5",
+     "label": "0.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "s1ief",
+     "label": "0.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5jgwq",
+     "label": "0.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7zyig",
+     "label": "0.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tkrzt",
+     "label": "1.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "p3e7a",
+     "label": "1.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "o63zj",
+     "label": "1.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vjfrk",
+     "label": "1.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "u61md",
+     "label": "2.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wi2l3",
+     "label": "2.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "zq462",
+     "label": "2.50",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "fc0f1e0",
+   "type": "select",
+   "label": "AX Ochi Drept",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "2bc81b6",
+       "condition": "!empty",
+       "value": "",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "zc549",
+     "label": "0",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "857rd",
+     "label": "1",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "058li",
+     "label": "2",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "s7j0k",
+     "label": "3",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mqdci",
+     "label": "4",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "pnjrh",
+     "label": "5",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "k7kr5",
+     "label": "6",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "o4w1h",
+     "label": "7",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hjzqv",
+     "label": "8",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1pgkq",
+     "label": "9",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ljeqb",
+     "label": "10",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "fay73",
+     "label": "11",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "y3u1b",
+     "label": "12",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "lbsro",
+     "label": "13",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "3ud88",
+     "label": "14",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7x5e9",
+     "label": "15",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "pfsq6",
+     "label": "16",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ymtsu",
+     "label": "17",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "h0yen",
+     "label": "18",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "65gms",
+     "label": "19",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7xcdo",
+     "label": "20",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "69c7s",
+     "label": "21",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "kabpq",
+     "label": "22",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6zj2k",
+     "label": "23",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "plbgf",
+     "label": "24",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "4yeaa",
+     "label": "25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "at7p3",
+     "label": "26",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "jkah9",
+     "label": "27",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0qirl",
+     "label": "28",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8nu95",
+     "label": "29",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "h7kcz",
+     "label": "30",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "kuhyl",
+     "label": "31",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "bgwp4",
+     "label": "32",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "48728",
+     "label": "33",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "io1t6",
+     "label": "34",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "82978",
+     "label": "35",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "3gele",
+     "label": "36",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "q0s32",
+     "label": "37",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7g5on",
+     "label": "38",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "g256v",
+     "label": "39",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "if8wo",
+     "label": "40",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "uj3j0",
+     "label": "41",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hsrqm",
+     "label": "42",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ipmhw",
+     "label": "43",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1l1xj",
+     "label": "44",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yrmr4",
+     "label": "45",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1bsty",
+     "label": "46",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5m3u3",
+     "label": "47",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mvdh0",
+     "label": "48",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7bh1s",
+     "label": "49",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "bjazj",
+     "label": "50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5bq4f",
+     "label": "51",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "23kzf",
+     "label": "52",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "nmtmi",
+     "label": "53",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "oxa38",
+     "label": "54",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8q4dz",
+     "label": "55",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "jx6rj",
+     "label": "56",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "xio1g",
+     "label": "57",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "a96gm",
+     "label": "58",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yywde",
+     "label": "59",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "9dv1x",
+     "label": "60",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tqsm2",
+     "label": "61",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "9eyve",
+     "label": "62",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yqcff",
+     "label": "63",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "xsx6t",
+     "label": "64",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "o4fvu",
+     "label": "65",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "nbwkg",
+     "label": "66",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8ik1g",
+     "label": "67",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1nak4",
+     "label": "68",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "m6cem",
+     "label": "69",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "rnc68",
+     "label": "70",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8fkov",
+     "label": "71",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ermgg",
+     "label": "72",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "2abs4",
+     "label": "73",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "81r4j",
+     "label": "74",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1n19m",
+     "label": "75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mrw2e",
+     "label": "76",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8g6r6",
+     "label": "77",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vkolk",
+     "label": "78",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "oetc4",
+     "label": "79",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ev0wt",
+     "label": "80",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "p68t9",
+     "label": "81",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0cmmr",
+     "label": "82",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "3pyyc",
+     "label": "83",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0evur",
+     "label": "84",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "72q9u",
+     "label": "85",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "a0f7l",
+     "label": "86",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "bto2x",
+     "label": "87",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "q0khv",
+     "label": "88",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "10y2x",
+     "label": "89",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "l81ii",
+     "label": "90",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "9movu",
+     "label": "91",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5jfff",
+     "label": "92",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6k3ah",
+     "label": "93",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mysjs",
+     "label": "94",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mjweo",
+     "label": "95",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "t80w3",
+     "label": "96",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "2046l",
+     "label": "97",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vjvt8",
+     "label": "98",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "l3czz",
+     "label": "99",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "qe6lp",
+     "label": "100",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8jm6v",
+     "label": "101",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "qj6jt",
+     "label": "102",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "e6xdb",
+     "label": "103",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "zkk89",
+     "label": "104",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tzdt9",
+     "label": "105",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "zhisy",
+     "label": "106",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "uh1c1",
+     "label": "107",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "usnxx",
+     "label": "108",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "gme8y",
+     "label": "109",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "nool6",
+     "label": "110",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "a9xa8",
+     "label": "111",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8bxwr",
+     "label": "112",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "dsqsv",
+     "label": "113",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "lemoa",
+     "label": "114",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hgvpz",
+     "label": "115",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "dj8b3",
+     "label": "116",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "x022i",
+     "label": "117",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "n0x2b",
+     "label": "118",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "up4j2",
+     "label": "119",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tljsa",
+     "label": "120",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7gao1",
+     "label": "121",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yg9tn",
+     "label": "122",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "80fst",
+     "label": "123",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "278ia",
+     "label": "124",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "i8jdh",
+     "label": "125",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "35xp9",
+     "label": "126",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7r7a1",
+     "label": "127",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "uhp5s",
+     "label": "128",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hlanx",
+     "label": "129",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0ib10",
+     "label": "130",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "h7b93",
+     "label": "131",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yhq5i",
+     "label": "132",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "fwrvk",
+     "label": "133",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8oabq",
+     "label": "134",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wmi3a",
+     "label": "135",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "iuqjo",
+     "label": "136",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5pygv",
+     "label": "137",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "it7ji",
+     "label": "138",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "qfjnm",
+     "label": "139",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "79w34",
+     "label": "140",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "chrxs",
+     "label": "141",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "y579j",
+     "label": "142",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "rtdm3",
+     "label": "143",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "4165d",
+     "label": "144",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wmirf",
+     "label": "145",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "nmf9c",
+     "label": "146",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "iowfh",
+     "label": "147",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "baycw",
+     "label": "148",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8yjkz",
+     "label": "149",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5gvpa",
+     "label": "150",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "r6mfy",
+     "label": "151",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hf2oq",
+     "label": "152",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "d4mjx",
+     "label": "153",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "cazrf",
+     "label": "154",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "19yv5",
+     "label": "155",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "uaeo8",
+     "label": "156",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "sxe7j",
+     "label": "157",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6c2vk",
+     "label": "158",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "dta5x",
+     "label": "159",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8majo",
+     "label": "160",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1bgft",
+     "label": "161",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "aa42o",
+     "label": "162",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "uku9z",
+     "label": "163",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "190a6",
+     "label": "164",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8gcqd",
+     "label": "165",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "598ov",
+     "label": "166",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ha10c",
+     "label": "167",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "pft8v",
+     "label": "168",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8cuht",
+     "label": "169",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ksunq",
+     "label": "170",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "qk7at",
+     "label": "171",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "eaabg",
+     "label": "172",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "3qgo6",
+     "label": "173",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ff6i8",
+     "label": "174",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "bzmie",
+     "label": "175",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "nmuo4",
+     "label": "176",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "e3zu2",
+     "label": "177",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6va97",
+     "label": "178",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ai519",
+     "label": "179",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "w2iwk",
+     "label": "180",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "CYL Ochi Drept !empty",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "f9fab52",
+   "type": "select",
+   "label": "SPH Ochi stâng",
+   "required": true,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "6iu13",
+     "label": "-6.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mstwd",
+     "label": "-5.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "gdbz3",
+     "label": "-5.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yf8wi",
+     "label": "-5.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "9i8sd",
+     "label": "-5.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "llkco",
+     "label": "-4.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "bf8l8",
+     "label": "-4.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "s2u37",
+     "label": "-4.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "bv7im",
+     "label": "-4.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mkqab",
+     "label": "-3.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "iwx3x",
+     "label": "-3.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "gsktv",
+     "label": "-3.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6rre8",
+     "label": "-3.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "oyvac",
+     "label": "-2.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "is6xr",
+     "label": "-2.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "41vvd",
+     "label": "-2.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "oumhi",
+     "label": "-2.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "meerl",
+     "label": "-1.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "piktt",
+     "label": "-1.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "rylxg",
+     "label": "-1.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mz27t",
+     "label": "-1.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5kbmq",
+     "label": "-0.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "3gmx4",
+     "label": "-0.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "iy5cx",
+     "label": "-0.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "k7b9o",
+     "label": "0.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ko6h0",
+     "label": "0.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "x4rrd",
+     "label": "0.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "nmxht",
+     "label": "0.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7xlpi",
+     "label": "1.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ds62w",
+     "label": "1.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "xw7tk",
+     "label": "1.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "92tcm",
+     "label": "1.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hxo30",
+     "label": "2.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0da6i",
+     "label": "2.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ofbm6",
+     "label": "2.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vmw8x",
+     "label": "2.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "e51nq",
+     "label": "3.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "lxr1s",
+     "label": "3.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "oc9jz",
+     "label": "3.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "riphq",
+     "label": "3.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "h15mi",
+     "label": "4.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vltux",
+     "label": "4.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yqk81",
+     "label": "4.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "2lur7",
+     "label": "4.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ett5d",
+     "label": "5.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yiekd",
+     "label": "5.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1pz3a",
+     "label": "5.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "unnv0",
+     "label": "5.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "91gh4",
+     "label": "6.00",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "7f4032a",
+   "type": "select",
+   "label": "CYL Ochi Stâng",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "8q673",
+     "label": "-2.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "imhev",
+     "label": "-2.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "cm3zw",
+     "label": "-2.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "2q8fi",
+     "label": "-1.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "2cegb",
+     "label": "-1.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "3v8fr",
+     "label": "-1.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "som48",
+     "label": "-1.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "nikjj",
+     "label": "-0.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "eiau4",
+     "label": "-0.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ndwpy",
+     "label": "-0.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wqc0j",
+     "label": "0.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "4lvy1",
+     "label": "0.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "m6bap",
+     "label": "0.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5l32y",
+     "label": "0.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "byt3p",
+     "label": "1.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "klwbt",
+     "label": "1.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "xc94l",
+     "label": "1.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "sj8fv",
+     "label": "1.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mfg08",
+     "label": "2.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "c39hw",
+     "label": "2.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0ojxl",
+     "label": "2.50",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "f02feb2",
+   "type": "select",
+   "label": "AX Ochi Stâng",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "7f4032a",
+       "condition": "!empty",
+       "value": "",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "bvz9m",
+     "label": "0",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5to61",
+     "label": "1",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mu7ub",
+     "label": "2",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "22neu",
+     "label": "3",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "39ir3",
+     "label": "4",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "21prc",
+     "label": "5",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0x7wh",
+     "label": "6",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "zq45a",
+     "label": "7",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vm1tc",
+     "label": "8",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "et6f8",
+     "label": "9",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tauqg",
+     "label": "10",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yahsq",
+     "label": "11",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "l2qa0",
+     "label": "12",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "gwz05",
+     "label": "13",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "02uol",
+     "label": "14",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "cizwt",
+     "label": "15",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "u6g0o",
+     "label": "16",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "zvitg",
+     "label": "17",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1cp9b",
+     "label": "18",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "axj2y",
+     "label": "19",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "4vvvt",
+     "label": "20",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "emcj5",
+     "label": "21",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "jjgpi",
+     "label": "22",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "e3ddv",
+     "label": "23",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "fymqj",
+     "label": "24",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "oicfe",
+     "label": "25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "qaejm",
+     "label": "26",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "37vsa",
+     "label": "27",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "nahen",
+     "label": "28",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "gm23l",
+     "label": "29",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "gbjil",
+     "label": "30",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "aeg3a",
+     "label": "31",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1r2fu",
+     "label": "32",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ub27s",
+     "label": "33",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vwea1",
+     "label": "34",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "dka8a",
+     "label": "35",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "9hzol",
+     "label": "36",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "zkb1j",
+     "label": "37",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "g50gs",
+     "label": "38",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "fsekc",
+     "label": "39",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wn001",
+     "label": "40",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "nzhg0",
+     "label": "41",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "4n698",
+     "label": "42",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "59auk",
+     "label": "43",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6e98p",
+     "label": "44",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tk2fw",
+     "label": "45",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "socz5",
+     "label": "46",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "dxiko",
+     "label": "47",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ctsui",
+     "label": "48",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "or373",
+     "label": "49",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "y0a25",
+     "label": "50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "fmypq",
+     "label": "51",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "t4kfm",
+     "label": "52",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wdf7u",
+     "label": "53",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wdxof",
+     "label": "54",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "fe0rq",
+     "label": "55",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6axi3",
+     "label": "56",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "qjujj",
+     "label": "57",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "icaj5",
+     "label": "58",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "937nk",
+     "label": "59",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vggnf",
+     "label": "60",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "2dq8t",
+     "label": "61",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "pk50j",
+     "label": "62",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "24q7e",
+     "label": "63",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ia9j0",
+     "label": "64",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "oplac",
+     "label": "65",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "dfhen",
+     "label": "66",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "p474b",
+     "label": "67",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "4twxu",
+     "label": "68",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "erh03",
+     "label": "69",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mezbp",
+     "label": "70",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "x3bzq",
+     "label": "71",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "pxe7b",
+     "label": "72",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "kirem",
+     "label": "73",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "bqjcm",
+     "label": "74",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "40frk",
+     "label": "75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vfji2",
+     "label": "76",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "rjdru",
+     "label": "77",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7ipbp",
+     "label": "78",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "rrs37",
+     "label": "79",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "2xthr",
+     "label": "80",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ql00m",
+     "label": "81",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "elj6r",
+     "label": "82",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "a2on7",
+     "label": "83",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "vfg1h",
+     "label": "84",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "yrytj",
+     "label": "85",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "letwo",
+     "label": "86",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7wy4r",
+     "label": "87",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "01mgt",
+     "label": "88",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hy4xz",
+     "label": "89",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "koki1",
+     "label": "90",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mwzsz",
+     "label": "91",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8kcid",
+     "label": "92",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hea9j",
+     "label": "93",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "it2ni",
+     "label": "94",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mvfit",
+     "label": "95",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "buuyh",
+     "label": "96",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "weal4",
+     "label": "97",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "dvigy",
+     "label": "98",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hcmbh",
+     "label": "99",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tn4ze",
+     "label": "100",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ez8zr",
+     "label": "101",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "fc2j3",
+     "label": "102",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "97tsm",
+     "label": "103",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "9egk0",
+     "label": "104",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mvlfd",
+     "label": "105",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "o0utv",
+     "label": "106",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "aex3x",
+     "label": "107",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "t3gyp",
+     "label": "108",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6t4u5",
+     "label": "109",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "s6h7u",
+     "label": "110",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ys102",
+     "label": "111",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "a7737",
+     "label": "112",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "fzuj5",
+     "label": "113",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "385d7",
+     "label": "114",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "b7jbw",
+     "label": "115",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "so5nj",
+     "label": "116",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ghy0i",
+     "label": "117",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "rib3d",
+     "label": "118",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "t43r0",
+     "label": "119",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ixv4v",
+     "label": "120",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "6i3nb",
+     "label": "121",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "maryu",
+     "label": "122",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "e2fwr",
+     "label": "123",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "jo9h1",
+     "label": "124",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "kp27m",
+     "label": "125",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ads4x",
+     "label": "126",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "cpe6v",
+     "label": "127",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "pr9qv",
+     "label": "128",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "wlf76",
+     "label": "129",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "s8hry",
+     "label": "130",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "rhd56",
+     "label": "131",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "5yn9r",
+     "label": "132",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "duw77",
+     "label": "133",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "he4ct",
+     "label": "134",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "kuj9g",
+     "label": "135",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1gvyl",
+     "label": "136",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tcaze",
+     "label": "137",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "uetrk",
+     "label": "138",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "85x02",
+     "label": "139",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8ocqo",
+     "label": "140",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ezngu",
+     "label": "141",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "mxkbs",
+     "label": "142",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "x6ghe",
+     "label": "143",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "j7gu3",
+     "label": "144",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "w8duo",
+     "label": "145",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "gs0ng",
+     "label": "146",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "7ico7",
+     "label": "147",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ptxp3",
+     "label": "148",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "h7h1i",
+     "label": "149",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "762h8",
+     "label": "150",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "b0j1j",
+     "label": "151",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "azy8w",
+     "label": "152",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "naubu",
+     "label": "153",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "i4whz",
+     "label": "154",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "cm1cz",
+     "label": "155",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "v0tak",
+     "label": "156",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "hu6dg",
+     "label": "157",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "1wrt2",
+     "label": "158",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "kf0g6",
+     "label": "159",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "9dbj6",
+     "label": "160",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "s6qhp",
+     "label": "161",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "ts7ku",
+     "label": "162",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "xnlj7",
+     "label": "163",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "3shiz",
+     "label": "164",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tqag1",
+     "label": "165",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "xix7d",
+     "label": "166",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "i371n",
+     "label": "167",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "f7fo1",
+     "label": "168",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "26t7v",
+     "label": "169",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "db2lv",
+     "label": "170",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "4wvkw",
+     "label": "171",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "l59f0",
+     "label": "172",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "h0rvv",
+     "label": "173",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "tlqjd",
+     "label": "174",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0qs4b",
+     "label": "175",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8ynq4",
+     "label": "176",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "jiiwv",
+     "label": "177",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "jpzt7",
+     "label": "178",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "snhdw",
+     "label": "179",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0rr28",
+     "label": "180",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "CYL Ochi Stâng !empty",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "0c5f0fb",
+   "type": "select",
+   "label": "Adiție",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "eb53804",
+       "condition": "==",
+       "value": "rw80c",
+       "generated": false
+      },
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [
+    {
+     "value": "qrc8a",
+     "label": "0.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "smcub",
+     "label": "1.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "z7siq",
+     "label": "1.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "sk1o9",
+     "label": "1.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "8td9s",
+     "label": "1.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "aoasx",
+     "label": "2.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "emic7",
+     "label": "2.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "zae6q",
+     "label": "2.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "9nc4g",
+     "label": "2.75",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "rz4ap",
+     "label": "3.00",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "j8d4f",
+     "label": "3.25",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0j4kr",
+     "label": "3.50",
+     "price": null,
+     "price_type": null
+    },
+    {
+     "value": "0onhg",
+     "label": "3.75",
+     "price": null,
+     "price_type": null
+    }
+   ],
+   "conditions_readable": [
+    [
+     "Tip ochelari == Multifocali",
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "163144f",
+   "type": "number",
+   "label": "Distanța pupilară",
+   "required": true,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "number": {
+    "min": "50",
+    "max": "80"
+   },
+   "tooltip": "Introduceși o valoare mare decât 50",
+   "conditions_readable": [
+    [
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  },
+  {
+   "id": "33bfb4d",
+   "type": "file",
+   "label": "Încarcă rețeta",
+   "required": false,
+   "conditions": [
+    {
+     "rules": [
+      {
+       "field": "baf8e6d",
+       "condition": "==",
+       "value": "h6jm4",
+       "generated": false
+      }
+     ]
+    }
+   ],
+   "options": [],
+   "conditions_readable": [
+    [
+     "Adaugi lentile? == Da"
+    ]
+   ]
+  }
+ ]
+}
