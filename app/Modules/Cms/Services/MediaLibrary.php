@@ -171,8 +171,12 @@ class MediaLibrary
         if (! $image) {
             return $variants;
         }
-        $widths = array_values(array_filter(self::WIDTHS, fn ($w) => $w < $media->width));
-        $widths[] = min($media->width, 2560);
+        // Fotografiile de produs au nevoie de mai puține trepte (grilă de catalog + zoom), ca procesarea să încapă
+        // în limitele de timp ale hostingului.
+        $steps = $media->folder === 'catalog' ? [320, 640, 960, 1600] : self::WIDTHS;
+        $max = $media->folder === 'catalog' ? 1600 : 2560;
+        $widths = array_values(array_filter($steps, fn ($w) => $w < $media->width));
+        $widths[] = min($media->width, $max);
         foreach (array_unique($widths) as $width) {
             $height = (int) max(1, round($media->height * $width / $media->width));
             $resized = $width === $media->width ? $image : imagescale($image, $width, $height, IMG_BICUBIC);

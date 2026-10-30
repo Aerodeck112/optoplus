@@ -53,4 +53,9 @@ return [
         'share_link_days' => 30,
         'upload_max_kb' => 10240,
     ],
+
+    // Importul: domeniile de pe care se pot descărca imaginile vechiului magazin (protecție SSRF).
+    'import' => [
+        'image_hosts' => ['optoplus.ro', 'www.optoplus.ro'],
+    ],
 ];

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CurrentConfiguratorSeeder::class,
             ProductionStagesSeeder::class,
             ShippingPaymentSeeder::class,
+            SiteContentSeeder::class,
         ]);
     }
 }

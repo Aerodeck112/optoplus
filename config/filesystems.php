@@ -30,6 +30,21 @@ return [
 
     'disks' => [
 
+        // Rețete și documente private: în afara public_html (în producție: shared/storage/app/private/...).
+        'retete' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/retete'),
+            'serve' => false,
+            'throw' => true,
+        ],
+
+        'documente' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/documente'),
+            'serve' => false,
+            'throw' => true,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),

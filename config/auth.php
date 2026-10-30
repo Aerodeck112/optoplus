@@ -42,6 +42,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Clienții (persoane fizice și utilizatorii partenerilor B2B): gardă separată de personal.
+        'client' => [
+            'driver' => 'session',
+            'provider' => 'customers',
+        ],
     ],
 
     /*
@@ -65,6 +71,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
+        ],
+
+        'customers' => [
+            'driver' => 'eloquent',
+            'model' => App\Modules\Customers\Models\Customer::class,
         ],
 
         // 'users' => [
@@ -97,6 +108,13 @@ return [
             'provider' => 'users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 30,
+            'throttle' => 60,
+        ],
+
+        'customers' => [
+            'provider' => 'customers',
+            'table' => 'customer_password_reset_tokens',
+            'expire' => 60,
             'throttle' => 60,
         ],
     ],

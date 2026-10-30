@@ -205,10 +205,20 @@ class PriceEngine
         };
     }
 
+    /** @var array<string, Collection<int, Promotion>> promoțiile active, memorate pe durata cererii */
+    private array $running = [];
+
+    /** Prețul afișat al unei variante (după promoțiile automate), pentru listele de produse. */
+    public function displayPrice(ProductVariant $variant, PricingContext $ctx): int
+    {
+        return $this->quote([PriceLine::product('p', $variant->id)], $ctx)->totalGross;
+    }
+
     /** @return Collection<int, Promotion> */
     private function promotions(PricingContext $ctx, Quote $quote): Collection
     {
-        $all = Promotion::query()->running($ctx->now)
+        $key = $ctx->channel.'|'.$ctx->now->format('Y-m-d H:i');
+        $all = $this->running[$key] ??= Promotion::query()->running($ctx->now)
             ->whereIn('channel', [$ctx->channel, 'all'])
             ->orderBy('priority')->orderBy('id')->get();
 

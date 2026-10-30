@@ -39,6 +39,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // optoplus.ro ↔ www.optoplus.ro: o singură adresă (vezi CanonicalHost), înainte de orice altă procesare.
         $middleware->prepend(\App\Core\Http\Middleware\CanonicalHost::class);
+        $middleware->prepend(\App\Modules\Storefront\Http\Middleware\TrailingSlash::class);
         $middleware->web(append: [SecurityHeaders::class]);
         $middleware->alias([
             'panou' => EnsurePanelAccess::class,
