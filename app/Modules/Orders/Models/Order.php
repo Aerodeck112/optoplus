@@ -26,6 +26,7 @@ class Order extends Model
     public const PAYMENT_METHODS = [
         'card' => 'Card online', 'transfer_bancar' => 'Transfer bancar (ordin de plată)',
         'ramburs' => 'Ramburs la curier', 'numerar_ridicare' => 'Plată la ridicare',
+        'termen' => 'La termen, pe factură (parteneri aprobați)',
     ];
 
     protected $guarded = ['id'];

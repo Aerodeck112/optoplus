@@ -3,6 +3,7 @@
 namespace App\Modules\Orders\Services;
 
 use App\Core\Audit\Audit;
+use App\Modules\B2B\Models\Organization;
 use App\Modules\Catalog\Models\ProductVariant;
 use App\Modules\Configurator\Models\Configuration;
 use App\Modules\Configurator\Services\ConfigurationValidator;
@@ -70,8 +71,20 @@ class OrderPlacer
             if ($quote->totalGross !== $expectedTotal) {
                 throw ValidationException::withMessages(['total' => 'Totalul s-a actualizat (preț, promoție sau livrare). Verificați noul total și confirmați din nou.']);
             }
-            if (! array_key_exists($data['payment_method'], $this->paymentMethods->available($quote->shipping, $ctx->channel))) {
+            $organization = $ctx->organizationId ? Organization::find($ctx->organizationId) : null;
+            if ($ctx->organizationId && (! $organization || ! $organization->isApproved() || $cart->organization_id !== $organization->id)) {
+                throw ValidationException::withMessages(['cos' => 'Contul de partener nu este activ.']);
+            }
+            if (! array_key_exists($data['payment_method'], $this->paymentMethods->available($quote->shipping, $ctx->channel, $organization))) {
                 throw ValidationException::withMessages(['plata' => 'Metoda de plată nu este disponibilă pentru această comandă.']);
+            }
+            if ($data['payment_method'] === 'termen' && $organization->credit_limit !== null) {
+                $open = (int) Order::where('organization_id', $organization->id)->where('payment_method', 'termen')
+                    ->whereNotIn('commercial_status', ['anulata'])->whereNotIn('payment_status', ['platita', 'rambursata'])
+                    ->sum(DB::raw('total - paid_total'));
+                if ($open + $quote->totalGross > $organization->credit_limit) {
+                    throw ValidationException::withMessages(['plata' => 'Comanda depășește limita de credit aprobată. Alegeți plata prin transfer sau contactați-ne.']);
+                }
             }
 
             $hasProduction = $items->contains(fn ($i) => $i->kind === 'configuration');
@@ -87,6 +100,7 @@ class OrderPlacer
                 'billing_address' => $data['billing'], 'shipping_address' => $data['shipping'] ?? null,
                 'coupon_code' => $quote->couponStatus === 'valid' ? $ctx->couponCode : null,
                 'customer_note' => $data['note'] ?? null, 'idempotency_key' => $idempotencyKey,
+                'purchase_order_ref' => $data['po_ref'] ?? null,
                 'placed_ip_hash' => $ip ? hash_hmac('sha256', $ip, (string) config('app.key')) : null,
                 'pricing_version' => $quote->version,
                 'production_status' => 'nu_se_aplica',
@@ -110,6 +124,7 @@ class OrderPlacer
                     'line_total' => $gross, 'vat_rate_bp' => count($rates) === 1 ? reset($rates) : max($rates),
                     'vat_amount' => array_sum(array_map(fn (PricedComponent $c) => $c->vat, $components)),
                     'unit_cost' => $this->cost($components),
+                    'patient_reference' => $item->patient_reference ?? $cfg?->prescription?->patient_reference,
                     'snapshot' => $this->snapshot($item, $line, $quote->version),
                     'requires_production' => $item->kind === 'configuration',
                 ]);

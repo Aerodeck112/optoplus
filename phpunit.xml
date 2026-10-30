@@ -30,6 +30,7 @@
         <env name="OPTOPLUS_BLIND_INDEX_KEY" value="base64:dGVzdC1ibGluZC1pbmRleC1rZXktMzItYnl0ZXMhISE="/>
         <env name="DB_URL" value=""/>
         <env name="MAIL_MAILER" value="array"/>
+        <env name="MAIL_FROM_ADDRESS" value="teste@demo.optoplus.invalid"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="PULSE_ENABLED" value="false"/>

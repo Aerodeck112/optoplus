@@ -29,6 +29,9 @@ class CartService
 
     private ?Cart $cart = null;
 
+    /** Cererea pentru care e valabil coșul memorat (serviciul poate trăi mai mult decât o cerere). */
+    private ?Request $cartRequest = null;
+
     public function __construct(
         private PriceEngine $prices,
         private ConfigurationValidator $validator,
@@ -37,9 +40,11 @@ class CartService
 
     public function current(Request $request, bool $create = false): ?Cart
     {
-        if ($this->cart) {
+        if ($this->cart && $this->cartRequest === $request) {
             return $this->cart;
         }
+        $this->cart = null;
+        $this->cartRequest = $request;
         $customer = Auth::guard('client')->user();
         // Cookie-ul păstrează coșul 30 de zile; sesiunea îl acoperă până la primul răspuns care setează cookie-ul.
         $uuid = $request->cookie(self::COOKIE) ?: ($request->hasSession() ? $request->session()->get('cos_uuid') : null);
@@ -64,6 +69,12 @@ class CartService
         }
 
         return $this->cart = $cart;
+    }
+
+    /** Coșul unui utilizator al unui partener B2B (separat de coșul personal; izolat pe organizație). */
+    public function forOrganization(int $organizationId, int $customerId): Cart
+    {
+        return Cart::firstOrCreate(['organization_id' => $organizationId, 'customer_id' => $customerId], ['uuid' => (string) Str::uuid(), 'expires_at' => now()->addDays(60)]);
     }
 
     public function cookie(Request $request): ?Cookie
@@ -123,11 +134,12 @@ class CartService
     public function lines(Cart $cart): array
     {
         $lines = [];
+        $channel = $cart->organization_id ? 'b2b' : 'b2c';
         foreach ($cart->items()->with('configuration.prescription')->get() as $item) {
             if ($item->kind === 'product') {
                 $lines[] = PriceLine::product('i'.$item->id, (int) $item->variant_id, $item->quantity);
             } elseif ($item->configuration) {
-                $lines[] = PriceLine::configuration('i'.$item->id, $item->configuration->toInput(), $item->quantity);
+                $lines[] = PriceLine::configuration('i'.$item->id, $item->configuration->toInput($channel), $item->quantity);
             }
         }
 
@@ -143,9 +155,15 @@ class CartService
     public function validationErrors(Cart $cart): array
     {
         $errors = [];
+        $channel = $cart->organization_id ? 'b2b' : 'b2c';
         foreach ($cart->items()->with('configuration.prescription', 'variant.product')->get() as $item) {
             if ($item->kind === 'configuration' && $item->configuration) {
-                $result = $this->validator->validate($item->configuration->toInput(), [], true);
+                if ($item->configuration->status === 'in_comanda') {
+                    $errors['i'.$item->id][] = 'Configurația a fost deja comandată.';
+
+                    continue;
+                }
+                $result = $this->validator->validate($item->configuration->toInput($channel), [], true);
                 foreach ($result->errors as $e) {
                     $errors['i'.$item->id][] = $e['message'];
                 }

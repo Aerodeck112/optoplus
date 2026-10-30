@@ -5,6 +5,9 @@ namespace App\Modules\Orders\Services;
 use App\Core\Audit\Audit;
 use App\Modules\Orders\Models\Order;
 use App\Modules\Orders\Models\OrderEvent;
+use App\Modules\Orders\Notifications\OrderUpdate;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
 
@@ -79,6 +82,9 @@ class OrderStatus
         ]);
         if ($axis !== 'note' && $axis !== 'customer') {
             Audit::log("order.{$axis}", $order, ['from' => $from, 'to' => $to, 'actor' => $actor], $order->customer_id);
+            app(OrderNotifier::class)->onEvent($order, $axis, $to);
+        } elseif ($visible && $message) {
+            DB::afterCommit(fn () => OrderNotifier::safely(fn () => Notification::route('mail', $order->email)->notify(new OrderUpdate($order->id, 'message', $message)), $order->id, 'message'));
         }
 
         return $event;

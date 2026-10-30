@@ -158,4 +158,24 @@ class CheckoutFlowTest extends TestCase
         $this->post('/cos/adauga/', ['varianta' => $this->frame(25000)->id]);
         $this->get('/comanda/')->assertOk()->assertSee('Comenzile online nu sunt încă deschise');
     }
+
+    public function test_customer_gets_order_email_without_prescription_values(): void
+    {
+        \Illuminate\Support\Facades\Notification::fake();
+        $frame = $this->frame(30000);
+        $cfg = $this->configureGlasses($frame);
+        $this->post('/comanda/', $this->checkoutData(['total_afisat' => $this->expectedTotal($frame->id, $cfg), 'plata' => 'ramburs']));
+        $order = Order::firstOrFail();
+        \Illuminate\Support\Facades\Notification::assertSentOnDemand(
+            \App\Modules\Orders\Notifications\OrderUpdate::class,
+            function ($n, $channels, $notifiable) use ($order) {
+                if ($n->kind !== 'placed' || $notifiable->routes['mail'] !== $order->email) {
+                    return false;
+                }
+                $text = implode(' ', $n->toMail($notifiable)->introLines);
+
+                return str_contains($text, $order->number) && ! str_contains($text, 'SPH') && ! str_contains($text, '-2,00');
+            }
+        );
+    }
 }

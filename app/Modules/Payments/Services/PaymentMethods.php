@@ -3,6 +3,7 @@
 namespace App\Modules\Payments\Services;
 
 use App\Core\Settings\Settings;
+use App\Modules\B2B\Models\Organization;
 use App\Modules\Payments\Gateways\BtIpayGateway;
 use App\Modules\Payments\Gateways\PaymentGateway;
 use App\Modules\Payments\Gateways\SimulationGateway;
@@ -34,9 +35,12 @@ class PaymentMethods
      * @param  array{kind:string, allows_cod:bool}|null  $shipping  metoda de livrare aleasă
      * @return array<string, array{label:string, note:string}>
      */
-    public function available(?array $shipping, string $channel = 'b2c'): array
+    public function available(?array $shipping, string $channel = 'b2c', ?Organization $organization = null): array
     {
         $out = [];
+        if ($channel === 'b2b' && $organization?->hasApprovedCredit()) {
+            $out['termen'] = ['label' => "La termen, {$organization->payment_terms_days} zile, pe factură", 'note' => 'Conform condițiilor aprobate pentru contul dumneavoastră.'];
+        }
         $gateway = $this->gateway();
         if ($this->settings->get('payments.card_enabled') && $gateway?->isConfigured()) {
             $out['card'] = ['label' => 'Card online', 'note' => 'Plătiți pe pagina securizată a procesatorului; nu vedem și nu păstrăm datele cardului.'];

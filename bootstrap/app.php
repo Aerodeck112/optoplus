@@ -47,8 +47,9 @@ $app = Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         ]);
-        $middleware->redirectGuestsTo(fn () => route('login'));
-        $middleware->redirectUsersTo(fn () => route('panou.dashboard'));
+        // Clienții (garda „client”) merg la autentificarea din site; personalul la cea din panou.
+        $middleware->redirectGuestsTo(fn (Request $request) => $request->is('cont', 'cont/*') ? '/cont/autentificare/' : route('login'));
+        $middleware->redirectUsersTo(fn (Request $request) => $request->is('cont', 'cont/*') ? '/cont/' : route('panou.dashboard'));
         $middleware->encryptCookies(except: []);
         // În mentenanță (ex. în timpul unei actualizări) rămân accesibile doar autentificarea și tabul Actualizări.
         $middleware->preventRequestsDuringMaintenance(except: [
