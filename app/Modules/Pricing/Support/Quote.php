@@ -59,6 +59,18 @@ final class Quote
         return array_sum(array_map(fn (PricedComponent $c) => $c->gross, $this->lines[$key]['components'] ?? []));
     }
 
+    /** Cotele de TVA sunt confirmate în setări? Dacă nu, defalcarea TVA nu se arată clientului. */
+    public function vatConfirmed(): bool
+    {
+        return ! in_array('tva_neconfirmat', $this->messages, true);
+    }
+
+    /** Mesajele pentru client (fără codurile interne). @return list<string> */
+    public function customerMessages(): array
+    {
+        return array_values(array_filter($this->messages, fn ($m) => ! preg_match('/^[a-z_]+$/', $m)));
+    }
+
     public function isValid(): bool
     {
         if ($this->errors) {

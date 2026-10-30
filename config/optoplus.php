@@ -54,6 +54,22 @@ return [
         'upload_max_kb' => 10240,
     ],
 
+    // Retenția datelor (ani/luni). Valorile finale se confirmă cu responsabilul GDPR (docs/INTREBARI.md).
+    'retention' => [
+        // Rețetele neatașate unei comenzi se șterg după acest interval de la ultima modificare.
+        'prescription_years' => (int) env('OPTOPLUS_RETENTION_PRESCRIPTION_YEARS', 3),
+        // Rețetele din cererile de ajutor/contact (fără comandă).
+        'prescription_lead_months' => (int) env('OPTOPLUS_RETENTION_LEAD_MONTHS', 12),
+        // Configurațiile anonime abandonate (fără cont, fără comandă).
+        'guest_configuration_days' => (int) env('OPTOPLUS_RETENTION_GUEST_CFG_DAYS', 60),
+    ],
+
+    // Plăți: furnizorii activați. Cardul se activează doar după configurarea contractului cu procesatorul.
+    'payments' => [
+        'transfer_days' => 5, // zile pentru plata prin transfer, după care comanda se anulează automat (confirmare umană)
+        'simulation' => (bool) env('OPTOPLUS_PAYMENT_SIMULATION', false), // NUMAI dev/staging; refuzat în producție
+    ],
+
     // Importul: domeniile de pe care se pot descărca imaginile vechiului magazin (protecție SSRF).
     'import' => [
         'image_hosts' => ['optoplus.ro', 'www.optoplus.ro'],

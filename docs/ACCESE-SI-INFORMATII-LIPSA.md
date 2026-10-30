@@ -47,7 +47,7 @@ atunci, valorile sunt **neverificate**.
 
 | # | Integrare | Ce trebuie | Stare |
 |---|---|---|---|
-| C1 | Card online | confirmarea procesatorului (azi: **BT iPay** și WooPayments sunt active), cont de comerciant, credențiale de test și de producție, URL webhook | ⏳ — adaptor BT iPay pregătit pe baza documentației oficiale; neactivat |
+| C1 | Card online | confirmarea procesatorului (azi: **BT iPay** și WooPayments sunt active), cont de comerciant, credențiale de test și de producție, URL webhook | ⏳ — **blocat de documentație**: btepos.ro/documentatie răspunde 403 fără cont de comerciant, deci nu am implementat endpointuri, coduri de stare sau semnătura callbackului din surse neoficiale. Avem contractul `PaymentGateway`, simulatorul semnat HMAC (dev/staging) și testele de comportament; adaptorul BT (`BtIpayGateway`) rămâne inactiv până primim documentația oficială pentru comercianți + contul de test |
 | C2 | Transfer bancar | IBAN, banca, titularul contului, regula de confirmare | ⏳ |
 | C3 | Ramburs / numerar la ridicare | confirmare dacă se oferă, la ce produse (personalizate?), avans | ⏳ |
 | C4 | Curier / AWB | curierul folosit (contract), cont API, servicii, tarife | ⏳ |

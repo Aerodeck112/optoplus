@@ -43,6 +43,11 @@ class Prescription extends Model
         return $this->hasMany(PrescriptionFile::class);
     }
 
+    public function configurations(): HasMany
+    {
+        return $this->hasMany(Configuration::class);
+    }
+
     public function verifier(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');

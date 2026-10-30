@@ -89,10 +89,11 @@
     @yield('content')
 </main>
 
-@if ($phone || ! request()->is('configurator*', 'finalizare-comanda*', 'cos*'))
+{{-- În pașii configuratorului bara cu totalul ține locul barei de acțiuni (nu se suprapun). --}}
+@if (! request()->is('configurator/*/pas/*') && ($phone || ! request()->is('configurator*', 'comanda*', 'cos*')))
     <div class="mobile-bar" aria-label="Acțiuni rapide">
         @if ($phone)<a class="mobile-bar__btn" href="tel:{{ preg_replace('/[^+\d]/', '', $phone) }}"><x-site.icon name="phone" :size="20" />Sună</a>@endif
-        @unless (request()->is('configurator*', 'finalizare-comanda*', 'cos*'))<a class="mobile-bar__btn mobile-bar__btn--primary" href="/configurator/"><x-site.icon name="lens" :size="20" />Configurează ochelarii</a>@endunless
+        @unless (request()->is('configurator*', 'comanda*', 'cos*'))<a class="mobile-bar__btn mobile-bar__btn--primary" href="/configurator/"><x-site.icon name="lens" :size="20" />Configurează ochelarii</a>@endunless
     </div>
 @endif
 

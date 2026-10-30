@@ -328,7 +328,7 @@ ul, ol { padding-left: 1.2em; }
 .field label, .field .label { font-weight: 600; color: var(--grafit); font-size: 0.98rem; }
 .field .hint { font-size: 0.88rem; color: var(--grafit-2); }
 .field .error { font-size: 0.9rem; color: var(--rosu-blocat); font-weight: 500; }
-input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="number"], input[type="search"], select, textarea {
+input:not([type]), input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="number"], input[type="search"], select, textarea {
     width: 100%; min-height: 48px; padding: var(--s2) var(--s3);
     border: 1.5px solid #b7c6d1; border-radius: var(--r-camp); background: var(--alb);
     font: inherit; font-size: 1rem; color: var(--grafit);
@@ -393,6 +393,8 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px
 .summary__total { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--linie); margin-top: var(--s3); padding-top: var(--s3); font-weight: 600; font-size: 1.25rem; color: var(--bleumarin); }
 .summary__note { font-size: 0.85rem; color: var(--grafit-2); margin: var(--s3) 0 0; }
 .total-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; background: var(--bleumarin); color: var(--alb); padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom)); display: flex; justify-content: space-between; align-items: center; gap: var(--s3); }
+/* Elementele aduse în vizor (focus, ancore) nu ajung sub bara fixă cu totalul. */
+@media (max-width: 999px) { html:has(body.cfg-page) { scroll-padding-bottom: 104px; } }
 .total-bar strong { font-size: 1.15rem; }
 .total-bar small { display: block; opacity: .8; }
 @media (min-width: 1000px) { .total-bar { display: none; } }
@@ -425,6 +427,26 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px
 .qty { display: inline-flex; align-items: center; border: 1px solid var(--linie); border-radius: var(--r-camp); }
 .qty button { width: 40px; height: 40px; border: 0; background: transparent; cursor: pointer; color: var(--bleumarin); }
 .qty input { width: 48px; min-height: 40px; border: 0; text-align: center; padding: 0; }
+.line__total { grid-column: 2; font-weight: 600; color: var(--bleumarin); }
+@media (min-width: 700px) { .line { grid-template-columns: 84px 1fr auto; } .line__total { grid-column: auto; text-align: right; } }
+.h-reset { font-family: var(--font-text); font-size: 1.05rem; margin: 0; }
+.qty-input { width: 64px; min-height: 40px; text-align: center; margin-left: var(--s2); }
+.error-text { color: var(--rosu-blocat); font-weight: 500; font-size: 0.92rem; margin: var(--s1) 0 0; }
+.ok { color: var(--verde-stoc); }
+.coupon { margin: var(--s4) 0; display: grid; gap: var(--s1); }
+.coupon label { font-weight: 600; font-size: 0.95rem; }
+.inline-field { display: flex; gap: var(--s2); }
+.inline-field input { flex: 1; min-width: 0; }
+.choice__aside { flex: none; font-weight: 600; color: var(--bleumarin); }
+.choices { display: grid; gap: var(--s2); border: 0; padding: 0; margin: 0; }
+.choices legend { font-weight: 600; margin-bottom: var(--s2); }
+.choices--inline { display: flex; gap: var(--s5); flex-wrap: wrap; }
+.js .js-hide { display: none; }
+[hidden] { display: none !important; }
+.grid-2 { display: grid; gap: var(--s3); align-items: start; }
+.page-pad { padding-top: var(--s6); padding-bottom: var(--s7); }
+.line__parts li > span:last-child { white-space: nowrap; }
+@media (min-width: 640px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
 .status-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0; }
 .status-list li { display: grid; grid-template-columns: 28px 1fr; gap: var(--s3); padding-bottom: var(--s4); position: relative; }
 .status-list li::before { content: ''; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--linie); background: var(--alb); margin: 5px 0 0 7px; z-index: 1; }

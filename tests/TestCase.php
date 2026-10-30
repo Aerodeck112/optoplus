@@ -30,6 +30,15 @@ abstract class TestCase extends BaseTestCase
         return $user;
     }
 
+    /** Siteul public folosește URL-uri cu „/” final (TrailingSlash); clientul de test nu trebuie să-l elimine. */
+    protected function prepareUrlForRequest($uri)
+    {
+        $url = parent::prepareUrlForRequest($uri);
+        $path = parse_url((string) $uri, PHP_URL_PATH) ?? '';
+
+        return ($path !== '/' && str_ends_with($path, '/') && ! str_contains($url, '?')) ? $url.'/' : (str_contains($url, '?') && str_ends_with($path, '/') ? preg_replace('/\?/', '/?', $url, 1) : $url);
+    }
+
     /** Marchează reconfirmarea identității ca recentă, pentru rutele cu middleware „reauth”. */
     protected function withRecentReauth(): static
     {

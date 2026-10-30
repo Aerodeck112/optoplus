@@ -15,7 +15,7 @@ decizia provizorie din coloana a treia (reversibilă din panou).
 | 8 | Termenele reale de producție pe familie și de livrare pe metodă? | Nu afișăm termene |
 | 9 | Ce stoc real au ramele? Afișăm „în stoc” sau „disponibil la comandă”? | „Disponibil la comandă” până la inventar |
 | 10 | Promoția Optofarm 210 → 99 lei: are perioadă? Ce cupoane există și cum se cumulează? | Promoțiile importate rămân inactive până la confirmare |
-| 11 | Ce procesator de card păstrați (BT iPay, WooPayments, altul)? Avem credențiale de test? | Adaptor BT iPay + simulare; card online inactiv |
+| 11 | Ce procesator de card păstrați (BT iPay, WooPayments, altul)? Avem credențiale de test? | Simulator semnat + contract de adaptor; BT iPay blocat până la documentația oficială; card online inactiv |
 | 12 | Oferiți ramburs sau plata la ridicare? Pentru produse personalizate cereți avans? | Inactive până la confirmare |
 | 13 | Ce curier folosiți și ce soluție de facturare? | Expediere manuală (AWB introdus de mână); facturare: stare „neconectată” |
 | 14 | Serviciul „lentile pentru rama mea” există? | Intrarea e ascunsă până la activare |
