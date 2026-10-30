@@ -37,4 +37,20 @@ return [
         'img_src' => [],
         'connect_src' => [],
     ],
+
+    // Lentile: ofertele marcate „neconfirmat” (preluate din siteul vechi) pot fi vândute până la confirmarea
+    // laboratorului? Pe producție se recomandă false după validarea matricei.
+    'lenses' => [
+        'sell_unconfirmed' => (bool) env('OPTOPLUS_SELL_UNCONFIRMED_LENSES', true),
+    ],
+
+    // Configurator: limite de plauzibilitate (nu de fabricație — acelea sunt în matrice), în zecimi de mm / sutimi dpt.
+    'configurator' => [
+        'pd_binocular_range' => [500, 800],
+        'pd_monocular_range' => [250, 400],
+        'anisometropia_review' => 300,
+        'own_frame_service' => (bool) env('OPTOPLUS_OWN_FRAME_SERVICE', false),
+        'share_link_days' => 30,
+        'upload_max_kb' => 10240,
+    ],
 ];
