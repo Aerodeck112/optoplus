@@ -1164,3 +1164,15 @@ body.auth {
 .seo-issues__error { color: var(--danger); }
 .seo-issues__info { color: var(--ink-3); }
 .code-copy { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85rem; background: var(--muted-soft); padding: .35rem .5rem; border-radius: var(--radius-s); word-break: break-all; }
+
+/* Producție: tabla pe etape */
+.board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 1fr); gap: .75rem; overflow-x: auto; padding-bottom: 1rem; }
+.board__col { background: var(--mist); border-radius: 10px; padding: .75rem; display: grid; align-content: start; gap: .5rem; min-height: 200px; }
+.board__col h2 { font-size: .95rem; margin: 0 0 .25rem; }
+.board__card { display: grid; gap: .2rem; background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: 8px; padding: .6rem .7rem; text-decoration: none; color: inherit; }
+.board__card:hover { border-color: var(--petrol); }
+.board__card.is-urgent { border-left-color: #a15f0e; }
+.board__card.is-late { border-left-color: #a23b2a; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: .4rem 1rem; margin: 0; }
+.kv dt { color: var(--ink-3); }
+.kv dd { margin: 0; }

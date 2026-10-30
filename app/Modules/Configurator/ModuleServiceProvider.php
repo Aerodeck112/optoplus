@@ -40,7 +40,7 @@ class ModuleServiceProvider extends BaseProvider
 
     public function navigation(): array
     {
-        return [new NavItem('Rețete de verificat', 'panou.prescriptions.index', 'prescriptions.verify', 'Producție', 'shield', 5)];
+        return []; // Verificarea rețetelor se face din fluxul de producție („Rețete de verificat”).
     }
 
     public function schedule(Schedule $schedule): void
