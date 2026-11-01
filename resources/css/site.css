@@ -490,7 +490,9 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px
 .choices legend { font-weight: 600; margin-bottom: var(--s2); }
 .choices--inline { display: flex; gap: var(--s5); flex-wrap: wrap; }
 .js .js-hide { display: none; }
-[hidden] { display: none !important; }
+/* Elementele ascunse din JavaScript care au altfel un display propriu. Nu global: panoul de filtre de pe desktop
+   folosește [hidden] doar pentru mobil și trebuie să rămână vizibil. */
+[data-show-if][hidden], .vx-mono-tabs[hidden], [data-option-for][hidden], [data-calc-errors][hidden], [data-pd][hidden], .lens-anatomy__note[hidden] { display: none !important; }
 .grid-2 { display: grid; gap: var(--s3); align-items: start; }
 .page-pad { padding-top: var(--s6); padding-bottom: var(--s7); }
 .line__parts li > span:last-child { white-space: nowrap; }

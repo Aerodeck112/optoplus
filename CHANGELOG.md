@@ -3,6 +3,15 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.4] — 2026-11-01
+
+Se poate instala direct peste 1.0.0 – 1.0.3.
+
+- Corectură: filtrele de la „Ochelari și rame” (pentru cine, material, construcție, tip ramă, formă, marcă,
+  culoare, mărime, preț) nu se vedeau pe calculator; pe telefon erau sub butonul „Filtrează și ordonează”.
+- Corectură: după o actualizare, paginile păstrate în cache puteau folosi stilurile vechi. Acum cache-ul
+  paginilor se reînnoiește automat la fiecare versiune nouă.
+
 ## [1.0.3] — 2026-11-01
 
 Se poate instala direct peste 1.0.0 – 1.0.2.

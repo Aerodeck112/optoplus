@@ -26,7 +26,9 @@ class PageCache
     {
         ksort($query);
 
-        return sha1($this->generation().'|'.$path.'|'.http_build_query($query));
+        // Versiunea aplicației face parte din cheie: după o actualizare (CSS/JS noi, cu alte nume de fișiere),
+        // paginile păstrate de versiunea veche nu mai sunt servite.
+        return sha1($this->generation().'|'.config('optoplus.version').'|'.$path.'|'.http_build_query($query));
     }
 
     public function get(string $key): ?string
