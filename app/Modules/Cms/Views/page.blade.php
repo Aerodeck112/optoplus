@@ -1,7 +1,7 @@
 @extends('layouts.site')
 @section('title', $seo['title'] ?? $title)
 @section('description', $seo['description'] ?? '')
-@if (! empty($seo['noindex']))@section('robots', 'noindex, follow')@endif
+@if (! empty($seo['noindex']) || $preview)@section('robots', 'noindex, nofollow')@endif
 @section('body_class', 'page-'.$kind)
 @section('content')
     @if ($preview)

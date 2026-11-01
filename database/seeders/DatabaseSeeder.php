@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             ShippingPaymentSeeder::class,
             BusinessSettingsSeeder::class,
             SiteContentSeeder::class,
+            LegalDraftsSeeder::class,
         ]);
     }
 }

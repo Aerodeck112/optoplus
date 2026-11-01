@@ -62,6 +62,18 @@ $app = Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
         $exceptions->dontFlash(['password', 'password_confirmation', 'current_password', 'code', 'cnp']);
+        // Orice 404 din siteul public (inclusiv /produs/<slug-vechi>/) verifică întâi redirecturile 301/410,
+        // ca adresele vechi să ajungă la pagina potrivită, nu la „pagina nu există”.
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, Request $request) {
+            if (! $request->isMethod('GET') || $request->is('panou', 'panou/*', 'api/*', 'webhook/*', 'build/*', 'media/*')) {
+                return null;
+            }
+            try {
+                return app(\App\Modules\Storefront\Http\Controllers\PageController::class)($request, app(\App\Modules\Cms\Services\PageRenderer::class), app(\App\Modules\Storefront\Services\ProductShowcase::class));
+            } catch (\Throwable) {
+                return null;
+            }
+        });
     })->create();
 
 // O versiune instalată din releases/ își citește .env și storage din directorul „shared” (vezi

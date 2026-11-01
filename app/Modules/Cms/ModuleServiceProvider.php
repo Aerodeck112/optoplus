@@ -53,9 +53,9 @@ class ModuleServiceProvider extends BaseProvider
             new NavItem('Întrebări frecvente', 'panou.cms.faq.index', 'cms.faq', 'Site', 'inbox', 12),
             new NavItem('Bibliotecă media', 'panou.cms.media.index', 'cms.media', 'Site', 'image', 13),
             new NavItem('Meniuri', 'panou.cms.menus.index', 'cms.menus', 'Site', 'menu', 14),
-            new NavItem('Redirecturi și 404', 'panou.cms.redirects.index', 'cms.redirects', 'Site', 'link', 15),
-            new NavItem('Date de contact și firmă', 'panou.cms.settings.edit', 'cms.settings', 'Site', 'settings', 16),
-            new NavItem('Mesaje din site', 'panou.cms.submissions.index', 'cms.submissions', 'Activitate', 'inbox', 40),
+            new NavItem('Redirecturi', 'panou.cms.redirects.index', 'cms.redirects', 'Site', 'link', 15),
+            new NavItem('Adrese negăsite (404)', 'panou.cms.notfound', 'cms.redirects', 'Site', 'warn', 16),
+                        new NavItem('Mesaje din site', 'panou.cms.submissions.index', 'cms.submissions', 'Activitate', 'inbox', 40),
         ];
     }
 }

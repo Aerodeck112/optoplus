@@ -1176,3 +1176,8 @@ body.auth {
 .kv { display: grid; grid-template-columns: max-content 1fr; gap: .4rem 1rem; margin: 0; }
 .kv dt { color: var(--ink-3); }
 .kv dd { margin: 0; }
+
+/* Editorul de pagini */
+.block-group { border: 1px solid var(--line); border-radius: 8px; padding: .75rem; }
+.block-group legend { font-weight: 600; padding: 0 .25rem; }
+.block-item { border-top: 1px dashed var(--line); padding-top: .5rem; margin-top: .5rem; }
