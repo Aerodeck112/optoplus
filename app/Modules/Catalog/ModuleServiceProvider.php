@@ -44,7 +44,7 @@ class ModuleServiceProvider extends BaseProvider
     public function navigation(): array
     {
         return [
-            new NavItem('Produse', 'panou.catalog.products.index', 'catalog.view', 'Catalog', 'layers', 10),
+            new NavItem('Produse', 'panou.catalog.products', 'catalog.view', 'Catalog', 'layers', 10, 'panou.catalog.product*'),
             new NavItem('Mărci', 'panou.catalog.brands.index', 'catalog.edit', 'Catalog', 'clipboard', 12),
             new NavItem('Categorii', 'panou.catalog.categories.index', 'catalog.edit', 'Catalog', 'menu', 13),
             new NavItem('Atribute și filtre', 'panou.catalog.attributes.index', 'catalog.edit', 'Catalog', 'settings', 14),

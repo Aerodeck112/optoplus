@@ -34,7 +34,7 @@ final class EyeRx
         if (is_int($v)) {
             return $v;
         }
-        $s = str_replace([',', ' ', '+'], ['.', '', ''], trim((string) $v));
+        $s = str_replace([',', ' ', '+', '−', '–'], ['.', '', '', '-', '-'], trim((string) $v));
         if (in_array(strtolower($s), ['pl', 'plan', '0', '0.0', '0.00', '-0', '-0.00'], true)) {
             return 0;
         }
