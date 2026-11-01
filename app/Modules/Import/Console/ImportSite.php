@@ -47,7 +47,7 @@ class ImportSite extends Command
         }
 
         // 2. Imaginile, câte puține pe rând.
-        $uploads = $this->option('uploads-dir') ?: $this->guessUploadsDir();
+        $uploads = $this->option('uploads-dir') ?: ImageDownloader::defaultUploadsDir();
         while ($done() && microtime(true) < $deadline - 2) {
             try {
                 $r = $images->process(3, $uploads);
@@ -81,14 +81,4 @@ class ImportSite extends Command
         return self::SUCCESS;
     }
 
-    private function guessUploadsDir(): ?string
-    {
-        foreach ([config('updates.public_path'), dirname(base_path(), 3).'/public_html', public_path()] as $root) {
-            if ($root && is_dir($root.'/wp-content/uploads')) {
-                return $root.'/wp-content/uploads';
-            }
-        }
-
-        return null;
-    }
 }

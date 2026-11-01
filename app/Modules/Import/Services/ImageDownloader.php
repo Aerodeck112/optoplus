@@ -19,8 +19,31 @@ class ImageDownloader
     public function __construct(private MediaLibrary $media) {}
 
     /** @return array{ready:int, failed:int, remaining:int} */
+    /**
+     * Directorul local cu imaginile vechiului site, în ordinea: setarea „import.uploads_dir”, pachetul de imagini
+     * dezarhivat în shared/wp-uploads (instalarea cPanel), public_html/wp-content/uploads, storage/app/wp-uploads.
+     */
+    public static function defaultUploadsDir(): ?string
+    {
+        $layout = app(\App\Modules\Updates\Support\DeploymentLayout::class);
+        $candidates = [
+            app(\App\Core\Settings\Settings::class)->get('import.uploads_dir'),
+            $layout->isDeployed() ? $layout->sharedPath('wp-uploads') : null,
+            $layout->publicPath() ? $layout->publicPath().'/wp-content/uploads' : null,
+            storage_path('app/wp-uploads'),
+        ];
+        foreach ($candidates as $dir) {
+            if ($dir && is_dir($dir)) {
+                return $dir;
+            }
+        }
+
+        return null;
+    }
+
     public function process(int $limit = 25, ?string $uploadsDir = null): array
     {
+        $uploadsDir ??= self::defaultUploadsDir();
         $ready = 0;
         $failed = 0;
         $images = ProductImage::where('status', 'pending')->orderBy('id')->limit($limit)->get();

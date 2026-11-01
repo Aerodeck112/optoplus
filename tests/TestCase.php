@@ -16,6 +16,8 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
         $this->withoutVite();
         Artisan::call('optoplus:sync-permissions');
+        // Migrarea 1.0.2 pornește „modul lucru”; testele siteului îl opresc (PreLaunchTest îl testează separat).
+        app(\App\Core\Settings\Settings::class)->set('site.prelaunch', false);
     }
 
     /**

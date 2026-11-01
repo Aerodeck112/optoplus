@@ -12,6 +12,15 @@ final class SettingsSchema
     public static function sections(): array
     {
         return [
+            'lansare' => [
+                'label' => 'Lansare', 'permission' => 'cms.settings',
+                'intro' => 'În „mod lucru”, vizitatorii văd pagina „Noul magazin este în lucru”, cu telefonul și emailul. Dumneavoastră, autentificat în panou, vedeți siteul normal. Debifați la lansare.',
+                'fields' => [
+                    'site.prelaunch' => ['Mod lucru: siteul public afișează pagina de pregătire', 'bool'],
+                    'site.prelaunch_message' => ['Mesaj suplimentar pe pagina de pregătire (opțional)', 'textarea'],
+                    'site.prelaunch_date' => ['Lansarea estimată (text liber, opțional; ex. „decembrie 2026”)', 'text'],
+                ],
+            ],
             'firma' => [
                 'label' => 'Firma', 'permission' => 'cms.settings',
                 'intro' => 'Datele juridice apar în subsolul siteului, în emailuri, pe pagina de transfer bancar și în textele juridice.',

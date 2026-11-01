@@ -13,7 +13,7 @@
         <img src="/images/optoplus-logo-alb.png" alt="Optoplus" width="140" height="48">
         <div>
             <h1>Panoul de lucru Optoplus</h1>
-            <p>Programări, fișe, recuperare și raportări într-un singur loc. Accesul este personal și se înregistrează în jurnalul de audit.</p>
+            <p>Comenzi, producție, catalog, parteneri și site într-un singur loc. Accesul este personal și se înregistrează în jurnalul de audit.</p>
         </div>
         <p class="small">Probleme cu accesul? Contactați administratorul Optoplus.</p>
     </aside>
