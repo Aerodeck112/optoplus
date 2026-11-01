@@ -147,7 +147,25 @@ class ReleaseBuild extends Command
         if ($this->option('vendor') === 'local') {
             // Pornim de la vendor/ existent: composer doar elimină pachetele dev (fără descărcări) și
             // regenerează autoloaderul optimizat pentru producție. vendor/ poate avea peste 1 GB cu pachetele dev.
-            (new Process(['cp', '-a', base_path('vendor'), $tmp.'/vendor'], null, null, null, 900))->mustRun();
+            // Pachetele de dezvoltare (din „packages-dev” în composer.lock) nu se mai copiază deloc: pot avea gigaocteți.
+            $lock = json_decode((string) file_get_contents(base_path('composer.lock')), true);
+            $dev = array_flip(array_column($lock['packages-dev'] ?? [], 'name'));
+            mkdir($tmp.'/vendor', 0755, true);
+            foreach (glob(base_path('vendor').'/*', GLOB_ONLYDIR) ?: [] as $vendorDir) {
+                $packages = glob($vendorDir.'/*', GLOB_ONLYDIR) ?: [];
+                $keep = array_filter($packages, fn ($p) => ! isset($dev[basename($vendorDir).'/'.basename($p)]));
+                if (basename($vendorDir) === 'bin' || basename($vendorDir) === 'composer') {
+                    $keep = [$vendorDir];
+                }
+                foreach ($keep as $p) {
+                    $target = $tmp.'/vendor/'.substr($p, strlen(base_path('vendor')) + 1);
+                    @mkdir(dirname($target), 0755, true);
+                    (new Process(['cp', '-a', $p, $target], null, null, null, 900))->mustRun();
+                }
+            }
+            foreach (glob(base_path('vendor').'/*.php') ?: [] as $f) {
+                copy($f, $tmp.'/vendor/'.basename($f));
+            }
         }
         $process = new Process(['composer', 'install', '--no-dev', '--optimize-autoloader', '--no-interaction', '--no-scripts', '--prefer-dist', '--no-progress'], $tmp, ['COMPOSER_ALLOW_SUPERUSER' => '1'], null, 900);
         $process->run(fn ($t, $line) => $this->output->write($line));

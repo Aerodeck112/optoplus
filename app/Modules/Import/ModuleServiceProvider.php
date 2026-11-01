@@ -37,6 +37,6 @@ class ModuleServiceProvider extends BaseProvider
     public function schedule(Schedule $schedule): void
     {
         // Imaginile importate se descarcă treptat, fără a depăși limitele hostingului.
-        $schedule->command('optoplus:import:images --limit=8')->everyMinute()->withoutOverlapping(10)->name('import:imagini');
+        $schedule->command('optoplus:import:images --limit=15')->everyMinute()->withoutOverlapping(10)->name('import:imagini');
     }
 }

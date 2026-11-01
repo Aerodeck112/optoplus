@@ -9,5 +9,5 @@ Identificatorul cheii (`key_id`) este format din primele 16 caractere hex ale SH
 - Adăugarea sau eliminarea unei chei se face numai printr-un release (cod revizuit), nu din panou.
 - Rotația cheilor este descrisă în `docs/ACTUALIZARI.md`.
 
-La data livrării nu există încă o cheie de producție: se generează de responsabilul de release al clinicii,
+La data livrării nu există încă o cheie de producție: se generează de responsabilul de release Optoplus,
 iar fișierul `.pub` se adaugă aici înainte de primul pachet semnat.

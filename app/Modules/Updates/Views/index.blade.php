@@ -31,7 +31,7 @@
 
         <x-panou.panel title="Încarcă un pachet">
             @if (! $trustedKeys)
-                <div class="alert alert--warn"><x-panou.icon name="warn" /><div>Nu există nicio cheie publică de încredere în <code>config/update-keys/</code>. Niciun pachet nu poate fi acceptat până la adăugarea cheii de release a clinicii.</div></div>
+                <div class="alert alert--warn"><x-panou.icon name="warn" /><div>Nu există nicio cheie publică de încredere în <code>config/update-keys/</code>. Niciun pachet nu poate fi acceptat până la adăugarea cheii de release Optoplus.</div></div>
             @endif
             <form method="post" action="{{ route('panou.updates.upload') }}" enctype="multipart/form-data" class="stack">
                 @csrf

@@ -319,9 +319,9 @@ final class OptoplusRecovery
     {
         $t = htmlspecialchars($title, ENT_QUOTES);
         echo '<!doctype html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>'.$t.'</title>'
-            .'<style>body{font-family:system-ui,sans-serif;color:#0e3b3d;background:#eef6f6;margin:0;padding:2rem 1rem}main{max-width:46rem;margin:0 auto;background:#fff;border:1px solid #d6e4e4;border-radius:10px;padding:1.5rem 1.75rem}'
-            .'h1{margin-top:0;font-size:1.5rem}h2{font-size:1.1rem;margin-top:1.75rem}table{border-collapse:collapse;width:100%}td{border-bottom:1px solid #d6e4e4;padding:.5rem}'
-            .'input{display:block;width:100%;padding:.55rem;margin:.3rem 0 1rem;border:1px solid #b9cfcf;border-radius:6px;font:inherit}button{background:#006f75;color:#fff;border:0;border-radius:6px;padding:.55rem 1rem;font:inherit;cursor:pointer}button.danger{background:#fff;color:#b42318;border:1px solid #b42318}'
+            .'<style>body{font-family:system-ui,sans-serif;color:#0b2a40;background:#f1f5f8;margin:0;padding:2rem 1rem}main{max-width:46rem;margin:0 auto;background:#fff;border:1px solid #d8e2ea;border-radius:10px;padding:1.5rem 1.75rem}'
+            .'h1{margin-top:0;font-size:1.5rem}h2{font-size:1.1rem;margin-top:1.75rem}table{border-collapse:collapse;width:100%}td{border-bottom:1px solid #d8e2ea;padding:.5rem}'
+            .'input{display:block;width:100%;padding:.55rem;margin:.3rem 0 1rem;border:1px solid #b6c7d4;border-radius:6px;font:inherit}button{background:#053b5e;color:#fff;border:0;border-radius:6px;padding:.55rem 1rem;font:inherit;cursor:pointer}button.danger{background:#fff;color:#b42318;border:1px solid #b42318}'
             .'form{margin:.4rem 0}.msg{background:#fdf1dc;padding:.6rem .8rem;border-radius:6px}.err{color:#b42318}.note{font-size:.9rem;color:#3c5f61}code{font-size:.85rem}</style></head>'
             .'<body><main><h1>'.$t.'</h1>'.$body.'</main></body></html>';
     }

@@ -36,7 +36,7 @@ function page(string $title, string $body): never
 {
     echo '<!doctype html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
         .'<meta name="robots" content="noindex,nofollow"><title>'.htmlspecialchars($title, ENT_QUOTES).'</title><style>'
-        .'body{font-family:system-ui,sans-serif;max-width:46rem;margin:2rem auto;padding:0 1rem;color:#0e3b3d;line-height:1.5}'
+        .'body{font-family:system-ui,sans-serif;max-width:46rem;margin:2rem auto;padding:0 1rem;color:#0b2a40;line-height:1.5}'
         .'h1{font-size:1.4rem}table{border-collapse:collapse;width:100%;font-size:.92rem}td,th{border-bottom:1px solid #d9e3e3;padding:.35rem .4rem;text-align:left;vertical-align:top}'
         .'.ok{color:#17663a}.err{color:#a1261b}.msg{background:#fff6df;border:1px solid #e8c66a;padding:.7rem 1rem;border-radius:.4rem}'
         .'.done{background:#e6f4ea;border:1px solid #8cc9a0;padding:.7rem 1rem;border-radius:.4rem}'

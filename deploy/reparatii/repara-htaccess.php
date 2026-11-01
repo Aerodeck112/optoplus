@@ -109,11 +109,11 @@ function optoplus_merge(string $template, ?string $existing, array $cpanelPatter
 function optoplus_page(string $title, string $body): never
 {
     echo '<!doctype html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-        .'<title>'.htmlspecialchars($title).' — OPTOPLUS</title><style>body{font-family:system-ui,sans-serif;background:#eef6f6;color:#0e3b3d;margin:0}'
-        .'header{background:#0e3b3d;color:#fff;padding:1rem 1.5rem;font-weight:700}main{max-width:46rem;margin:2rem auto;padding:0 1rem}'
-        .'.card{background:#fff;border:1px solid #d6e4e4;border-radius:12px;padding:1.5rem}.ok{background:#e3f3e9;color:#1f5a37;padding:.8rem 1rem;border-radius:8px}'
-        .'.err{background:#fde8e6;color:#b42318;padding:.8rem 1rem;border-radius:8px}button{background:#006f75;color:#fff;border:0;border-radius:8px;padding:.8rem 1.4rem;font-size:1rem;font-weight:700;cursor:pointer}'
-        .'code{background:#eef6f6;padding:.1rem .35rem;border-radius:5px}li{margin:.3rem 0}</style></head><body><header>OPTOPLUS — reparare .htaccess</header>'
+        .'<title>'.htmlspecialchars($title).' — OPTOPLUS</title><style>body{font-family:system-ui,sans-serif;background:#f1f5f8;color:#0b2a40;margin:0}'
+        .'header{background:#0b2a40;color:#fff;padding:1rem 1.5rem;font-weight:700}main{max-width:46rem;margin:2rem auto;padding:0 1rem}'
+        .'.card{background:#fff;border:1px solid #d8e2ea;border-radius:12px;padding:1.5rem}.ok{background:#e3f3e9;color:#1f5a37;padding:.8rem 1rem;border-radius:8px}'
+        .'.err{background:#fde8e6;color:#b42318;padding:.8rem 1rem;border-radius:8px}button{background:#053b5e;color:#fff;border:0;border-radius:8px;padding:.8rem 1.4rem;font-size:1rem;font-weight:700;cursor:pointer}'
+        .'code{background:#f1f5f8;padding:.1rem .35rem;border-radius:5px}li{margin:.3rem 0}</style></head><body><header>OPTOPLUS — reparare .htaccess</header>'
         .'<main><div class="card"><h1>'.htmlspecialchars($title).'</h1>'.$body.'</div></main></body></html>';
     exit;
 }
