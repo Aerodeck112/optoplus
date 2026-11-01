@@ -5,6 +5,8 @@ use App\Modules\B2B\Http\Controllers\PortalController;
 use App\Modules\B2B\Http\Middleware\EnsurePartner;
 use Illuminate\Support\Facades\Route;
 
+// Adresa scurtă folosită în texte: /b2b/ → portalul partenerilor.
+Route::redirect('b2b', '/portal/', 301);
 Route::get('portal/invitatie/{token}', [InvitationController::class, 'show'])->middleware('throttle:20,1');
 Route::post('portal/invitatie/{token}', [InvitationController::class, 'accept'])->middleware('throttle:10,1');
 

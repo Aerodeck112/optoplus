@@ -54,6 +54,24 @@ function initMenu() {
     });
 }
 
+// Apariția la derulare: titlurile, cardurile și fotografiile secțiunilor intră ușor în pagină.
+function initReveal() {
+    const showAll = () => document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('is-visible'));
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) { showAll(); return; }
+    const targets = document.querySelectorAll('[data-reveal], .section h2, .section .lead, .steps li, .family, .card, .photo-row figure, .compare figure, .b2b-band > *, .story > *');
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+            if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    targets.forEach((el, i) => {
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.9) { el.classList.add('is-visible'); return; } // ce se vede deja nu se ascunde
+        el.setAttribute('data-reveal', '');
+        el.style.transitionDelay = `${(i % 4) * 70}ms`;
+        io.observe(el);
+    });
+}
+
 function initAssistant() {
     const btn = document.querySelector('[data-assistant-launch]');
     if (!btn) return;
@@ -64,4 +82,5 @@ function initAssistant() {
 
 initMenu();
 loadModules();
+initReveal();
 initAssistant();

@@ -92,6 +92,27 @@ final class BlockRegistry
                     'cta' => ['type' => 'group', 'label' => 'Link', 'fields' => $link],
                 ],
             ],
+            'video' => [
+                'label' => 'Video (YouTube)',
+                'description' => 'Un videoclip YouTube, afișat cu imaginea lui de previzualizare; se încarcă de la YouTube (modul cu confidențialitate sporită) la apăsare sau, dacă bifați, pornește singur, fără sunet.',
+                'fields' => [
+                    'title' => ['type' => 'text', 'label' => 'Titlu'],
+                    'text' => ['type' => 'textarea', 'label' => 'Text'],
+                    'youtube_url' => ['type' => 'url', 'label' => 'Linkul videoclipului YouTube', 'required' => true],
+                    'caption' => ['type' => 'text', 'label' => 'Legendă'],
+                    'autoplay' => ['type' => 'checkbox', 'label' => 'Pornește singur, fără sunet, în buclă (când ajunge pe ecran)'],
+                ],
+            ],
+            'frames_marquee' => [
+                'label' => 'Bandă animată cu rame',
+                'description' => 'Fotografii reale ale ramelor din catalog, care derulează încet; fiecare duce la produs.',
+                'fields' => [
+                    'title' => ['type' => 'text', 'label' => 'Titlu'],
+                    'intro' => ['type' => 'textarea', 'label' => 'Introducere'],
+                    'limit' => ['type' => 'number', 'label' => 'Număr de rame (8–30)'],
+                    'cta' => ['type' => 'group', 'label' => 'Link', 'fields' => $link],
+                ],
+            ],
             'b2b_band' => [
                 'label' => 'Bandă pentru parteneri (B2B)',
                 'description' => 'Bandă bleumarin cu beneficiile pentru clinici și magazine de optică.',
@@ -195,6 +216,16 @@ final class BlockRegistry
         }
 
         return $out;
+    }
+
+    /** ID-ul unui videoclip YouTube dintr-un link (watch, youtu.be, embed, shorts); null dacă nu e YouTube. */
+    public static function youtubeId(string $url): ?string
+    {
+        if (preg_match('~(?:youtube(?:-nocookie)?\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/)|youtu\.be/)([A-Za-z0-9_-]{11})~', $url, $m)) {
+            return $m[1];
+        }
+
+        return null;
     }
 
     public static function url(string $url): string

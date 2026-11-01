@@ -34,7 +34,7 @@ return [
     // Surse externe permise de Content-Security-Policy. Se adaugă numai servicii confirmate.
     'csp' => [
         'frame_src' => ['https://www.google.com', 'https://maps.google.com', 'https://www.youtube-nocookie.com', 'https://www.youtube.com'],
-        'img_src' => [],
+        'img_src' => ['https://i.ytimg.com'], // imaginile de previzualizare ale videoclipurilor YouTube
         'connect_src' => [],
     ],
 

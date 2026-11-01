@@ -47,6 +47,12 @@ Citește întâi: `docs/ARHITECTURA.md`, `docs/SCHEMA-BD.md`, `docs/STATUS.md`, 
   `2026_06_*` configurator · `2026_07_*` notifications, shop, orders, payments, shipping, invoicing ·
   `2026_08_*` production · `2026_09_*` b2b · `2026_10_0*` crm, assistant, import · `2026_10_20` updates/backup.
   Numele de indici ≤ 64 caractere (MariaDB).
+- **Migrările rulează în timpul actualizării cu codul versiunii VECHI în memorie** (actualizatorul le aplică în
+  procesul curent; pe cPanel nu avem garanția `proc_open`). O migrare nu are voie să depindă de clase noi sau
+  modificate în aceeași versiune: folosește doar `Schema`/`DB` sau modele neschimbate; dacă are nevoie de o
+  clasă nouă, o încarcă explicit cu `require_once dirname(__DIR__, 2).'/app/...'` (vezi
+  `2026_11_02_000100_refresh_home_and_production_content.php`). Testează fiecare pachet pe simularea cPanel
+  (actualizare reală peste versiunea anterioară), nu doar cu `php artisan test`.
 - Panou: `@extends('layouts.panou')`, componente `x-panou.*`. Site public: `@extends('layouts.site')`,
   CSS `resources/css/site.css` (tokeni pe `:root`), JS pe pagină în `resources/js/site/<nume>.js`
   (`data-module`). CSP cu nonce: scripturile inline au `nonce="{{ app('csp-nonce') }}"`; preferă fișiere JS.

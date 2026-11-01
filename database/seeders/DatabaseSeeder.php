@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             BusinessSettingsSeeder::class,
             SiteContentSeeder::class,
             LegalDraftsSeeder::class,
+            ContentRefreshSeeder::class,
         ]);
     }
 }

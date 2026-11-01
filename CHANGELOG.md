@@ -3,6 +3,25 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.5] — 2026-11-01
+
+Se poate instala direct peste 1.0.0 – 1.0.4.
+
+- **Site mai luminos:** fundaluri deschise (bleu, crem, piersică) în locul secțiunilor bleumarin închise, pete de
+  culoare animate în prima secțiune, fotografii colorate de lentile din laboratorul nostru în locul celor maro.
+- **Animații:** titlurile, cardurile, pașii și fotografiile apar lin la derulare; cardurile se ridică la trecerea
+  mouse-ului; lentila din prima secțiune „plutește”. Vizitatorii care au cerut din sistem mai puțină mișcare
+  văd pagina fără animații.
+- **Bandă cu rame** pe prima pagină („Rame alese pentru tine”), care derulează continuu fotografiile ramelor din
+  catalog și se oprește la trecerea mouse-ului.
+- **Videoclipul nostru de pe YouTube** („Video Prezentare | Fabrica de lentile”) pe pagina „Producția noastră”:
+  pornește singur, fără sunet, când ajunge pe ecran. Pe prima pagină pornește la apăsare. Se încarcă de pe
+  youtube-nocookie.com; dacă YouTube nu îl poate reda, rămâne imaginea clipului cu link spre YouTube.
+  Videoclipul, textele și pornirea automată se schimbă din Panou → Site → Pagini (blocul „Video YouTube”).
+- Paginile pe care le-ați modificat deja în panou **nu sunt suprascrise**: varianta nouă rămâne ciornă, de
+  publicat dacă vă convine. Politica de cookie-uri primește un paragraf despre YouTube, tot ca ciornă de verificat.
+- Corectură: linkul vechi `/b2b/` duce acum la autentificarea partenerilor (`/portal/`).
+
 ## [1.0.4] — 2026-11-01
 
 Se poate instala direct peste 1.0.0 – 1.0.3.

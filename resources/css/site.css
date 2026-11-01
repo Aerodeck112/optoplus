@@ -573,3 +573,81 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px
     .site-header, .site-footer, .mobile-bar, .assistant-launch, .total-bar { display: none !important; }
     body { background: #fff; padding: 0; }
 }
+
+/* ===== 1.0.5 — un site mai luminos: culori calde, fotografii, animații discrete ===== */
+:root { --cer: #e8f3fc; --crem: #fff7ec; --piersica: #ffe7cf; --azur: #2f8fd8; }
+body { background: linear-gradient(180deg, #f7fbff 0%, #ffffff 40%, #fffaf3 100%); }
+.section:nth-of-type(even):not(.section--navy):not(.section--white):not(.section--video) { background: linear-gradient(180deg, var(--cer), #f7fbff); }
+.section:nth-of-type(odd):not(.section--navy):not(.hero):not(.section--white) { background: transparent; }
+.section--light { background: linear-gradient(180deg, #fff, var(--crem)) !important; }
+
+/* Prima secțiune: fundal luminos cu „pete” de culoare care se mișcă încet și lentila care plutește. */
+.hero { position: relative; background: radial-gradient(900px 500px at 85% 10%, #dcefff 0%, transparent 60%), radial-gradient(700px 420px at 0% 100%, var(--piersica) 0%, transparent 55%), #fff; isolation: isolate; }
+.hero::before, .hero::after { content: ''; position: absolute; z-index: -1; border-radius: 50%; filter: blur(40px); opacity: .55; animation: blob 18s ease-in-out infinite alternate; }
+.hero::before { width: 420px; height: 420px; right: -80px; top: -120px; background: #bfe2ff; }
+.hero::after { width: 360px; height: 360px; left: -120px; bottom: -160px; background: #ffd9b3; animation-delay: -6s; }
+@keyframes blob { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, 20px) scale(1.08); } 100% { transform: translate(-20px, 30px) scale(.95); } }
+.lens-anatomy__img, .hero .lens-anatomy img { animation: float 7s ease-in-out infinite; filter: drop-shadow(0 30px 40px rgb(5 59 94 / .18)); }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(1.5deg); } }
+
+/* Banda pentru parteneri: luminoasă, nu bleumarin închis. */
+.section--navy { background: linear-gradient(120deg, #e3f1fc 0%, #f4f9ff 45%, var(--piersica) 100%); color: var(--grafit); }
+.section--navy h2, .section--navy h3 { color: var(--bleumarin); }
+.section--navy a:not(.btn) { color: var(--bleumarin); }
+.section--navy .btn:not(.btn--primary) { color: var(--bleumarin); border-color: var(--bleumarin); background: #fff; }
+.section--navy .btn--light { background: var(--bleumarin); color: #fff; border-color: var(--bleumarin); }
+.b2b-band li .ico { color: var(--gravura); }
+
+/* Pașii: cercuri colorate, care se „aprind” pe rând. */
+.steps li::before { background: linear-gradient(135deg, #fff, var(--cer)); box-shadow: 0 6px 16px rgb(47 143 216 / .18); }
+.steps li:hover::before { background: var(--bleumarin); color: #fff; transition: background .2s, color .2s; }
+
+/* Carduri: se ridică ușor la hover. */
+.card, .family, .entry, .stat { transition: transform .25s ease, box-shadow .25s ease; }
+.card:hover { transform: translateY(-4px); }
+.card__img { transition: box-shadow .25s ease; }
+.card:hover .card__img { box-shadow: 0 16px 30px rgb(5 59 94 / .12); }
+.family:hover { transform: translateY(-4px); }
+.family__diagram ellipse { transition: fill .3s; }
+.family:hover .family__diagram { animation: wiggle .8s ease; }
+@keyframes wiggle { 30% { transform: rotate(-3deg); } 60% { transform: rotate(2deg); } }
+
+/* Fotografiile de lentile: ușor rotite, cu umbră; se îndreaptă la hover. */
+.photo-row figure, .compare figure { transition: transform .35s ease; }
+.photo-row figure:nth-child(odd) { transform: rotate(-1.5deg); }
+.photo-row figure:nth-child(even) { transform: rotate(1.5deg); }
+.photo-row figure:hover, .compare figure:hover { transform: rotate(0) scale(1.03); }
+.photo-row img, .compare img { box-shadow: 0 18px 36px rgb(5 59 94 / .15); }
+
+/* Apariția la derulare (doar cu JavaScript și fără „reducere mișcare”). */
+.js [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+/* Bandă animată cu rame */
+.marquee { overflow: hidden; padding: var(--s4) 0; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.marquee__track { display: flex; gap: var(--s4); width: max-content; animation: marquee 60s linear infinite; }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee__item { flex: none; width: 220px; display: grid; gap: var(--s2); text-decoration: none; color: var(--grafit-2); font-size: .9rem; text-align: center; }
+.marquee__item img, .marquee__item .img-placeholder { width: 220px; height: 150px; object-fit: contain; background: #fff; border-radius: var(--r-foto); box-shadow: 0 10px 24px rgb(5 59 94 / .10); padding: var(--s2); transition: transform .25s; }
+.marquee__item:hover img { transform: translateY(-6px) scale(1.03); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* Video */
+.video-block { display: grid; gap: var(--s5); align-items: center; }
+@media (min-width: 960px) { .video-block { grid-template-columns: .8fr 1.2fr; } }
+.video { margin: 0; position: relative; border-radius: var(--r-foto); overflow: hidden; box-shadow: 0 30px 60px rgb(5 59 94 / .22); aspect-ratio: 16 / 9; background: #0b2a40; }
+.video__poster, .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.video__poster img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.video__poster:hover img { transform: scale(1.04); }
+.video__play { position: absolute; left: 50%; top: 50%; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%; background: rgb(255 255 255 / .92); color: var(--bleumarin); display: grid; place-items: center; box-shadow: 0 10px 30px rgb(0 0 0 / .3); animation: pulse-play 2.4s ease-out infinite; }
+.video__play svg { margin-left: 4px; }
+@keyframes pulse-play { 0% { box-shadow: 0 0 0 0 rgb(255 255 255 / .6), 0 10px 30px rgb(0 0 0 / .3); } 70% { box-shadow: 0 0 0 22px rgb(255 255 255 / 0), 0 10px 30px rgb(0 0 0 / .3); } 100% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0), 0 10px 30px rgb(0 0 0 / .3); } }
+.video figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: var(--s3) var(--s4); color: #fff; font-size: .9rem; background: linear-gradient(transparent, rgb(0 0 0 / .55)); pointer-events: none; }
+.section--video { background: linear-gradient(180deg, #fff, var(--cer)); }
+.video--fallback .video__poster::after { content: "Vezi pe YouTube ↗"; position: absolute; top: var(--s3); right: var(--s3); padding: .35rem .7rem; border-radius: 999px; background: rgb(255 255 255 / .92); color: var(--bleumarin); font-size: .85rem; font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+    .hero::before, .hero::after, .lens-anatomy__img, .marquee__track, .video__play { animation: none !important; }
+    .js [data-reveal] { opacity: 1; transform: none; }
+    .marquee { overflow-x: auto; }
+}
