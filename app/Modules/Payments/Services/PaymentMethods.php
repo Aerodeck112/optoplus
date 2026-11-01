@@ -43,6 +43,7 @@ class PaymentMethods
         }
         $gateway = $this->gateway();
         if ($this->settings->get('payments.card_enabled') && $gateway?->isConfigured()) {
+            // Cardul: BT iPay (sau simulatorul, doar în dezvoltare).
             $out['card'] = ['label' => 'Card online', 'note' => 'Plătiți pe pagina securizată a procesatorului; nu vedem și nu păstrăm datele cardului.'];
         }
         if ($this->settings->get('payments.bank_transfer_enabled') && $this->bankDetails()) {
@@ -62,7 +63,7 @@ class PaymentMethods
     public function bankDetails(): ?array
     {
         $iban = (string) $this->settings->get('company.iban', '');
-        $name = (string) $this->settings->get('company.legal_name', '');
+        $name = (string) ($this->settings->get('company.name') ?: $this->settings->get('company.legal_name', ''));
         if ($iban === '' || $name === '') {
             return null;
         }

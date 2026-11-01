@@ -26,6 +26,25 @@ class Settings
         Cache::forget(self::CACHE_KEY);
     }
 
+    /** Valoare secretă (parolă, cheie API), păstrată criptată cu cheia aplicației. */
+    public function secret(string $key): ?string
+    {
+        $v = $this->get($key);
+        if (! is_array($v) || ! isset($v['enc'])) {
+            return null;
+        }
+        try {
+            return \Illuminate\Support\Facades\Crypt::decryptString($v['enc']);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    public function setSecret(string $key, ?string $value): void
+    {
+        $this->set($key, $value === null || $value === '' ? null : ['enc' => \Illuminate\Support\Facades\Crypt::encryptString($value)]);
+    }
+
     /** @return array<string, mixed> */
     public function all(): array
     {

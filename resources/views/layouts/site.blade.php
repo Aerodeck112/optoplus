@@ -121,7 +121,7 @@
     </div>
     <div class="wrap site-footer__legal">
         @if ($company = $site->companyLine())<p>{{ $company }}</p>@endif
-        <p>© {{ date('Y') }} Optoplus. Prețurile includ TVA, cu excepția prețurilor afișate partenerilor ca „fără TVA”.</p>
+        <p>© {{ date('Y') }} Optoplus. {{ \App\Core\Support\Tax::note() }}@if(\App\Core\Support\Tax::payer()) Excepție: prețurile afișate partenerilor ca „fără TVA”.@endif</p>
         <p><a href="https://anpc.ro/ce-este-sal/" rel="noopener">ANPC — Soluționarea alternativă a litigiilor (SAL)</a> · <a href="https://ec.europa.eu/consumers/odr" rel="noopener">Soluționarea online a litigiilor (SOL)</a></p>
     </div>
 </footer>

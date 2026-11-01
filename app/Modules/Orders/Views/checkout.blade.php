@@ -105,7 +105,7 @@
                 <dt>Produse</dt><dd>{{ $fmt($quote->subtotal) }}</dd>
                 @if ($quote->discountTotal)<dt>Reduceri</dt><dd class="discount">−{{ $fmt($quote->discountTotal) }}</dd>@endif
                 <dt>Livrare</dt><dd>{{ $quote->shipping ? ($quote->shipping['gross'] ? $fmt($quote->shipping['gross']) : 'gratuit') : '—' }}</dd>
-                @if ($quote->vatConfirmed())<dt><small>din care TVA</small></dt><dd class="small">{{ $fmt($quote->vatTotal) }}</dd>@endif
+                @if ($quote->vatConfirmed() && $quote->vatTotal > 0)<dt><small>din care TVA</small></dt><dd class="small">{{ $fmt($quote->vatTotal) }}</dd>@endif
             </dl>
             <div class="summary__total"><span>Total de plată</span><span>{{ $fmt($quote->totalGross) }}</span></div>
             @foreach ($quote->errors as $e)<p class="error-text">{{ $e }}</p>@endforeach

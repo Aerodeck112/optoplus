@@ -29,9 +29,9 @@
         <h2>Total</h2>
         <dl>
             <dt>Fără TVA</dt><dd>{{ $fmt($quote->totalNet) }}</dd>
-            <dt>TVA</dt><dd>{{ $quote->vatConfirmed() ? $fmt($quote->vatTotal) : 'se confirmă pe factură' }}</dd>
+            @if (\App\Core\Support\Tax::payer())<dt>TVA</dt><dd>{{ $quote->vatConfirmed() ? $fmt($quote->vatTotal) : 'se confirmă pe factură' }}</dd>@endif
         </dl>
-        <div class="summary__total"><span>Total cu TVA</span><span>{{ $fmt($quote->totalGross) }}</span></div>
+        <div class="summary__total"><span>{{ \App\Core\Support\Tax::total() }}</span><span>{{ $fmt($quote->totalGross) }}</span></div>
         @if ($quote->isValid() && ! $itemErrors)
             <a class="btn btn--primary btn--block" href="/portal/finalizare/" style="margin-top: 16px">Continuă</a>
         @else

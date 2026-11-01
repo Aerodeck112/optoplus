@@ -74,7 +74,7 @@
             @else
                 <p class="error-text">Corectați produsele marcate înainte de a continua.</p>
             @endif
-            <p class="small muted">Prețurile includ TVA. Lentilele sunt produse în laboratorul Optoplus după comandă; timpul de producție se adaugă celui de transport.</p>
+            <p class="small muted">{{ \App\Core\Support\Tax::note() }} Lentilele sunt produse în laboratorul Optoplus după comandă; timpul de producție se adaugă celui de transport.</p>
         </aside>
     </form>
     @endif

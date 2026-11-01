@@ -20,7 +20,7 @@
         @endforeach
     </dl>
     <div class="summary__total"><span>Total</span><span data-total-inline>{{ \App\Core\Support\Money::format($quote->totalGross) }}</span></div>
-    <p class="summary__note">Prețuri cu TVA. Transportul se calculează în coș, după alegerea livrării.</p>
+    <p class="summary__note">{{ \App\Core\Support\Tax::note() }} Transportul se calculează în coș, după alegerea livrării.</p>
 @endif
 @if ($validation->requiresReview())
     <p class="summary__note"><x-site.icon name="shield" :size="16" /> Un specialist optic verifică rețeta și lentila aleasă înainte de producție.</p>

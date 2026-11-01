@@ -237,6 +237,12 @@ class OrderPlacer
             }
         }
 
+        // Fără termen pe ofertă: termenul general de execuție din Setări (confirmat: 2–5 zile lucrătoare).
+        if ($items->contains(fn ($i) => $i->kind === 'configuration')) {
+            $min ??= app(\App\Core\Settings\Settings::class)->get('orders.production_days_min');
+            $max ??= app(\App\Core\Settings\Settings::class)->get('orders.production_days_max');
+        }
+
         return [$min, $max];
     }
 }

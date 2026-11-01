@@ -34,7 +34,7 @@
             <dt>Fără TVA</dt><dd>{{ $fmt($quote->totalNet) }}</dd>
             <dt>Livrare</dt><dd>{{ $quote->shipping ? $fmt($quote->shipping['gross']) : '—' }}</dd>
         </dl>
-        <div class="summary__total"><span>Total cu TVA</span><span>{{ $fmt($quote->totalGross) }}</span></div>
+        <div class="summary__total"><span>{{ \App\Core\Support\Tax::total() }}</span><span>{{ $fmt($quote->totalGross) }}</span></div>
         @foreach ($quote->errors as $e)<p class="error-text">{{ $e }}</p>@endforeach
         <button class="btn btn--primary btn--block" type="submit" style="margin-top: 16px" @disabled(! $paymentMethods || ! $quote->isValid() || $itemErrors)>Trimite comanda</button>
         <p class="summary__note">Fiecare rețetă este verificată de un specialist optic înainte de producție.</p>
