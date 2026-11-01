@@ -19,9 +19,9 @@
                             <span class="choice__title"><span>{{ $t->name }}</span><span>@if($ot->is_included) inclus @else +{{ \App\Core\Support\Money::format($ot->price) }} @endif</span></span>
                             <span class="choice__text"><strong>Ce face:</strong> {{ $t->benefits }}</span>
                             <span class="choice__text"><strong>Limite:</strong> {{ $t->limits }}</span>
-                            @if ($t->kind === 'fotocromatic')<span class="illustrative">Comparația interior/exterior de pe site este o fotografie ilustrativă, nu o măsurătoare.</span>@endif
                         </span>
                     </label>
+                    @include('configurator::partials.treatment-explainer', ['kind' => $t->kind, 'treatmentId' => $t->id])
                     @if ($t->requires_option)
                         @php($opts = $t->options->filter(fn ($op) => $op->is_active && $ot->allowsOption($op->code)))
                         <fieldset class="variants" data-option-for="{{ $t->id }}" style="margin-top: 12px; width: 100%">

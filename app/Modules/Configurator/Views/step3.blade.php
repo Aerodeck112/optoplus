@@ -4,6 +4,9 @@
     @csrf
     <h1>Alege lentila</h1>
     <p>Îți arătăm variantele care se pot produce pentru rețeta ta, de la cea mai accesibilă. Prețul este pentru lentile fără tratamente; diferența dintre indici e grosimea și greutatea lentilei.</p>
+    @php($allGroups = $lensOptions['recommended']->concat($lensOptions['other']))
+    @php($selectedGroup = $allGroups->first(fn ($g) => $g['options']->contains(fn ($o) => $o['offering']->id === $cfg->lens_offering_id)))
+    @include('configurator::partials.vision-explainer', ['family' => $selectedGroup ? $selectedGroup['family']->code : (in_array($cfg->usage, ['toate', 'nu_stiu'], true) && $allGroups->contains(fn ($g) => $g['family']->code === 'progresiv') ? 'progresiv' : ($allGroups->first()['family']->code ?? 'progresiv')), 'usage' => $cfg->usage])
     @foreach (['recommended' => 'Potrivite pentru utilizarea aleasă', 'other' => 'Alte variante'] as $group => $heading)
         @if ($lensOptions[$group]->isNotEmpty())
             @if ($group === 'other')<details class="faq" @if($cfg->offering && $lensOptions['other']->contains(fn ($g) => $g['options']->contains(fn ($o) => $o['offering']->id === $cfg->lens_offering_id))) open @endif><summary>{{ $heading }} ({{ $lensOptions['other']->count() }})<x-site.icon name="chevron-down" /></summary>@else<h2 style="font-size: 1.3rem; margin-top: 8px">{{ $heading }}</h2>@endif
@@ -19,7 +22,7 @@
                         @foreach ($g['options'] as $opt)
                             @php($o = $opt['offering'])
                             <label class="choice">
-                                <input type="radio" name="oferta" value="{{ $o->id }}" @checked(old('oferta', $cfg->lens_offering_id) == $o->id) @disabled(! $opt['available']) required data-calc>
+                                <input type="radio" name="oferta" value="{{ $o->id }}" @checked(old('oferta', $cfg->lens_offering_id) == $o->id) @disabled(! $opt['available']) required data-calc data-family="{{ $g['family']->code }}" data-index="{{ $o->material->refractive_index }}">
                                 <span class="choice__mark"></span>
                                 <span class="choice__body">
                                     <span class="choice__title"><span>Indice {{ $o->material->indexLabel() }}</span><span>{{ \App\Core\Support\Money::format($opt['price']) }}</span></span>
@@ -35,7 +38,7 @@
             @if ($group === 'other')</details>@endif
         @endif
     @endforeach
-    <p class="small muted">Grosimea depinde de rețetă și de mărimea ramei; un indice mai mare înseamnă o lentilă mai subțire la aceeași rețetă. Comparațiile sunt orientative, nu un calcul de grosime.</p>
+    @include('configurator::partials.thickness-explainer', ['input' => $input, 'indices' => $allGroups->flatMap(fn ($g) => $g['options']->filter(fn ($o) => $o['available'])->map(fn ($o) => $o['offering']->material->refractive_index))->all()])
     <div class="cfg__nav">
         <a class="btn btn--ghost" href="{{ $cfg->stepUrl(2) }}">Înapoi la rețetă</a>
         <button class="btn btn--primary" type="submit">Continuă la tratamente</button>

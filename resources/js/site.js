@@ -8,8 +8,9 @@ function loadModules(root = document) {
     root.querySelectorAll('[data-module]').forEach((el) => {
         for (const name of el.dataset.module.split(' ')) {
             const loader = modules[`./site/${name}.js`];
-            if (loader && !el.dataset[`loaded${name}`]) {
-                el.dataset[`loaded${name}`] = '1';
+            const key = `loaded${name.replace(/-(\w)/g, (_, c) => c.toUpperCase())}`; // dataset nu acceptă cratime
+            if (loader && !el.dataset[key]) {
+                el.dataset[key] = '1';
                 loader().then((m) => m.default && m.default(el));
             }
         }

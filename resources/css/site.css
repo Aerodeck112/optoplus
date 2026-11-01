@@ -410,6 +410,54 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px
 .thickness { display: flex; gap: var(--s2); align-items: flex-end; height: 56px; margin-top: var(--s2); }
 .thickness span { display: block; width: 14px; background: linear-gradient(180deg, #cfe0ea, #9fbdd0); border-radius: 2px 2px 0 0; }
 
+/* Ilustrațiile interactive din configurator (desene explicative, nu la scară) */
+.explain { border: 1px solid var(--linie); border-radius: var(--r-foto); background: var(--sticla); padding: var(--s4); margin: var(--s4) 0; }
+.explain__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s3); flex-wrap: wrap; }
+.explain__head h2 { font-size: 1.25rem; margin: 0 0 var(--s2); }
+.explain__tabs { display: flex; flex-wrap: wrap; gap: var(--s2); align-items: center; margin: var(--s2) 0; }
+.chip { min-height: 40px; padding: 0 var(--s3); border-radius: 20px; border: 1.5px solid var(--linie); background: var(--alb); color: var(--bleumarin); font: 600 0.92rem var(--font-text); cursor: pointer; }
+.chip--small { min-height: 34px; font-size: 0.85rem; }
+.chip[aria-pressed="true"] { background: var(--bleumarin); border-color: var(--bleumarin); color: var(--alb); }
+.chip:focus-visible { outline: 3px solid var(--gravura); outline-offset: 2px; }
+.explain__stage { display: grid; gap: var(--s3); align-items: start; }
+@media (min-width: 760px) { .explain__stage { grid-template-columns: 1.6fr 1fr; } }
+.vx-scene, .vx-lens, .tx { width: 100%; height: auto; display: block; }
+.vx-lens { max-width: 220px; margin: 0 auto; }
+@media (max-width: 759px) { .vx-lens { max-width: 180px; } }
+.vx-target { transition: opacity .4s ease; opacity: .45; }
+.vx-target.is-looked { opacity: 1; }
+.vx-gaze { stroke-dashoffset: 0; animation: vx-march 1.2s linear infinite; transition: d .5s ease; }
+.vx-gaze.is-bad { stroke: var(--rosu-blocat); }
+.vx-hit, .vx-dot { transition: cy .5s cubic-bezier(.4, 0, .2, 1); }
+.vx-dot.is-bad { fill: var(--rosu-blocat); }
+@keyframes vx-march { to { stroke-dashoffset: -24; } }
+.z-far { fill: #cfe0ea; } .z-mid { fill: #b9d2e2; } .z-near { fill: #a3c3d8; } .z-sharp { fill: #c6dbe8; }
+.z-blur { fill: #e6ecf0; fill-opacity: .9; }
+.explain__caption { margin: var(--s2) 0 0; min-height: 3em; font-size: 0.98rem; }
+.tx-card { fill: var(--alb); stroke: var(--linie); }
+.tx-shape { fill: #bcd5e5; stroke: var(--bleumarin); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; transform: scaleY(.05); transition: transform .7s cubic-bezier(.3, 1.3, .5, 1) var(--d, 0ms), fill .3s; }
+.explain.is-drawn .tx-shape { transform: scaleY(1); }
+.tx-lens.is-selected .tx-card { stroke: var(--bleumarin); stroke-width: 2.5; }
+.tx-lens.is-selected .tx-shape { fill: var(--gravura); }
+.tx-mm { fill: var(--grafit-2); }
+.choice:has(.tx-demo) { flex-wrap: wrap; }
+.tx-demo { flex-basis: 100%; display: grid; gap: var(--s2); margin-top: var(--s3); padding: var(--s3); background: var(--sticla); border-radius: var(--r-camp); }
+.tx-demo svg { width: 100%; max-width: 360px; height: auto; }
+.tx-demo__controls { display: flex; gap: var(--s2); flex-wrap: wrap; }
+.tx-demo__range { display: flex; align-items: center; gap: var(--s2); font-size: 0.88rem; color: var(--grafit-2); }
+.choice .tx-demo input, .tx-demo__range input { position: static; opacity: 1; flex: 1; accent-color: var(--gravura); min-height: 32px; }
+.vx-lens text, .vx-scene text { paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
+.vx-scene text { stroke-width: 0; }
+.demo-glare { transition: opacity .5s ease; opacity: .9; }
+.tx-demo.is-on .demo-glare { opacity: .06; }
+.rays path { stroke-dasharray: 8 6; animation: vx-march 1s linear infinite; }
+.ray-filtered { transition: opacity .5s ease; }
+.tx-demo.is-on .ray-filtered { opacity: .18; }
+.demo-filter { transition: fill .4s; }
+.tx-demo.is-on .demo-filter { fill: #f3ead0; }
+.photo-sun, .photo-room { transition: opacity .2s; }
+@media (prefers-reduced-motion: reduce) { .vx-gaze, .rays path { animation: none; } .tx-shape { transform: none; transition: none; } }
+
 /* Coș, finalizare comandă, cont */
 .layout-2 { display: grid; gap: var(--s5); padding-bottom: var(--s8); }
 @media (min-width: 1000px) { .layout-2 { grid-template-columns: 1fr 380px; gap: var(--s7); align-items: start; } }
