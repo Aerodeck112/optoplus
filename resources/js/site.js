@@ -37,7 +37,9 @@ function initMenu() {
         backdrop = document.createElement('div');
         backdrop.className = 'nav-backdrop';
         backdrop.addEventListener('click', close);
-        document.body.appendChild(backdrop);
+        // În același context de suprapunere cu meniul (antetul are z-index propriu): fundalul rămâne SUB meniu.
+        menu.parentNode.insertBefore(backdrop, menu);
+        document.body.style.overflow = 'hidden';
         menu.querySelector('a, summary, button')?.focus();
     });
     menu.querySelector('[data-menu-close]')?.addEventListener('click', close);

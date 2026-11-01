@@ -3,6 +3,14 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.3] — 2026-11-01
+
+Se poate instala direct peste 1.0.0 – 1.0.2.
+
+- Corectură: pe telefon, cu meniul deschis, linkurile nu se puteau apăsa (fundalul întunecat al meniului
+  stătea deasupra lor). Acum toate paginile și submeniurile se deschid la atingere; pagina din spate nu mai
+  derulează cât timp meniul e deschis.
+
 ## [1.0.2] — 2026-11-01
 
 Se poate instala direct peste 1.0.0 sau 1.0.1.

@@ -18,3 +18,11 @@ imită `.htaccess`), MariaDB 10.11, bază și utilizator dedicate. Pașii au fos
 
 Neverificat încă: instalarea pe hostingul real al Optoplus (limitele lui de PHP, cron, e-mail), plata BT iPay
 cu contul de test al băncii.
+
+## Meniul pe mobil (2026-11-01)
+
+Problema raportată: pe telefon, cu meniul deschis, nicio pagină nu se putea apăsa. Cauza: fundalul meniului
+era adăugat în `body` cu z-index 50, deasupra antetului (z-index 40) care conține meniul. Reparat în 1.0.3.
+Verificat cu Playwright (Pixel 7, iPhone 13): „Producția noastră”, „Ochelari și rame → Rame pentru femei”,
+„Lentile”, „Configurează ochelarii”, „Contact” se deschid; butonul × și atingerea pe fundal închid meniul.
+Meniul panoului pe mobil: funcțional (verificat pe instalarea cPanel simulată).
