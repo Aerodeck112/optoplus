@@ -51,7 +51,9 @@ Citește întâi: `docs/ARHITECTURA.md`, `docs/SCHEMA-BD.md`, `docs/STATUS.md`, 
   procesul curent; pe cPanel nu avem garanția `proc_open`). O migrare nu are voie să depindă de clase noi sau
   modificate în aceeași versiune: folosește doar `Schema`/`DB` sau modele neschimbate; dacă are nevoie de o
   clasă nouă, o încarcă explicit cu `require_once dirname(__DIR__, 2).'/app/...'` (vezi
-  `2026_11_02_000100_refresh_home_and_production_content.php`). Testează fiecare pachet pe simularea cPanel
+  `2026_11_02_000100_refresh_home_and_production_content.php`). Dacă o clasă există deja în versiunea veche,
+  `class_exists()` o găsește pe cea veche: nu adăuga metode noi la ea pentru migrări, ci creează o clasă nouă
+  (ex. `PartnersPageRefresh`). Testează fiecare pachet pe simularea cPanel
   (actualizare reală peste versiunea anterioară), nu doar cu `php artisan test`.
 - Panou: `@extends('layouts.panou')`, componente `x-panou.*`. Site public: `@extends('layouts.site')`,
   CSS `resources/css/site.css` (tokeni pe `:root`), JS pe pagină în `resources/js/site/<nume>.js`

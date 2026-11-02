@@ -3,14 +3,16 @@
 @section('robots', 'noindex, nofollow')
 @section('body_class', 'portal-page')
 @section('content')
-<div class="wrap page-pad">
-    <div class="account-head">
+<div class="portal-banner">
+    <div class="wrap account-head portal-banner__inner">
         <div>
-            <p class="eyebrow">Portal parteneri · {{ $org->name }}</p>
+            <p class="eyebrow"><x-site.icon name="building" :size="16" />Portal parteneri · {{ $org->name }}</p>
             <h1>@yield('heading')</h1>
         </div>
         <form method="post" action="/cont/iesire/">@csrf<button class="link-btn" type="submit">Ieșire</button></form>
     </div>
+</div>
+<div class="wrap page-pad portal-main">
     <nav class="account-nav" aria-label="Portal parteneri">
         @php($nav = ['/portal/' => ['Panou', 'view'], '/portal/comanda-rapida/' => ['Comandă rapidă', 'order'], '/portal/import/' => ['Import CSV', 'order'], '/portal/cos/' => ['Coș', 'order'], '/portal/comenzi/' => ['Comenzi', 'view'], '/portal/oferte/' => ['Oferte', 'view'], '/portal/documente/' => ['Documente', 'documents'], '/portal/utilizatori/' => ['Utilizatori', 'manage_users']])
         @foreach ($nav as $url => [$label, $ability])

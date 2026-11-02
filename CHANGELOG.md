@@ -3,6 +3,25 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.6] — 2026-11-02
+
+Se poate instala direct peste 1.0.0 – 1.0.5.
+
+- **Pagină nouă „Pentru clinici și parteneri”:** deschidere cu macheta animată a portalului (comandă rapidă,
+  urmărirea unei lucrări pas cu pas, „rețetă verificată de specialist”), carduri „Pentru cine este portalul”,
+  **turul interactiv al portalului** (comandă rapidă, import CSV, urmărirea producției, oferte, documente,
+  echipa) care se derulează singur sau la apăsare, formularul de parteneriat cu „Ce urmează după cerere” și
+  datele de contact pentru parteneri. Machetele folosesc date evident fictive și nu afișează prețuri.
+- **Autentificare dedicată partenerilor** (`/portal/autentificare/`). Corectură: un partener neautentificat
+  care deschidea `/portal/` ajungea la autentificarea personalului din panou.
+- **Portalul partenerilor, mai prietenos:** bandă de întâmpinare, meniu tip file, carduri cu pictograme,
+  „Cerere de ofertă” direct din panou și, până la prima comandă, o explicație ilustrată a etapelor.
+- Banda pentru parteneri de pe prima pagină: card luminos cu urmărirea animată a unei lucrări.
+- Corectură: nota despre TVA din portal ține cont că firma nu este plătitoare de TVA.
+- Dacă ați editat deja pagina „Pentru clinici și parteneri” în panou, nu este suprascrisă: varianta nouă
+  rămâne ciornă în Panou → Site → Pagini. Blocurile noi („Deschidere pentru parteneri”, „Pentru cine”,
+  „Turul portalului”) se pot edita ca oricare altele.
+
 ## [1.0.5] — 2026-11-01
 
 Se poate instala direct peste 1.0.0 – 1.0.4.

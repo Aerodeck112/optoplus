@@ -48,7 +48,12 @@ $app = Application::configure(basePath: dirname(__DIR__))
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         ]);
         // Clienții (garda „client”) merg la autentificarea din site; personalul la cea din panou.
-        $middleware->redirectGuestsTo(fn (Request $request) => $request->is('cont', 'cont/*') ? '/cont/autentificare/' : route('login'));
+        // Partenerii (portalul B2B) au pagina lor de autentificare.
+        $middleware->redirectGuestsTo(fn (Request $request) => match (true) {
+            $request->is('portal', 'portal/*') => '/portal/autentificare/',
+            $request->is('cont', 'cont/*') => '/cont/autentificare/',
+            default => route('login'),
+        });
         $middleware->redirectUsersTo(fn (Request $request) => $request->is('cont', 'cont/*') ? '/cont/' : route('panou.dashboard'));
         $middleware->encryptCookies(except: []);
         // În mentenanță (ex. în timpul unei actualizări) rămân accesibile doar autentificarea și tabul Actualizări.

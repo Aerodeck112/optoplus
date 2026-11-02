@@ -14,5 +14,6 @@ class ContentRefreshSeeder extends Seeder
         $refresh->home();
         $refresh->production();
         $refresh->cookies();
+        (new \App\Modules\Cms\Services\PartnersPageRefresh)->run();
     }
 }

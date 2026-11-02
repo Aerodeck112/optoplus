@@ -11,6 +11,20 @@ use App\Core\Support\Html;
  */
 final class BlockRegistry
 {
+    /** Pictogramele care pot fi alese în blocuri (din componenta x-site.icon). */
+    public const ICONS = [
+        'building' => 'Clădire (clinică, cabinet)', 'eye' => 'Ochi', 'lab' => 'Laborator', 'lens' => 'Lentilă',
+        'frame' => 'Ramă', 'user' => 'Persoană', 'shield' => 'Scut (siguranță)', 'clock' => 'Ceas',
+        'truck' => 'Livrare', 'repeat' => 'Repetare', 'file' => 'Document', 'upload' => 'Încărcare',
+        'chat' => 'Discuție', 'ruler' => 'Măsurare', 'check' => 'Bifă',
+    ];
+
+    /** Ecranele portalului pentru care avem machete animate (date fictive). */
+    public const PORTAL_SCREENS = [
+        'quick' => 'Comandă rapidă', 'csv' => 'Import din CSV', 'tracking' => 'Urmărirea producției',
+        'quotes' => 'Oferte', 'documents' => 'Documente', 'team' => 'Utilizatori și roluri',
+    ];
+
     /** @return array<string, array{label:string, description:string, fields: array<string, array>}> */
     public static function types(): array
     {
@@ -115,13 +129,53 @@ final class BlockRegistry
             ],
             'b2b_band' => [
                 'label' => 'Bandă pentru parteneri (B2B)',
-                'description' => 'Bandă bleumarin cu beneficiile pentru clinici și magazine de optică.',
+                'description' => 'Bandă cu beneficiile pentru clinici și magazine de optică, cu urmărirea animată a unei lucrări.',
                 'fields' => [
                     'title' => ['type' => 'text', 'label' => 'Titlu'],
                     'text' => ['type' => 'textarea', 'label' => 'Text'],
                     'bullets' => ['type' => 'list', 'label' => 'Puncte', 'fields' => ['text' => ['type' => 'text', 'label' => 'Text']]],
                     'primary' => ['type' => 'group', 'label' => 'Butonul principal', 'fields' => $link],
                     'secondary' => ['type' => 'group', 'label' => 'Butonul secundar', 'fields' => $link],
+                ],
+            ],
+            'b2b_hero' => [
+                'label' => 'Deschidere pentru parteneri (B2B)',
+                'description' => 'Titlul paginii pentru parteneri, butoanele și macheta animată a portalului (cu date fictive).',
+                'fields' => [
+                    'eyebrow' => ['type' => 'text', 'label' => 'Text mic deasupra titlului'],
+                    'title' => ['type' => 'text', 'label' => 'Titlu', 'required' => true],
+                    'subtitle' => ['type' => 'textarea', 'label' => 'Text de sub titlu'],
+                    'primary' => ['type' => 'group', 'label' => 'Butonul principal', 'fields' => $link],
+                    'secondary' => ['type' => 'group', 'label' => 'Butonul secundar', 'fields' => $link],
+                    'points' => ['type' => 'list', 'label' => 'Puncte scurte', 'fields' => ['text' => ['type' => 'text', 'label' => 'Text']]],
+                    'caption' => ['type' => 'text', 'label' => 'Legenda machetei'],
+                ],
+            ],
+            'b2b_audience' => [
+                'label' => 'Pentru cine (carduri cu pictogramă)',
+                'description' => 'Carduri scurte: tipurile de parteneri sau avantajele, fiecare cu o pictogramă.',
+                'fields' => [
+                    'title' => ['type' => 'text', 'label' => 'Titlu'],
+                    'intro' => ['type' => 'textarea', 'label' => 'Introducere'],
+                    'items' => ['type' => 'list', 'label' => 'Carduri', 'fields' => [
+                        'icon' => ['type' => 'select', 'label' => 'Pictogramă', 'options' => self::ICONS],
+                        'title' => ['type' => 'text', 'label' => 'Titlu'],
+                        'text' => ['type' => 'textarea', 'label' => 'Text'],
+                    ]],
+                ],
+            ],
+            'b2b_tour' => [
+                'label' => 'Turul portalului (interactiv)',
+                'description' => 'File care se schimbă singure (sau la apăsare); fiecare arată macheta animată a unui ecran din portal.',
+                'fields' => [
+                    'title' => ['type' => 'text', 'label' => 'Titlu'],
+                    'intro' => ['type' => 'textarea', 'label' => 'Introducere'],
+                    'tabs' => ['type' => 'list', 'label' => 'File', 'fields' => [
+                        'screen' => ['type' => 'select', 'label' => 'Ecranul ilustrat', 'options' => self::PORTAL_SCREENS],
+                        'title' => ['type' => 'text', 'label' => 'Titlu'],
+                        'text' => ['type' => 'textarea', 'label' => 'Text'],
+                    ]],
+                    'caption' => ['type' => 'text', 'label' => 'Legendă'],
                 ],
             ],
             'rich_text' => [

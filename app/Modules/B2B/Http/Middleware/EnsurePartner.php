@@ -15,7 +15,7 @@ class EnsurePartner
     {
         $customer = Auth::guard('client')->user();
         if (! $customer) {
-            return redirect()->guest('/cont/autentificare/');
+            return redirect()->guest('/portal/autentificare/');
         }
         $membership = $customer->activeMembership();
         if (! $membership) {

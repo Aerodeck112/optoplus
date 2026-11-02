@@ -7,13 +7,13 @@
     @if ($preview)
         <div class="wrap"><div class="notice notice--warn" role="status"><x-site.icon name="eye" /><p>Previzualizare: {{ $previewLabel }}. Această versiune nu este publică.</p></div></div>
     @endif
-    @if ($kind !== 'home' && ! collect($blocks)->contains(fn ($b) => $b['type'] === 'hero_lens'))
+    @if ($kind !== 'home' && ! collect($blocks)->contains(fn ($b) => in_array($b['type'], ['hero_lens', 'b2b_hero'], true)))
         <div class="wrap">
             <x-site.breadcrumbs :items="$breadcrumbs" />
             <header class="page-head"><h1>{{ $title }}</h1></header>
         </div>
     @endif
     @foreach ($blocks as $i => $block)
-        @includeIf('cms::blocks.'.$block['type'], ['d' => $block['data'], 'index' => $i, 'media' => $media, 'first' => $i === 0])
+        @includeIf('cms::blocks.'.$block['type'], ['d' => $block['data'], 'index' => $i, 'media' => $media, 'first' => $i === 0, 'breadcrumbs' => $breadcrumbs ?? []])
     @endforeach
 @endsection
