@@ -2,6 +2,7 @@
 
 namespace App\Modules\Identity\Http\Controllers;
 
+use App\Core\Mail\SafeMail;
 use App\Core\Audit\Audit;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -25,7 +26,10 @@ class PasswordResetController extends Controller
     {
         $request->validate(['email' => ['required', 'email', 'max:190']]);
 
-        $status = Password::sendResetLink(['email' => Str::lower($request->input('email')), 'is_active' => true]);
+        $status = 'neexpediat';
+        SafeMail::attempt(function () use ($request, &$status) {
+            $status = Password::sendResetLink(['email' => Str::lower($request->input('email')), 'is_active' => true]);
+        }, 'resetare parolă personal');
         Audit::log('auth.password_reset_requested', context: [
             'email_hash' => hash('sha256', Str::lower($request->input('email'))),
             'rezultat' => $status,

@@ -2,6 +2,8 @@
 
 namespace App\Modules\Identity\Http\Controllers;
 
+use App\Core\Mail\SafeMail;
+use App\Modules\Settings\Services\MailSettings;
 use App\Core\Audit\Audit;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -52,7 +54,15 @@ class UserController extends Controller
             return $user;
         });
 
-        Password::sendResetLink(['email' => $user->email]);
+        if (! SafeMail::attempt(fn () => Password::sendResetLink(['email' => $user->email]), 'utilizator nou')) {
+            return redirect()->route('panou.users.index')
+                ->with('warning', "Contul pentru {$user->name} a fost creat, dar emailul pentru setarea parolei nu a putut fi trimis. Configurați Setări → Email (SMTP), trimiteți un email de test, apoi folosiți „Trimite link de resetare a parolei” din fișa utilizatorului.");
+        }
+
+        if (! MailSettings::delivering()) {
+            return redirect()->route('panou.users.index')
+                ->with('warning', "Contul pentru {$user->name} a fost creat, dar emailurile nu se trimit încă (serverul de email nu e configurat). Completați Setări → Email (SMTP), trimiteți un email de test, apoi folosiți „Trimite link de resetare a parolei” din fișa utilizatorului.");
+        }
 
         return redirect()->route('panou.users.index')
             ->with('status', "Contul pentru {$user->name} a fost creat. A fost trimis un e-mail pentru setarea parolei.");
@@ -103,8 +113,13 @@ class UserController extends Controller
 
     public function sendReset(User $user): RedirectResponse
     {
-        Password::sendResetLink(['email' => $user->email]);
+        if (! SafeMail::attempt(fn () => Password::sendResetLink(['email' => $user->email]), 'resetare parolă din panou')) {
+            return back()->with('warning', 'Emailul nu a putut fi trimis. Verificați Setări → Email (SMTP) și trimiteți un email de test.');
+        }
         Audit::log('users.password_reset_sent', $user);
+        if (! MailSettings::delivering()) {
+            return back()->with('warning', 'Emailurile nu se trimit încă (serverul de email nu e configurat): completați Setări → Email (SMTP).');
+        }
 
         return back()->with('status', 'Linkul de resetare a parolei a fost trimis.');
     }

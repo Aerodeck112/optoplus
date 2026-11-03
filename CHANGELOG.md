@@ -3,6 +3,21 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.7] — 2026-11-03
+
+Se poate instala direct peste 1.0.0 – 1.0.6.
+
+- **Setări → Email (SMTP), nou:** serverul prin care siteul trimite emailuri (confirmări și stări de comandă,
+  resetări de parolă, invitații). Se completează serverul, portul, criptarea, utilizatorul și parola (păstrată
+  criptat), adresa și numele expeditorului. Butonul „Trimite un email de test” arată exact ce răspunde serverul.
+  Secțiunea e vizibilă pentru administratorul tehnic.
+- Corectură: **crearea unui utilizator nou dădea eroare** când emailul nu putea fi trimis (la instalare,
+  adresa expeditorului rămăsese goală). Acum contul se creează, iar panoul spune clar că emailul nu a plecat
+  și ce e de făcut. Adresa expeditorului are mereu o valoare (setarea, apoi emailul de contact).
+- Resetările de parolă (personal și clienți) nu mai dau eroare dacă emailul nu pleacă; invitațiile pentru
+  parteneri spun clar dacă emailul nu a putut fi trimis.
+- Detaliul comenzii din panou nu mai afișează „din care TVA 0,00 lei” când firma nu e plătitoare de TVA.
+
 ## [1.0.6] — 2026-11-02
 
 Se poate instala direct peste 1.0.0 – 1.0.5.

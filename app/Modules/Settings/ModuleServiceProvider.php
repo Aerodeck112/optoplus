@@ -17,6 +17,13 @@ class ModuleServiceProvider extends BaseProvider
         return 'Setări';
     }
 
+    public function boot(): void
+    {
+        parent::boot();
+        // Serverul de email din Setări se aplică la prima trimitere (vezi MailSettings).
+        $this->app->afterResolving('mail.manager', fn () => Services\MailSettings::apply());
+    }
+
     public function navigation(): array
     {
         // Vizibil pentru oricine are cel puțin o secțiune; controllerul verifică permisiunea fiecărei secțiuni.

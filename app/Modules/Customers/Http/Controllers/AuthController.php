@@ -2,6 +2,7 @@
 
 namespace App\Modules\Customers\Http\Controllers;
 
+use App\Core\Mail\SafeMail;
 use App\Core\Audit\Audit;
 use App\Http\Controllers\Controller;
 use App\Modules\Configurator\Services\ConfigurationService;
@@ -82,7 +83,7 @@ class AuthController extends Controller
         $email = Str::lower($data['email']);
         if (Customer::where('email', $email)->exists()) {
             // Nu confirmăm existența contului: trimitem un link de setare a parolei pe adresa respectivă.
-            Password::broker('customers')->sendResetLink(['email' => $email]);
+            SafeMail::attempt(fn () => Password::broker('customers')->sendResetLink(['email' => $email]), 'înregistrare cont existent');
 
             return redirect('/cont/autentificare/')->with('status', 'Dacă adresa are deja un cont, v-am trimis pe email un link pentru setarea parolei.');
         }
@@ -109,7 +110,7 @@ class AuthController extends Controller
     public function sendReset(Request $request)
     {
         $request->validate(['email' => ['required', 'email', 'max:190']]);
-        Password::broker('customers')->sendResetLink(['email' => Str::lower($request->input('email'))]);
+        SafeMail::attempt(fn () => Password::broker('customers')->sendResetLink(['email' => Str::lower($request->input('email'))]), 'resetare parolă client');
 
         return back()->with('status', 'Dacă adresa are un cont, v-am trimis un link pentru setarea parolei (valabil 60 de minute).');
     }

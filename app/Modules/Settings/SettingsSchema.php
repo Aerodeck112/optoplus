@@ -79,6 +79,21 @@ final class SettingsSchema
                     ],
                 ],
             ],
+            'email' => [
+                'label' => 'Email (SMTP)', 'permission' => 'settings.manage', 'reauth' => true,
+                'intro' => 'Serverul prin care siteul trimite emailuri: confirmări și stări de comandă, resetări de parolă, invitații pentru colegi și parteneri. În cPanel: Email Accounts → creați sau alegeți o adresă (ex. comenzi@optoplus.ro) → „Connect Devices”; acolo găsiți serverul, portul și utilizatorul. Parola se păstrează criptat și nu se mai afișează după salvare.',
+                'fields' => [
+                    'mail.enabled' => ['Trimite emailurile prin acest server', 'bool'],
+                    'mail.host' => ['Server SMTP (ex. mail.optoplus.ro)', 'text'],
+                    'mail.port' => ['Port (465 pentru SSL, 587 pentru TLS)', 'number'],
+                    'mail.encryption' => ['Criptare', 'select', null, ['ssl' => 'SSL (de obicei portul 465)', 'tls' => 'TLS / STARTTLS (de obicei portul 587)', 'none' => 'Fără criptare (nerecomandat)']],
+                    'mail.username' => ['Utilizator (de obicei adresa de email completă)', 'text'],
+                    'mail.password' => ['Parola contului de email', 'secret'],
+                    'mail.from_address' => ['Adresa expeditorului (ex. comenzi@optoplus.ro)', 'email'],
+                    'mail.from_name' => ['Numele expeditorului (ex. Optoplus)', 'text'],
+                    'mail.reply_to' => ['Răspunsurile clienților merg la (opțional)', 'email'],
+                ],
+            ],
             'livrare' => [
                 'label' => 'Livrare și termene', 'permission' => 'shipping.manage',
                 'fields' => [

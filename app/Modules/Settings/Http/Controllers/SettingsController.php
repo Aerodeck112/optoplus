@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Modules\Payments\Gateways\BtIpayGateway;
 use App\Modules\Settings\SettingsSchema;
 use App\Modules\Settings\Services\ApplySettings;
+use App\Modules\Settings\Services\MailSettings;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 /** Tabul „Setări”: fiecare secțiune are permisiunea ei; modificările se auditează (fără valorile secrete). */
@@ -25,6 +27,7 @@ class SettingsController extends Controller
             'sections' => $sections, 'section' => $section, 'def' => $sections[$section],
             'values' => $settings->all(), 'settings' => $settings,
             'btStatus' => $section === 'plati' ? app(BtIpayGateway::class)->unavailableReason() : null,
+            'mailStatus' => $section === 'email' ? MailSettings::status($settings->all()) : null,
         ]);
     }
 
@@ -84,6 +87,9 @@ class SettingsController extends Controller
         if ($changed) {
             Audit::log('settings.updated', null, ['sectiune' => $section, 'chei' => $changed]);
             $apply->apply();
+            if ($section === 'email') {
+                MailSettings::refresh();
+            }
         }
         if ($errors) {
             return back()->withInput()->withErrors($errors);
@@ -98,6 +104,26 @@ class SettingsController extends Controller
         $result = $gateway->testConnection();
 
         return back()->with($result['ok'] ? 'status' : 'warning', $result['message']);
+    }
+
+    /** Trimite un email de test la adresa utilizatorului conectat și arată exact ce răspunde serverul. */
+    public function testMail(Request $request)
+    {
+        MailSettings::refresh();
+        $to = $request->user()->email;
+        try {
+            Mail::raw("Acesta este un email de test trimis din panoul Optoplus.\n\nDacă l-ați primit, emailurile către clienți (confirmări de comandă, stări, resetări de parolă) vor ajunge la fel.", function ($m) use ($to) {
+                $m->to($to)->subject('Email de test — Optoplus');
+            });
+            Audit::log('settings.mail_test', null, ['rezultat' => 'trimis']);
+
+            return back()->with('status', 'Emailul de test a fost trimis la '.$to.'. Verificați și folderul Spam.'
+                .(MailSettings::smtpEnabled(app(Settings::class)->all()) ? '' : ' Atenție: SMTP nu este activ, deci emailul a fost doar scris în jurnal, nu trimis.'));
+        } catch (\Throwable $e) {
+            Audit::log('settings.mail_test', null, ['rezultat' => 'eroare', 'tip' => $e::class]);
+
+            return back()->with('warning', 'Emailul de test NU a putut fi trimis. Răspunsul serverului: '.mb_substr(strip_tags($e->getMessage()), 0, 300));
+        }
     }
 
     private function validIban(string $iban): bool

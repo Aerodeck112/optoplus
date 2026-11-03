@@ -13,6 +13,9 @@
                     @if ($btStatus)<div class="alert alert--warn">{{ $btStatus }}</div>@else<div class="alert alert--ok">Datele BT iPay sunt completate. Testați conexiunea înainte de a activa plata.</div>@endif
                     <p class="small muted">Adresa de revenire (returnUrl) se trimite automat. Adresa de notificare (callback) de comunicat la BT: <code>{{ url('/webhook/plati/btipay') }}</code>. Plata se confirmă numai după interogarea stării la BT (server-la-server), niciodată din revenirea clientului pe site.</p>
                 @endif
+                @if ($section === 'email' && $mailStatus)
+                    <div class="alert alert--{{ $mailStatus[0] }}">{{ $mailStatus[1] }}</div>
+                @endif
                 @if ($section === 'firma')
                     <div class="alert alert--info">Conform ANAF (interogare din {{ now()->format('d.m.Y') }}, serviciul public „PlatitorTvaRest”), OFA SRL nu figurează înregistrată în scopuri de TVA. Verificați cu contabilul: dacă firma nu este plătitoare de TVA, debifați „Firma este înregistrată în scopuri de TVA”; prețurile rămân aceleași, dar nu se mai afișează „din care TVA”.</div>
                 @endif
@@ -44,5 +47,9 @@
     </form>
     @if ($section === 'plati')
         <form method="post" action="{{ route('panou.settings.test-bt') }}" style="margin-top:1rem">@csrf<button class="btn" type="submit">Testează conexiunea BT iPay</button></form>
+    @endif
+    @if ($section === 'email')
+        <form method="post" action="{{ route('panou.settings.test-mail') }}" style="margin-top:1rem">@csrf<button class="btn" type="submit">Trimite un email de test la {{ auth()->user()->email }}</button></form>
+        <p class="small muted">Salvați întâi setările, apoi trimiteți testul.</p>
     @endif
 @endsection

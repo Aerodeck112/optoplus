@@ -48,7 +48,7 @@
                     </tbody>
                     <tfoot>
                         <tr><td colspan="3" class="text-right">Livrare ({{ $order->shipping_method_code ?? '—' }})</td><td class="num">{{ $fmt($order->shipping_total) }}</td></tr>
-                        <tr><td colspan="3" class="text-right">din care TVA</td><td class="num">{{ $fmt($order->vat_total) }}</td></tr>
+                        @if ((int) $order->vat_total > 0)<tr><td colspan="3" class="text-right">din care TVA</td><td class="num">{{ $fmt($order->vat_total) }}</td></tr>@endif
                         <tr><td colspan="3" class="text-right"><strong>Total</strong></td><td class="num"><strong>{{ $fmt($order->total) }}</strong></td></tr>
                     </tfoot>
                 </table></div>

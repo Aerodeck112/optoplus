@@ -28,7 +28,12 @@ class Invitations
             'organization_id' => $org->id, 'email' => $email, 'role' => $role, 'token_hash' => hash('sha256', $token),
             'expires_at' => now()->addDays(7), 'invited_by_customer_id' => $byCustomerId, 'invited_by_user_id' => $byUserId,
         ]);
-        Notification::route('mail', $email)->notify(new Invitation($org->name, url('/portal/invitatie/'.$token.'/')));
+        $sent = \App\Core\Mail\SafeMail::attempt(fn () => Notification::route('mail', $email)->notify(new Invitation($org->name, url('/portal/invitatie/'.$token.'/'))), 'invitație B2B');
+        if (! $sent) {
+            // Fără email, invitația nu ar ajunge la nimeni: o anulăm și spunem clar de ce.
+            $inv->delete();
+            throw ValidationException::withMessages(['email' => 'Invitația nu a putut fi trimisă pe email. Verificați Panou → Setări → Email (SMTP), trimiteți un email de test și încercați din nou.']);
+        }
         Audit::log('b2b.invitation_sent', $inv, ['organization' => $org->id, 'role' => $role], null, $byUserId);
 
         return $inv;
