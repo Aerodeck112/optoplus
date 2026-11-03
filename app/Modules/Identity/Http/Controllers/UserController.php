@@ -124,6 +124,65 @@ class UserController extends Controller
         return back()->with('status', 'Linkul de resetare a parolei a fost trimis.');
     }
 
+    /**
+     * Ștergere doar pentru conturile care nu s-au autentificat niciodată (invitații neacceptate, conturi create
+     * din greșeală). Un coleg care a lucrat în aplicație apare în istoricul comenzilor, al producției și în
+     * jurnalul de audit: contul lui se dezactivează, ca istoricul să rămână corect.
+     */
+    public function destroy(Request $request, User $user): RedirectResponse
+    {
+        if ($error = $this->protectedAccount($request, $user)) {
+            return back()->withErrors(['user' => $error]);
+        }
+        if ($user->last_login_at !== null) {
+            return back()->withErrors(['user' => "{$user->name} a lucrat deja în aplicație și apare în istoric (comenzi, producție, audit). Contul nu se șterge, ci se dezactivează: folosiți „Dezactivează contul”. Persoana nu se mai poate autentifica."]);
+        }
+        $name = $user->name;
+        DB::transaction(function () use ($user) {
+            Audit::log('users.deleted', $user, ['roluri' => $user->getRoleNames()->all()]);
+            DB::table('sessions')->where('user_id', $user->id)->delete();
+            DB::table('password_reset_tokens')->where('email', $user->email)->delete();
+            $user->syncRoles([]);
+            $user->delete();
+        });
+
+        return redirect()->route('panou.users.index')->with('status', "Contul pentru {$name} a fost șters.");
+    }
+
+    /** Dezactivare rapidă: persoana nu se mai poate autentifica, sesiunile ei se închid; istoricul rămâne. */
+    public function deactivate(Request $request, User $user): RedirectResponse
+    {
+        if ($error = $this->protectedAccount($request, $user)) {
+            return back()->withErrors(['user' => $error]);
+        }
+        DB::transaction(function () use ($user) {
+            $user->update(['is_active' => false]);
+            DB::table('sessions')->where('user_id', $user->id)->delete();
+            Audit::log('users.deactivated', $user);
+        });
+
+        return back()->with('status', "Contul pentru {$user->name} a fost dezactivat. Îl puteți reactiva din fișa utilizatorului (bifa „Cont activ”).");
+    }
+
+    /** Propriul cont și ultimul administrator tehnic activ nu se pot șterge sau dezactiva. */
+    private function protectedAccount(Request $request, User $user): ?string
+    {
+        if ($user->is($request->user())) {
+            return 'Nu vă puteți șterge sau dezactiva propriul cont.';
+        }
+        if ($user->hasRole(Roles::ADMIN_TEHNIC)) {
+            if (! $request->user()->hasRole(Roles::ADMIN_TEHNIC)) {
+                return 'Doar un administrator tehnic poate șterge sau dezactiva un administrator tehnic.';
+            }
+            $others = User::role(Roles::ADMIN_TEHNIC)->where('is_active', true)->whereKeyNot($user->id)->exists();
+            if (! $others) {
+                return 'Acesta este ultimul administrator tehnic activ; creați întâi un alt administrator.';
+            }
+        }
+
+        return null;
+    }
+
     private function validated(Request $request, ?User $user = null): array
     {
         return $request->validate([

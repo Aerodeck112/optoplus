@@ -3,6 +3,21 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.8] — 2026-11-03
+
+Se poate instala direct peste 1.0.0 – 1.0.7.
+
+- **Utilizatori, acțiuni direct în listă:** „Retrimite invitația” (pentru cine nu s-a autentificat încă) sau
+  „Resetare parolă”, plus „Șterge” / „Dezactivează”. Starea „invitat, neautentificat” arată cine nu și-a
+  activat încă contul. Aceleași acțiuni sunt și în fișa utilizatorului.
+- **Ștergerea** e definitivă doar pentru conturile care nu s-au autentificat niciodată (invitații neacceptate,
+  conturi create din greșeală). Un coleg care a lucrat deja apare în istoricul comenzilor, al producției și
+  în jurnalul de audit: contul lui se **dezactivează** (nu se mai poate autentifica, sesiunile se închid),
+  ca istoricul să rămână corect; se poate reactiva oricând.
+- Protecții: nu vă puteți șterge propriul cont, ultimul administrator tehnic activ nu poate fi șters sau
+  dezactivat, iar un administrator tehnic poate fi șters doar de alt administrator tehnic. Toate acțiunile
+  cer reconfirmarea identității și se înregistrează în jurnalul de audit.
+
 ## [1.0.7] — 2026-11-03
 
 Se poate instala direct peste 1.0.0 – 1.0.6.

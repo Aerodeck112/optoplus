@@ -39,10 +39,22 @@
                 </dl>
                 <hr class="sep">
                 <div class="stack">
-                    <form method="post" action="{{ route('panou.users.send-reset', $user) }}">@csrf<button class="btn" type="submit">Trimite link de resetare a parolei</button></form>
+                    <form method="post" action="{{ route('panou.users.send-reset', $user) }}">@csrf<button class="btn" type="submit">{{ $user->last_login_at ? 'Trimite link de resetare a parolei' : 'Retrimite invitația (email pentru setarea parolei)' }}</button></form>
                     <form method="post" action="{{ route('panou.users.revoke-sessions', $user) }}" data-confirm="Închideți toate sesiunile acestui utilizator?">@csrf<button class="btn" type="submit">Închide toate sesiunile</button></form>
                     <form method="post" action="{{ route('panou.users.reset-mfa', $user) }}" data-confirm="Utilizatorul va trebui să configureze din nou MFA. Continuați?">@csrf<button class="btn btn--danger" type="submit">Resetează MFA</button></form>
                 </div>
+                @unless ($user->is(auth()->user()))
+                    <hr class="sep">
+                    <div class="stack">
+                        @if (! $user->last_login_at)
+                            <form method="post" action="{{ route('panou.users.destroy', $user) }}" data-confirm="Ștergeți definitiv contul pentru {{ $user->name }}? Persoana nu s-a autentificat niciodată.">@csrf @method('delete')<button class="btn btn--danger" type="submit">Șterge contul</button></form>
+                            <p class="small muted">Contul nu a fost folosit niciodată, deci se poate șterge definitiv.</p>
+                        @elseif ($user->is_active)
+                            <form method="post" action="{{ route('panou.users.deactivate', $user) }}" data-confirm="Dezactivați contul pentru {{ $user->name }}? Persoana nu se va mai putea autentifica.">@csrf<button class="btn btn--danger" type="submit">Dezactivează contul</button></form>
+                            <p class="small muted">Colegul a lucrat în aplicație și apare în istoric, deci contul se dezactivează în loc să fie șters.</p>
+                        @endif
+                    </div>
+                @endunless
             </x-panou.panel>
         @endif
     </div>

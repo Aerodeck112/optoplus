@@ -31,6 +31,8 @@ Route::middleware('permission:users.manage')->group(function () {
         Route::post('utilizatori/{user}/reset-mfa', [UserController::class, 'resetMfa'])->name('users.reset-mfa');
         Route::post('utilizatori/{user}/inchide-sesiuni', [UserController::class, 'revokeSessions'])->name('users.revoke-sessions');
         Route::post('utilizatori/{user}/resetare-parola', [UserController::class, 'sendReset'])->name('users.send-reset');
+        Route::post('utilizatori/{user}/dezactiveaza', [UserController::class, 'deactivate'])->name('users.deactivate');
+        Route::delete('utilizatori/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 });
 

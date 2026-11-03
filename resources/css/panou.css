@@ -1185,3 +1185,10 @@ body.auth {
 .media-card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: .5rem; display: grid; gap: .4rem; }
 .media-card img { width: 100%; height: 130px; object-fit: contain; background: var(--mist); border-radius: 6px; }
 .media-card input { width: 100%; font-size: .85rem; padding: .3rem .4rem; }
+
+/* Acțiuni rapide în tabele (ex. Utilizatori): butoanele se așază unul sub altul dacă nu e loc. */
+.row-actions { width: 1%; }
+.row-actions__inner { display: flex; flex-direction: column; gap: .35rem; align-items: stretch; min-width: 9.5rem; }
+.row-actions__inner form { margin: 0; }
+.row-actions__inner .btn { width: 100%; justify-content: center; white-space: nowrap; }
+.table td.cell-email { word-break: break-all; }

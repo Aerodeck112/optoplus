@@ -16,16 +16,19 @@
         @else
             <div class="table-wrap">
                 <table class="table">
-                    <thead><tr><th>Nume</th><th>E-mail</th><th>Roluri</th><th>MFA</th><th>Stare</th><th>Ultima autentificare</th></tr></thead>
+                    <thead><tr><th>Nume</th><th>E-mail</th><th>Roluri</th><th>MFA</th><th>Stare</th><th>Ultima autentificare</th><th><span class="sr-only">Acțiuni</span></th></tr></thead>
                     <tbody>
                     @foreach ($users as $u)
                         <tr>
                             <td><a class="row-link" href="{{ route('panou.users.edit', $u) }}">{{ $u->name }}</a></td>
-                            <td>{{ $u->email }}</td>
+                            <td class="cell-email">{{ $u->email }}</td>
                             <td>{{ $u->roles->map(fn ($r) => \App\Modules\Identity\Roles::label($r->name))->join(', ') ?: '—' }}</td>
                             <td>@if ($u->hasMfaEnabled())<x-panou.badge tone="ok">activ</x-panou.badge>@else<x-panou.badge tone="warn">neconfigurat</x-panou.badge>@endif</td>
-                            <td>@if ($u->is_active)<x-panou.badge tone="ok">activ</x-panou.badge>@else<x-panou.badge>dezactivat</x-panou.badge>@endif</td>
+                            <td>@if (! $u->is_active)<x-panou.badge>dezactivat</x-panou.badge>@elseif (! $u->last_login_at)<x-panou.badge tone="warn">invitat, neautentificat</x-panou.badge>@else<x-panou.badge tone="ok">activ</x-panou.badge>@endif</td>
                             <td class="num">{{ $u->last_login_at?->format('d.m.Y H:i') ?? '—' }}</td>
+                            <td class="row-actions">
+                                @include('identity::users.partials.actions', ['u' => $u, 'small' => true])
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
