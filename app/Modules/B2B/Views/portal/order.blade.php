@@ -11,7 +11,7 @@
                 <tbody>
                 @foreach ($order->items as $item)
                     @php($job = $order->productionJobs->where('order_item_id', $item->id)->sortByDesc('id')->first())
-                    <tr><td>{{ $item->patient_reference ?? '—' }}</td><td>{{ $item->quantity }} × {{ $item->name }}</td>
+                    <tr><td>{{ $item->patient_reference ?? '—' }}</td><td>{{ $item->quantity }} × {{ $item->name }}@if ($tl = \App\Modules\Lenses\Support\TreatmentLine::format((array) ($item->snapshot['treatments'] ?? [])))<br><small class="muted">Tratamente: {{ $tl }}</small>@endif</td>
                         <td>{{ $job ? ($stages[$job->stage] ?? $job->stage) : '—' }}@if($job?->remake_of_id) <span class="tag">refacere</span>@endif</td>
                         <td class="num">{{ $fmt($item->line_total) }}</td></tr>
                 @endforeach

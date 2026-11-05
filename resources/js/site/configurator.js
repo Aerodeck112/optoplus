@@ -40,6 +40,9 @@ export default function configurator(root) {
     const syncOptions = () => form?.querySelectorAll('[data-option-for]').forEach((fs) => {
         const cb = form.querySelector(`[data-treatment="${fs.dataset.optionFor}"]`);
         fs.hidden = !cb?.checked;
+        // nuanța e obligatorie doar pentru tratamentul bifat (browserul o cere la trimitere)
+        const radios = fs.querySelectorAll('input[type=radio]');
+        radios.forEach((r, i) => { r.required = !!cb?.checked && i === 0; });
     });
     form?.querySelectorAll('[data-treatment]').forEach((cb) => cb.addEventListener('change', syncOptions));
     syncOptions();

@@ -40,8 +40,9 @@ class ModuleServiceProvider extends BaseProvider
     public function navigation(): array
     {
         return [
-            new NavItem('Lentile și matrice', 'panou.lenses.index', 'lenses.view', 'Catalog', 'activity', 20),
-            new NavItem('Reguli de compatibilitate', 'panou.lenses.rules.index', 'lenses.view', 'Catalog', 'shield', 21),
+            new NavItem('Lentile și matrice', 'panou.lenses.index', 'lenses.view', 'Catalog', 'activity', 20, 'panou.lenses.index|panou.lenses.offering*'),
+            new NavItem('Tratamente lentile', 'panou.lenses.treatments.index', 'lenses.view', 'Catalog', 'layers', 21),
+            new NavItem('Reguli de compatibilitate', 'panou.lenses.rules.index', 'lenses.view', 'Catalog', 'shield', 22),
         ];
     }
 }

@@ -33,7 +33,7 @@
                                 @if ($item->kind === 'configuration')
                                     @if ($s['frame'] ?? null)Ramă: {{ $s['frame']['name'] }} ({{ $s['frame']['sku'] }})<br>@endif
                                     @if ($s['lens'] ?? null)Lentilă: {{ $s['lens']['product'] }}, {{ $s['lens']['material'] }} · {{ $s['lens']['offering_code'] ?? '' }}@if($s['lens']['offering_status'] === 'neconfirmat') <x-panou.badge tone="warn">ofertă neconfirmată</x-panou.badge>@endif<br>@endif
-                                    @if (! empty($s['treatments']))Tratamente: {{ collect($s['treatments'])->map(fn ($t) => $t['name'].($t['option'] ? ' ('.$t['option'].')' : ''))->implode(', ') }}<br>@endif
+                                    @if (! empty($s['treatments']))Tratamente: {{ \App\Modules\Lenses\Support\TreatmentLine::format((array) $s['treatments']) }}<br>@endif
                                     @foreach (($s['validation']['warnings'] ?? []) as $w)<span class="muted">⚠ {{ $w }}</span><br>@endforeach
                                     @if ($s['prescription']['customer_unsure'] ?? false)<x-panou.badge tone="warn">clientul nu înțelege rețeta</x-panou.badge>@endif
                                     @if ($s['prescription']['has_file'] ?? false)<x-panou.badge>rețetă încărcată</x-panou.badge>@endif

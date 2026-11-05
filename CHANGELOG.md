@@ -3,6 +3,23 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.9] — 2026-11-05
+
+Se poate instala direct peste 1.0.0 – 1.0.8.
+
+- **Configurator, pasul „Tratamente”:** un tratament pe care regulile nu îl permit pentru alegerea clientului
+  (ex. fotocromatic la ochelarii de citit) apare inactiv, cu motivul, în loc să fie oferit cu preț și respins
+  abia după bifare. Nuanța fotocromaticului e cerută la trimitere, fără mesaj roșu în timp ce clientul alege.
+- **Nuanța în comandă:** fișa de producție, comanda din panou, pagina comenzii pentru client și portalul
+  partenerilor afișează „Fotocromatic (Gri 85%)”, nu codul intern („gri_85”). Clientul vede acum pe pagina
+  comenzii și tratamentele alese.
+- **Panou → Catalog → Tratamente lentile, nou:** numele și textele „Ce face” / „Limite” afișate clientului,
+  activ/inactiv, nuanțele (etichetă, culoare, activă) și tratamente noi.
+- **La fiecare lentilă:** se bifează nuanțele permise (ex. la indicele 1.60 doar 85%) și se poate adăuga un
+  tratament care lipsește, cu prețul lui.
+- Prețul lentilei din panou se numește „Preț B2C final” când firma nu e plătitoare de TVA. În meniu se
+  evidențiază doar secțiunea deschisă.
+
 ## [1.0.8] — 2026-11-03
 
 Se poate instala direct peste 1.0.0 – 1.0.7.

@@ -39,7 +39,7 @@
                     <ul class="nav-list">
                         @foreach ($items as $item)
                             <li>
-                                <a class="nav-link" href="{{ route($item->route) }}" @if (request()->routeIs($item->pattern())) aria-current="page" @endif>
+                                <a class="nav-link" href="{{ route($item->route) }}" @if (request()->routeIs(...explode('|', $item->pattern()))) aria-current="page" @endif>
                                     <x-panou.icon :name="$item->icon" />{{ $item->label }}
                                 </a>
                             </li>

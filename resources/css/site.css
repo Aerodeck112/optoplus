@@ -897,3 +897,8 @@ body { background: linear-gradient(180deg, #f7fbff 0%, #ffffff 40%, #fffaf3 100%
     .b2b-hero__visual .b2b-float--track { display: none; }
     .b2b-card__visual { padding-left: 0; }
 }
+
+/* 1.0.9 — tratamente indisponibile pentru alegerea clientului (ex. fotocromatic la ochelarii de citit) */
+.choice--blocked { opacity: .72; background: #f4f6f8; }
+.choice--blocked .choice__title span:last-child { text-decoration: line-through; }
+.choice__blocked { display: block; margin-top: 8px; padding: 8px 12px; border-radius: 8px; background: var(--gravura-pal); color: var(--gravura); font-size: .92rem; }

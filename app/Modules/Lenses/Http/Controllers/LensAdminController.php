@@ -44,6 +44,8 @@ class LensAdminController extends Controller
             'zile_min' => ['nullable', 'integer', 'min:0', 'max:120'], 'zile_max' => ['nullable', 'integer', 'min:0', 'max:120'],
             'stare' => ['required', 'in:activ,neconfirmat,inactiv'], 'verificare' => ['nullable', 'boolean'], 'sursa' => ['nullable', 'string', 'max:255'],
             't' => ['array'], 't.*.pret' => ['nullable', 'string'], 't.*.inclus' => ['nullable', 'boolean'], 't.*.stare' => ['nullable', 'in:activ,neconfirmat,inactiv'],
+            't.*.nuante' => ['nullable', 'array'], 't.*.nuante.*' => ['string', 'max:40'],
+            'adauga.tratament' => ['nullable', 'integer', 'exists:lens_treatments,id'], 'adauga.pret' => ['nullable', 'string'],
         ]);
         if ($data['stare'] === 'activ' && $o->status !== 'activ' && ! $request->user()->can('lenses.confirm')) {
             throw ValidationException::withMessages(['stare' => 'Doar cine are permisiunea „confirmare laborator” poate marca oferta ca activă (confirmată).']);
@@ -76,8 +78,31 @@ class LensAdminController extends Controller
         DB::transaction(function () use ($o, $values, $data) {
             $o->update($values);
             foreach ((array) ($data['t'] ?? []) as $tid => $row) {
-                $ot = LensOfferingTreatment::where('offering_id', $o->id)->findOrFail((int) $tid);
-                $ot->update(['price' => Money::parse($row['pret'] ?? '0') ?? 0, 'is_included' => (bool) ($row['inclus'] ?? false), 'status' => $row['stare'] ?? $ot->status]);
+                $ot = LensOfferingTreatment::with('treatment.options')->where('offering_id', $o->id)->findOrFail((int) $tid);
+                $changes = ['price' => Money::parse($row['pret'] ?? '0') ?? 0, 'is_included' => (bool) ($row['inclus'] ?? false), 'status' => $row['stare'] ?? $ot->status];
+                if ($ot->treatment?->requires_option) {
+                    // Nuanțele permise pe această lentilă (ex. la indicele 1.60 doar 85%).
+                    $codes = array_values(array_intersect((array) ($row['nuante'] ?? []), $ot->treatment->options->pluck('code')->all()));
+                    if (! $codes && $changes['status'] !== 'inactiv') {
+                        throw ValidationException::withMessages(["t.{$tid}.nuante" => "„{$ot->treatment->name}”: bifați cel puțin o nuanță permisă pe această lentilă (sau treceți tratamentul pe „inactiv”)."]);
+                    }
+                    $changes['option_codes'] = $codes;
+                }
+                $ot->update($changes);
+            }
+            if (! empty($data['adauga']['tratament'])) {
+                $tid = (int) $data['adauga']['tratament'];
+                if (LensOfferingTreatment::where('offering_id', $o->id)->where('treatment_id', $tid)->exists()) {
+                    throw ValidationException::withMessages(['adauga.tratament' => 'Tratamentul este deja la această lentilă.']);
+                }
+                $price = Money::parse((string) ($data['adauga']['pret'] ?? ''));
+                if ($price === null) {
+                    throw ValidationException::withMessages(['adauga.pret' => 'Completați prețul tratamentului pentru această lentilă (0 dacă e inclus).']);
+                }
+                $tr = \App\Modules\Lenses\Models\LensTreatment::with('options')->findOrFail($tid);
+                LensOfferingTreatment::create(['offering_id' => $o->id, 'treatment_id' => $tid, 'price' => $price, 'is_included' => $price === 0, 'status' => 'neconfirmat',
+                    'option_codes' => $tr->requires_option ? $tr->options->where('is_active', true)->pluck('code')->values()->all() : null]);
+                Audit::log('lenses.offering_treatment_added', $o, ['tratament' => $tr->code, 'pret' => $price]);
             }
         });
         $diff = array_filter(array_keys($values), fn ($k) => $before[$k] != $values[$k]);

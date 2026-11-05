@@ -198,7 +198,10 @@ class OrderPlacer
             'treatments' => collect($input->treatments)->map(function ($t) use ($o) {
                 $ot = $o?->treatments->firstWhere('treatment_id', (int) $t['treatment_id']);
 
-                return ['treatment_id' => (int) $t['treatment_id'], 'name' => $ot?->treatment->name, 'option' => $t['option'] ?? null, 'included' => (bool) $ot?->is_included];
+                $option = $t['option'] ?? null;
+                $optionLabel = $option ? \App\Modules\Lenses\Support\TreatmentLine::optionLabel((int) $t['treatment_id'], (string) $option) : null;
+
+                return ['treatment_id' => (int) $t['treatment_id'], 'name' => $ot?->treatment->name, 'option' => $option, 'option_label' => $optionLabel, 'included' => (bool) $ot?->is_included];
             })->values()->all(),
             'prescription' => ['id' => $cfg->prescription_id, 'pd_mode' => $input->pdMode, 'has_file' => (bool) $cfg->prescription?->files()->exists(), 'customer_unsure' => (bool) $cfg->prescription?->customer_unsure],
             'validation' => [

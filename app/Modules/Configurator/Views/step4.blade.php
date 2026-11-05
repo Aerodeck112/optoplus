@@ -9,23 +9,28 @@
     @else
         <p>Tratamentele sunt opționale. Îți spunem ce fac și ce nu fac, ca să alegi doar ce îți folosește.</p>
         @php($chosen = collect($cfg->treatments ?? [])->keyBy('treatment_id'))
+        @php($blocked = $blockedTreatments ?? [])
         <div class="choice-grid">
             @foreach ($available as $ot)
                 @php($t = $ot->treatment)
-                <div class="choice" style="cursor: default">
+                @php($why = $blocked[$t->id] ?? null)
+                <div class="choice @if($why) choice--blocked @endif" style="cursor: default">
                     <label class="check" style="flex: 1">
-                        <input type="checkbox" name="tratamente[]" value="{{ $t->id }}" @checked($chosen->has($t->id)) data-calc data-treatment="{{ $t->id }}">
+                        <input type="checkbox" name="tratamente[]" value="{{ $t->id }}" @checked(! $why && $chosen->has($t->id)) @disabled($why) data-calc data-treatment="{{ $t->id }}" @if($t->requires_option) data-needs-option @endif>
                         <span class="choice__body">
                             <span class="choice__title"><span>{{ $t->name }}</span><span>@if($ot->is_included) inclus @else +{{ \App\Core\Support\Money::format($ot->price) }} @endif</span></span>
                             <span class="choice__text"><strong>Ce face:</strong> {{ $t->benefits }}</span>
                             <span class="choice__text"><strong>Limite:</strong> {{ $t->limits }}</span>
+                            @if ($why)<span class="choice__blocked"><strong>Nu este disponibil pentru alegerea ta:</strong> {{ $why }}</span>@endif
                         </span>
                     </label>
+                    @unless ($why)
                     @include('configurator::partials.treatment-explainer', ['kind' => $t->kind, 'treatmentId' => $t->id])
-                    @if ($t->requires_option)
+                    @endunless
+                    @if ($t->requires_option && ! $why)
                         @php($opts = $t->options->filter(fn ($op) => $op->is_active && $ot->allowsOption($op->code)))
                         <fieldset class="variants" data-option-for="{{ $t->id }}" style="margin-top: 12px; width: 100%">
-                            <legend>Alege nuanța</legend>
+                            <legend>Alege nuanța <span class="muted">(obligatoriu)</span></legend>
                             @foreach ($opts as $op)
                                 <label><input type="radio" name="optiune[{{ $t->id }}]" value="{{ $op->code }}" @checked(($chosen[$t->id]['option'] ?? null) === $op->code) data-calc>@if($op->swatch)<span aria-hidden="true" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:{{ $op->swatch }}"></span>@endif{{ $op->label }}</label>
                             @endforeach

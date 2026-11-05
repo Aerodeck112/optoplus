@@ -87,6 +87,9 @@ class ConfiguratorController extends Controller
             $data['lensOptions'] = $lensOptions->forInput($input, $this->service->context());
             $data['lensHint'] = $request->session()->get('cfg_lens_hint.'.$cfg->uuid);
         }
+        if ($step === 4 && $data['offering']) {
+            $data['blockedTreatments'] = $this->blockedTreatments($cfg, $input, $data['offering']);
+        }
         if ($step === 2 && $cfg->prescription) {
             Audit::log('prescription.viewed', $cfg->prescription, ['context' => 'configurator'], $cfg->prescription->customer_id);
         }
@@ -116,6 +119,33 @@ class ConfiguratorController extends Controller
         return redirect($cfg->stepUrl(min(5, $step + 1)));
     }
 
+    /**
+     * Tratamentele pe care regulile de compatibilitate nu le permit pentru alegerile clientului (ex. fotocromatic la
+     * ochelarii de citit): le arătăm inactive, cu motivul, în loc să le oferim și să le respingem după bifare.
+     * Decizia rămâne a validatorului de pe server (ConfigurationValidator).
+     *
+     * @return array<int, string> treatment_id => motivul
+     */
+    private function blockedTreatments(\App\Modules\Configurator\Models\Configuration $cfg, $input, $offering): array
+    {
+        $rulesOf = fn ($result) => collect($result->errors)->filter(fn ($e) => str_starts_with($e['code'], 'rule_'))->pluck('message', 'code')->all();
+        $baseline = $rulesOf($this->service->validate($cfg, false, $input->with(['treatments' => []])));
+        $blocked = [];
+        foreach ($offering->treatments as $ot) {
+            $t = $ot->treatment;
+            if (! $t || ! $t->is_active || $ot->status === 'inactiv') {
+                continue;
+            }
+            $option = $t->requires_option ? $t->options->first(fn ($op) => $op->is_active && $ot->allowsOption($op->code))?->code : null;
+            $new = array_diff_key($rulesOf($this->service->validate($cfg, false, $input->with(['treatments' => [['treatment_id' => $t->id, 'option' => $option]]]))), $baseline);
+            if ($new) {
+                $blocked[$t->id] = implode(' ', $new);
+            }
+        }
+
+        return $blocked;
+    }
+
     /** Recalcul fără salvare (JavaScript): prețul și mesajele pentru alegerile din formular. */
     public function calc(Request $request, string $uuid): JsonResponse
     {
@@ -141,7 +171,7 @@ class ConfiguratorController extends Controller
         return response()->json([
             'summary' => view('configurator::partials.summary', ['quote' => $quote, 'cfg' => $cfg, 'validation' => $result])->render(),
             'total' => \App\Core\Support\Money::format($quote->totalGross),
-            'errors' => array_column(array_filter($result->errors, fn ($e) => str_starts_with($e['code'], 'treatment') || str_starts_with($e['code'], 'rule_')), 'message'),
+            'errors' => array_column(array_filter($result->errors, fn ($e) => (str_starts_with($e['code'], 'treatment') && $e['code'] !== 'treatment_option') || str_starts_with($e['code'], 'rule_')), 'message'),
             'warnings' => array_column($result->warnings, 'message'),
         ])->header('Cache-Control', 'no-store, private');
     }

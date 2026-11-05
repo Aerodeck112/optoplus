@@ -11,7 +11,7 @@ final class NavItem
      * @param  string|null  $permission  permisiunea necesară (null = orice utilizator autentificat)
      * @param  string  $group  grupul din meniu (ex. „Activitate”, „Site”, „Administrare”)
      * @param  string  $icon  numele pictogramei din resources/views/components/panou/icon.blade.php
-     * @param  string|null  $activePattern  tiparul de rută pentru evidențiere (implicit route + '*')
+     * @param  string|null  $activePattern  tiparul de rută pentru evidențiere (implicit route + '*'; mai multe, separate prin „|”)
      */
     public function __construct(
         public readonly string $label,

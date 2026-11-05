@@ -22,6 +22,12 @@ class LensTreatment extends Model
         return $this->hasMany(LensTreatmentOption::class, 'treatment_id')->orderBy('sort');
     }
 
+    /** Lentilele (ofertele) la care tratamentul este disponibil, cu prețul pe fiecare. */
+    public function offerings(): HasMany
+    {
+        return $this->hasMany(LensOfferingTreatment::class, 'treatment_id');
+    }
+
     public function datasheet(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'datasheet_media_id');

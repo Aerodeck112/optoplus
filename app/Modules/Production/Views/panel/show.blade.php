@@ -21,7 +21,7 @@
             <x-panou.panel title="Fișa de lucru">
                 <dl class="kv">
                     <dt>Lentila</dt><dd>{{ $s['lens']['product'] ?? '—' }}, {{ $s['lens']['material'] ?? '' }} <span class="muted">({{ $s['lens']['offering_code'] ?? '' }}, formă: {{ $s['lens']['supply_form'] ?? '—' }}, ⌀ {{ $s['lens']['diameter_mm'] ?? '—' }})</span>@if(($s['lens']['offering_status'] ?? '') === 'neconfirmat') <x-panou.badge tone="warn">ofertă neconfirmată de laborator</x-panou.badge>@endif</dd>
-                    <dt>Tratamente</dt><dd>{{ collect($s['treatments'] ?? [])->map(fn ($t) => $t['name'].($t['option'] ? ' ('.$t['option'].')' : ''))->implode(', ') ?: 'fără' }}</dd>
+                    <dt>Tratamente</dt><dd>{{ \App\Modules\Lenses\Support\TreatmentLine::format((array) ($s['treatments'] ?? []), 'fără') }}</dd>
                     <dt>Ramă</dt><dd>@if($s['frame'] ?? null){{ $s['frame']['name'] }} · {{ $s['frame']['sku'] }}@if($s['frame']['spec']) · {{ $s['frame']['spec']['lens_width_mm'] }}□{{ $s['frame']['spec']['bridge_mm'] }}-{{ $s['frame']['spec']['temple_mm'] }}, {{ $s['frame']['spec']['rim_type'] ?? '' }}@endif @else fără ramă (doar lentile) @endif</dd>
                     <dt>Utilizare</dt><dd>{{ \App\Modules\Configurator\Support\ConfigurationInput::USAGES[$s['usage'] ?? ''] ?? '—' }} · ochi: {{ $s['eyes'] ?? 'ambii' }} · montaj: {{ $job->requires_mounting ? 'da' : 'nu' }}</dd>
                 </dl>

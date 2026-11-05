@@ -56,7 +56,7 @@
         <aside class="summary">
             <h2>Rezumat</h2>
             <ul class="line__parts">
-                @foreach ($order->items as $item)<li><span>{{ $item->quantity }} × {{ $item->name }}</span><span>{{ $fmt($item->line_total) }}</span></li>@endforeach
+                @foreach ($order->items as $item)<li><span>{{ $item->quantity }} × {{ $item->name }}@if ($tl = \App\Modules\Lenses\Support\TreatmentLine::format((array) ($item->snapshot['treatments'] ?? [])))<br><small class="muted">Tratamente: {{ $tl }}</small>@endif</span><span>{{ $fmt($item->line_total) }}</span></li>@endforeach
             </ul>
             <dl style="margin-top: 16px">
                 @if ($order->discount_total)<dt>Reduceri</dt><dd class="discount">−{{ $fmt($order->discount_total) }}</dd>@endif
