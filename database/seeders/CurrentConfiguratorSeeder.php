@@ -136,6 +136,8 @@ class CurrentConfiguratorSeeder extends Seeder
             }
 
             $this->rules();
+            // Helio / Xtractive și regulile pentru ramele fără ramă (aceleași date ca migrarea 1.0.10).
+            \App\Modules\Lenses\Support\PhotochromicSplit::run();
         });
     }
 

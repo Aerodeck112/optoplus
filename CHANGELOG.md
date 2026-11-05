@@ -3,6 +3,23 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.10] — 2026-11-05
+
+Se poate instala direct peste 1.0.0 – 1.0.9.
+
+- **Fotocromatic Helio și Fotocromatic Xtractive:** Helio se închide doar afară, la soare (în mașină
+  parbrizul oprește razele UV); Xtractive se închide și în mașină, deci e potrivit și pentru condus. Clientul
+  poate alege un singur fotocromatic; ilustrația are acum și poziția „În mașină”, ca să se vadă diferența.
+- **Xtractive se activează din panou:** e adăugat la aceleași lentile ca Helio, dar **inactiv, fără preț și
+  fără culori**, până le completează laboratorul (Catalog → Tratamente lentile → Xtractive → culorile; apoi la
+  fiecare lentilă: prețul, culorile permise și starea). Un tratament nu se poate activa pe o lentilă cu preț 0.
+- **Culorile se văd mereu,** ca buline mari; un clic pe o culoare bifează și tratamentul.
+- **Reguli noi:** ramele fără ramă, cu lentilele prinse prin găurire, nu se pot combina cu Helio (lentilele
+  pentru găurire sunt din alt material) — clientul vede tratamentul inactiv, cu motivul; cu Xtractive, comanda
+  trece prin verificarea specialistului. La ochelarii de citit nu se oferă niciun fotocromatic.
+- Regula pentru găurire funcționează pentru ramele marcate „Fără ramă (prindere în șuruburi/capse)” la
+  Catalog → Produse → rama → Tip ramă.
+
 ## [1.0.9] — 2026-11-05
 
 Se poate instala direct peste 1.0.0 – 1.0.8.

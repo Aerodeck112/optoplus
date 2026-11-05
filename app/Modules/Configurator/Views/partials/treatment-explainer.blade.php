@@ -31,7 +31,8 @@
 </div>
 @break
 @case('fotocromatic')
-<div class="tx-demo" data-module="lens-explainer" data-explainer="photo" data-treatment-ref="{{ $treatmentId }}">
+@case('fotocromatic_condus')
+<div class="tx-demo" data-module="lens-explainer" data-explainer="photo" data-variant="{{ $kind === 'fotocromatic_condus' ? 'xtractive' : 'helio' }}" data-treatment-ref="{{ $treatmentId }}">
     <svg viewBox="0 0 260 130" role="img" aria-label="Ilustrație: lentila fotocromatică se închide la lumina soarelui">
         <rect width="260" height="130" rx="10" class="photo-sky" fill="#e9eef2"/>
         <g class="photo-sun"><circle cx="222" cy="28" r="14" fill="#ffd34d"/><path d="M222 6 v-4 M222 54 v-4 M200 28 h-4 M248 28 h-4 M206 12 l-3 -3 M238 44 l3 3 M238 12 l3 -3 M206 44 l-3 3" stroke="#e0b54b" stroke-width="2"/></g>
@@ -39,8 +40,9 @@
 <g class="demo-face"><path d="M40 128 C40 60 80 22 130 22 C180 22 220 60 220 128 Z" fill="#f0d0b4"/><path d="M42 84 C40 40 84 14 130 14 C176 14 220 40 218 84 C204 54 170 42 130 42 C90 42 56 54 42 84 Z" fill="#3f2a1e"/><path d="M122 98 q8 8 16 0" stroke="#b07a63" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M110 116 q20 10 40 0" stroke="#b5655a" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="94" cy="76" rx="11" ry="7" fill="#fff"/><circle cx="95" cy="76" r="5.5" fill="#3d6b8a"/><circle cx="95" cy="76" r="2.4" fill="#111"/><ellipse cx="166" cy="76" rx="11" ry="7" fill="#fff"/><circle cx="167" cy="76" r="5.5" fill="#3d6b8a"/><circle cx="167" cy="76" r="2.4" fill="#111"/></g>
         <g stroke="#053b5e" stroke-width="3.5"><rect x="62" y="56" width="62" height="42" rx="16" class="photo-tint" fill="#4a4f55" fill-opacity="0"/><rect x="136" y="56" width="62" height="42" rx="16" class="photo-tint" fill="#4a4f55" fill-opacity="0"/></g>
         <path d="M124 72 q6 -6 12 0 M62 70 L44 64 M198 70 L216 64" stroke="#053b5e" stroke-width="3" fill="none"/>
+        <g class="photo-car" opacity="0"><path d="M0 0 H260 V22 Q130 4 0 22 Z" fill="#2b3036"/><path d="M0 0 V130 H10 V20 Z M260 0 V130 H250 V20 Z" fill="#2b3036"/><circle cx="214" cy="140" r="34" fill="none" stroke="#2b3036" stroke-width="9"/><rect x="0" y="118" width="260" height="12" fill="#2b3036"/></g>
     </svg>
-    <label class="tx-demo__range"><span>În casă</span><input type="range" min="0" max="100" value="0" data-photo-range aria-label="De la interior la exterior, la soare"><span>Afară, la soare</span></label>
+    <div class="tx-demo__controls" role="group" aria-label="Unde vă aflați"><button type="button" class="chip chip--small" data-scene="casa" aria-pressed="true">În casă</button><button type="button" class="chip chip--small" data-scene="masina" aria-pressed="false">În mașină</button><button type="button" class="chip chip--small" data-scene="afara" aria-pressed="false">Afară, la soare</button></div>
     <p class="small muted" aria-live="polite" data-demo-caption>În casă: lentila este aproape transparentă.</p>
 </div>
 @break

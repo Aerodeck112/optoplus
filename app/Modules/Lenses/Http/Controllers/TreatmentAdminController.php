@@ -21,7 +21,8 @@ use Illuminate\Validation\ValidationException;
 class TreatmentAdminController extends Controller
 {
     /** Tipurile pentru care avem explicație ilustrată în configurator. */
-    public const KINDS = ['antireflex' => 'Antireflex', 'lumina_albastra' => 'Filtru lumină albastră', 'fotocromatic' => 'Fotocromatic', 'altul' => 'Alt tratament'];
+    public const KINDS = ['antireflex' => 'Antireflex', 'lumina_albastra' => 'Filtru lumină albastră', 'fotocromatic' => 'Fotocromatic (se închide afară)',
+        'fotocromatic_condus' => 'Fotocromatic care se închide și în mașină (ex. Xtractive)', 'altul' => 'Alt tratament'];
 
     public function index()
     {

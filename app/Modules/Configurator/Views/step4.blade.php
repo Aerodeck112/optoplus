@@ -16,7 +16,7 @@
                 @php($why = $blocked[$t->id] ?? null)
                 <div class="choice @if($why) choice--blocked @endif" style="cursor: default">
                     <label class="check" style="flex: 1">
-                        <input type="checkbox" name="tratamente[]" value="{{ $t->id }}" @checked(! $why && $chosen->has($t->id)) @disabled($why) data-calc data-treatment="{{ $t->id }}" @if($t->requires_option) data-needs-option @endif>
+                        <input type="checkbox" name="tratamente[]" value="{{ $t->id }}" @checked(! $why && $chosen->has($t->id)) @disabled($why) data-calc data-treatment="{{ $t->id }}" @if($t->requires_option) data-needs-option @endif @if(str_starts_with((string) $t->kind, 'fotocromatic')) data-exclusive="fotocromatic" @endif>
                         <span class="choice__body">
                             <span class="choice__title"><span>{{ $t->name }}</span><span>@if($ot->is_included) inclus @else +{{ \App\Core\Support\Money::format($ot->price) }} @endif</span></span>
                             <span class="choice__text"><strong>Ce face:</strong> {{ $t->benefits }}</span>
@@ -29,10 +29,10 @@
                     @endunless
                     @if ($t->requires_option && ! $why)
                         @php($opts = $t->options->filter(fn ($op) => $op->is_active && $ot->allowsOption($op->code)))
-                        <fieldset class="variants" data-option-for="{{ $t->id }}" style="margin-top: 12px; width: 100%">
-                            <legend>Alege nuanța <span class="muted">(obligatoriu)</span></legend>
+                        <fieldset class="swatches" data-option-for="{{ $t->id }}">
+                            <legend>Alege culoarea</legend>
                             @foreach ($opts as $op)
-                                <label><input type="radio" name="optiune[{{ $t->id }}]" value="{{ $op->code }}" @checked(($chosen[$t->id]['option'] ?? null) === $op->code) data-calc>@if($op->swatch)<span aria-hidden="true" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:{{ $op->swatch }}"></span>@endif{{ $op->label }}</label>
+                                <label class="swatch"><input type="radio" name="optiune[{{ $t->id }}]" value="{{ $op->code }}" @checked(($chosen[$t->id]['option'] ?? null) === $op->code) data-calc><span class="swatch__dot" aria-hidden="true" style="background: {{ $op->swatch ?: '#8a9399' }}"></span><span>{{ $op->label }}</span></label>
                             @endforeach
                         </fieldset>
                     @endif

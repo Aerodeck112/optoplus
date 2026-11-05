@@ -80,6 +80,9 @@ class LensAdminController extends Controller
             foreach ((array) ($data['t'] ?? []) as $tid => $row) {
                 $ot = LensOfferingTreatment::with('treatment.options')->where('offering_id', $o->id)->findOrFail((int) $tid);
                 $changes = ['price' => Money::parse($row['pret'] ?? '0') ?? 0, 'is_included' => (bool) ($row['inclus'] ?? false), 'status' => $row['stare'] ?? $ot->status];
+                if ($changes['status'] !== 'inactiv' && $changes['price'] === 0 && ! $changes['is_included']) {
+                    throw ValidationException::withMessages(["t.{$tid}.pret" => "„{$ot->treatment?->name}”: completați prețul pe această lentilă (sau bifați „inclus”) înainte de a-l activa."]);
+                }
                 if ($ot->treatment?->requires_option) {
                     // Nuanțele permise pe această lentilă (ex. la indicele 1.60 doar 85%).
                     $codes = array_values(array_intersect((array) ($row['nuante'] ?? []), $ot->treatment->options->pluck('code')->all()));

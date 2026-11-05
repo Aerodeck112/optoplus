@@ -36,15 +36,24 @@ export default function configurator(root) {
     };
     form?.querySelectorAll('[data-calc]').forEach((el) => el.addEventListener('change', recalc));
 
-    // Opțiunile tratamentelor apar doar pentru tratamentele bifate.
+    // Culorile tratamentelor (ex. fotocromatic) se văd mereu; alegerea unei culori bifează și tratamentul.
+    // Culoarea e obligatorie doar pentru tratamentul bifat (browserul o cere la trimitere).
     const syncOptions = () => form?.querySelectorAll('[data-option-for]').forEach((fs) => {
         const cb = form.querySelector(`[data-treatment="${fs.dataset.optionFor}"]`);
-        fs.hidden = !cb?.checked;
-        // nuanța e obligatorie doar pentru tratamentul bifat (browserul o cere la trimitere)
-        const radios = fs.querySelectorAll('input[type=radio]');
-        radios.forEach((r, i) => { r.required = !!cb?.checked && i === 0; });
+        fs.classList.toggle('is-active', !!cb?.checked);
+        fs.querySelectorAll('input[type=radio]').forEach((r, i) => { r.required = !!cb?.checked && i === 0; });
     });
-    form?.querySelectorAll('[data-treatment]').forEach((cb) => cb.addEventListener('change', syncOptions));
+    // Un singur fotocromatic: Helio sau Xtractive.
+    const exclusive = (cb) => {
+        if (!cb.checked || !cb.dataset.exclusive) return;
+        form.querySelectorAll(`[data-exclusive="${cb.dataset.exclusive}"]`).forEach((o) => { if (o !== cb && o.checked) { o.checked = false; o.dispatchEvent(new Event('change')); } });
+    };
+    const clearOptions = (cb) => { if (!cb.checked) form.querySelectorAll(`[data-option-for="${cb.dataset.treatment}"] input[type=radio]`).forEach((r) => { r.checked = false; }); };
+    form?.querySelectorAll('[data-treatment]').forEach((cb) => cb.addEventListener('change', () => { exclusive(cb); clearOptions(cb); syncOptions(); }));
+    form?.querySelectorAll('[data-option-for] input[type=radio]').forEach((r) => r.addEventListener('change', () => {
+        const cb = form.querySelector(`[data-treatment="${r.closest('[data-option-for]').dataset.optionFor}"]`);
+        if (cb && !cb.checked && !cb.disabled) { cb.checked = true; exclusive(cb); cb.dispatchEvent(new Event('change')); }
+    }));
     syncOptions();
 
     // AX are sens doar cu CYL.

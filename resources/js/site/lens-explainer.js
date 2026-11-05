@@ -144,48 +144,49 @@ function toggle(root) {
     set(checkbox?.checked ? 'on' : 'off');
 }
 
-// Fotocromatic: cursorul „în casă → la soare” închide lentila în nuanța și intensitatea alese.
+// Fotocromatic: „În casă / În mașină / Afară, la soare”, în nuanța și intensitatea alese (ilustrativ).
+// Helio se închide doar afară (parbrizul oprește UV); Xtractive se închide și în mașină.
 const TINTS = { gri: '#454a50', maro: '#6b4a2f', verde: '#3f5a45', albastru: '#2f4c6e', mov: '#5a3f6e' };
 function photo(root) {
-    const range = root.querySelector('[data-photo-range]');
     const cap = root.querySelector('[data-demo-caption]');
     const fieldset = document.querySelector(`[data-option-for="${root.dataset.treatmentRef}"]`);
+    const xtractive = root.dataset.variant === 'xtractive';
     const sun = root.querySelector('.photo-sun');
     const room = root.querySelector('.photo-room');
     const sky = root.querySelector('.photo-sky');
+    const car = root.querySelector('.photo-car');
+    const chips = [...root.querySelectorAll('[data-scene]')];
+    let scene = 'casa';
     const render = () => {
-        const v = Number(range.value) / 100;
-        const code = fieldset?.querySelector('input:checked')?.value || 'gri_85';
+        const code = fieldset?.querySelector('input:checked')?.value || '';
         const [color, pct] = code.split('_');
         const max = (Number(pct) || 80) / 100;
-        root.querySelectorAll('.photo-tint').forEach((el) => { el.setAttribute('fill', TINTS[color] || TINTS.gri); el.setAttribute('fill-opacity', (v * max).toFixed(2)); });
-        sun.style.opacity = String(0.15 + v * 0.85);
-        room.style.opacity = String(1 - v);
-        sky.setAttribute('fill', v > 0.5 ? '#cfe6f7' : '#e9eef2');
-        cap.textContent = v < 0.2 ? 'În casă: lentila este aproape transparentă.'
-            : v < 0.7 ? 'Afară, pe înnorat: lentila se închide parțial.'
-                : `La soare: lentila se închide până la aproximativ ${Math.round(max * 100)}% în nuanța aleasă. Viteza și intensitatea reale depind de lumina UV și de temperatură; în mașină, în spatele parbrizului, se închide mai puțin.`;
+        const level = { casa: 0, masina: xtractive ? 0.6 : 0.06, afara: 1 }[scene];
+        root.querySelectorAll('.photo-tint').forEach((el) => { el.setAttribute('fill', TINTS[color] || TINTS.gri); el.setAttribute('fill-opacity', (level * max).toFixed(2)); });
+        sun.style.opacity = scene === 'casa' ? '0.15' : '1';
+        room.style.opacity = scene === 'casa' ? '1' : '0';
+        car.setAttribute('opacity', scene === 'masina' ? '1' : '0');
+        sky.setAttribute('fill', scene === 'casa' ? '#e9eef2' : '#cfe6f7');
+        chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.scene === scene)));
+        const shade = code ? ` în nuanța aleasă (până la aproximativ ${Math.round(max * 100)}%)` : '';
+        cap.textContent = {
+            casa: 'În casă: lentila este aproape transparentă.',
+            masina: xtractive
+                ? 'În mașină: Xtractive se închide și în spatele parbrizului, deci vă ajută și la volan. Cât de mult depinde de lumină și de temperatură.'
+                : 'În mașină: Helio rămâne aproape transparent, pentru că parbrizul oprește razele UV care îl închid. Pentru condus, alegeți Xtractive.',
+            afara: `Afară, la soare: lentila se închide${shade}. Viteza reală depinde de lumina UV și de temperatură.`,
+        }[scene];
     };
-    range.addEventListener('input', render);
-    fieldset?.addEventListener('change', render);
-    // Animație scurtă la prima afișare: lentila se închide și se redeschide.
+    root.addEventListener('click', (e) => { const b = e.target.closest('[data-scene]'); if (b) { root.dataset.touched = '1'; scene = b.dataset.scene; render(); } });
+    fieldset?.addEventListener('change', () => { if (scene === 'casa') scene = 'afara'; render(); });
+    // La prima afișare: o scurtă trecere casă → afară → (mașină) → casă.
     if (!reduce) {
         const io = new IntersectionObserver((entries) => {
             if (!entries[0].isIntersecting) return;
             io.disconnect();
-            let t = 0;
-            const tick = () => {
-                if (root.dataset.touched) return;
-                t += 0.02;
-                range.value = String(Math.round(Math.sin(Math.min(t, Math.PI)) * 100));
-                render();
-                if (t < Math.PI) requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
+            ['afara', 'masina', 'casa'].forEach((sc, i) => setTimeout(() => { if (!root.dataset.touched) { scene = sc; render(); } }, 900 * (i + 1)));
         }, { threshold: 0.6 });
         io.observe(root);
-        range.addEventListener('pointerdown', () => { root.dataset.touched = '1'; });
-        range.addEventListener('keydown', () => { root.dataset.touched = '1'; });
     }
     render();
 }

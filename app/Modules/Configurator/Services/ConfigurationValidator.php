@@ -208,6 +208,7 @@ class ConfigurationValidator
         /** @var \Illuminate\Support\Collection<int, LensOfferingTreatment> $available */
         $available = $o->treatments->keyBy('treatment_id');
         $seen = [];
+        $photochromic = [];
         foreach ($in->treatments as $t) {
             $id = (int) $t['treatment_id'];
             if (isset($seen[$id])) {
@@ -222,6 +223,13 @@ class ConfigurationValidator
                 $r->error('treatment_unavailable', 'Un tratament ales nu este disponibil pentru această lentilă.', 'treatments');
 
                 continue;
+            }
+            // Helio și Xtractive sunt ambele fotocromatice: o lentilă poate avea doar unul.
+            if (str_starts_with((string) $treatment->kind, 'fotocromatic')) {
+                $photochromic[] = $treatment->name;
+                if (count($photochromic) > 1) {
+                    $r->error('treatment_exclusive', 'Alegeți un singur tratament fotocromatic: '.implode(' sau ', $photochromic).'.', 'treatments');
+                }
             }
             if ($treatment->requires_option) {
                 $option = $t['option'] ?? null;

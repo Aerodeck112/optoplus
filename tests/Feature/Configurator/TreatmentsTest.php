@@ -82,26 +82,26 @@ class TreatmentsTest extends TestCase
         $order = Order::latest('id')->firstOrFail();
         $snap = $order->items()->first()->snapshot;
         $this->assertSame('Gri 85%', collect($snap['treatments'])->firstWhere('treatment_id', $foto)['option_label']);
-        $this->assertSame('Antireflex super hidrofob, Fotocromatic (Gri 85%)', TreatmentLine::format($snap['treatments']));
+        $this->assertSame('Antireflex super hidrofob, Fotocromatic Helio (Gri 85%)', TreatmentLine::format($snap['treatments']));
         // comenzile vechi (fără option_label) primesc numele după cod
         $this->assertSame('Fotocromatic (Maro 85%)', TreatmentLine::one(['treatment_id' => $foto, 'name' => 'Fotocromatic', 'option' => 'maro_85']));
 
         $this->actingAsRole(Roles::MANAGER);
-        $this->get('/panou/comenzi/'.$order->uuid.'/')->assertSee('Fotocromatic (Gri 85%)')->assertDontSee('gri_85)');
+        $this->get('/panou/comenzi/'.$order->uuid.'/')->assertSee('Fotocromatic Helio (Gri 85%)')->assertDontSee('gri_85)');
     }
 
     public function test_panel_edits_treatment_texts_and_shades(): void
     {
         $this->actingAsRole(Roles::MANAGER);
         $foto = LensTreatment::where('code', 'fotocromatic')->with('options')->firstOrFail();
-        $this->get('/panou/lentile/tratamente/')->assertOk()->assertSee('Fotocromatic')->assertSee('Maro 85%');
+        $this->get('/panou/lentile/tratamente/')->assertOk()->assertSee('Fotocromatic Helio')->assertSee('Xtractive')->assertSee('Maro 85%');
         $this->get('/panou/lentile/tratamente/'.$foto->id.'/')->assertOk();
 
         $rows = $foto->options->mapWithKeys(fn ($o) => [$o->id => ['eticheta' => $o->label, 'culoare' => $o->swatch, 'activ' => $o->is_active ? '1' : '0']])->all();
         $verde = $foto->options->firstWhere('code', 'verde');
         $rows[$verde->id]['activ'] = '1';
         $this->post('/panou/lentile/tratamente/'.$foto->id.'/', [
-            'nume' => 'Fotocromatic', 'ce_face' => '<b>Text</b> nou de test, fictiv.', 'limite' => 'Limite de test.', 'activ' => '1', 'cu_nuanta' => '1', 'ordine' => 3,
+            'nume' => 'Fotocromatic Helio', 'ce_face' => '<b>Text</b> nou de test, fictiv.', 'limite' => 'Limite de test.', 'activ' => '1', 'cu_nuanta' => '1', 'ordine' => 3,
             'nuante' => $rows, 'nuanta_noua' => ['eticheta' => 'Gri 75% test', 'culoare' => '#555555'],
         ])->assertSessionHasNoErrors();
         $foto->refresh();
@@ -135,5 +135,75 @@ class TreatmentsTest extends TestCase
         $foto = $this->treatmentId('fotocromatic');
         $this->get('/panou/lentile/tratamente/')->assertOk();
         $this->post('/panou/lentile/tratamente/'.$foto.'/', ['nume' => 'X', 'ce_face' => 'x', 'limite' => 'x'])->assertForbidden();
+    }
+
+    /** Activează Xtractive pe o lentilă, cu o culoare și un preț de TEST (în teste; pe site le completează laboratorul). */
+    private function enableXtractive(string $offering): int
+    {
+        $x = LensTreatment::where('code', 'transitions-xtractive')->firstOrFail();
+        $x->options()->updateOrCreate(['code' => 'gri_test'], ['label' => 'Gri test', 'swatch' => '#444444', 'is_active' => true, 'sort' => 1]);
+        LensOfferingTreatment::where('offering_id', $this->offering($offering)->id)->where('treatment_id', $x->id)
+            ->update(['price' => 12300, 'status' => 'neconfirmat', 'option_codes' => json_encode(['gri_test'])]);
+
+        return $x->id;
+    }
+
+    public function test_photochromic_is_split_into_helio_and_xtractive(): void
+    {
+        $helio = LensTreatment::where('code', 'fotocromatic')->firstOrFail();
+        $x = LensTreatment::where('code', 'transitions-xtractive')->firstOrFail();
+        $this->assertSame('Fotocromatic Helio', $helio->name);
+        $this->assertStringContainsString('Nu se închid în mașină', $helio->limits);
+        $this->assertSame('fotocromatic_condus', $x->kind);
+        $this->assertTrue($x->is_active);
+        // la toate lentilele cu Helio, Xtractive există, dar inactiv și fără preț până îl completează laboratorul
+        $this->assertSame(LensOfferingTreatment::where('treatment_id', $helio->id)->count(), LensOfferingTreatment::where('treatment_id', $x->id)->where('status', 'inactiv')->where('price', 0)->count());
+        $cfg = $this->toStep4('distanta', 'monofocal-premium-150');
+        $this->get("/configurator/{$cfg->uuid}/pas/4/")->assertDontSee('Xtractive (și pentru condus)');
+    }
+
+    public function test_only_one_photochromic_can_be_chosen(): void
+    {
+        $xId = $this->enableXtractive('monofocal-premium-150');
+        $cfg = $this->toStep4('distanta', 'monofocal-premium-150');
+        $helio = $this->treatmentId('fotocromatic');
+        $this->get("/configurator/{$cfg->uuid}/pas/4/")->assertSee('Fotocromatic Xtractive (și pentru condus)')->assertSee('În mașină')->assertSee('data-exclusive="fotocromatic"', false);
+        $this->post("/configurator/{$cfg->uuid}/pas/4/", ['tratamente' => [$helio, $xId], 'optiune' => [$helio => 'gri_85', $xId => 'gri_test']])->assertSessionHasErrors();
+        $this->post("/configurator/{$cfg->uuid}/pas/4/", ['tratamente' => [$xId], 'optiune' => [$xId => 'gri_test']])->assertSessionHasNoErrors();
+    }
+
+    public function test_rimless_drilled_frame_cannot_get_helio(): void
+    {
+        $frame = $this->frame(30000, [], ['rim_type' => 'rimless_screw']);
+        $this->post('/configurator/start/', ['intrare' => 'cu_rama', 'varianta' => $frame->id])->assertRedirect();
+        $cfg = Configuration::latest('id')->firstOrFail();
+        $base = "/configurator/{$cfg->uuid}/pas/";
+        $this->post($base.'1/', ['utilizare' => 'distanta'])->assertSessionHasNoErrors();
+        $this->post($base.'2/', ['od' => ['sph' => '-2,00'], 'os' => ['sph' => '-1,75'], 'dp_mod' => 'binocular', 'dp' => '63'])->assertSessionHasNoErrors();
+        $this->post($base.'3/', ['oferta' => $this->offering('monofocal-premium-160')->id])->assertSessionHasNoErrors();
+        $helio = $this->treatmentId('fotocromatic');
+        $this->get($base.'4/')->assertSee('lentilele prinse prin găurire, nu putem folosi lentile fotocromatice Helio');
+        $this->post($base.'4/', ['tratamente' => [$helio], 'optiune' => [$helio => 'gri_85']])->assertSessionHasErrors();
+        // antireflexul rămâne posibil
+        $this->post($base.'4/', ['tratamente' => [$this->treatmentId('antireflex-hidrofob')]])->assertSessionHasNoErrors();
+    }
+
+    public function test_reading_glasses_block_both_photochromic_variants(): void
+    {
+        $xId = $this->enableXtractive('monofocal-premium-150');
+        $cfg = $this->toStep4('aproape', 'monofocal-premium-150');
+        $this->post("/configurator/{$cfg->uuid}/pas/4/", ['tratamente' => [$xId], 'optiune' => [$xId => 'gri_test']])->assertSessionHasErrors();
+    }
+
+    public function test_treatment_cannot_be_activated_on_a_lens_without_price(): void
+    {
+        $this->actingAsRole(Roles::MANAGER);
+        $o = LensOffering::where('code', 'monofocal-premium-150')->firstOrFail();
+        $x = LensTreatment::where('code', 'transitions-xtractive')->firstOrFail();
+        $ot = LensOfferingTreatment::where('offering_id', $o->id)->where('treatment_id', $x->id)->firstOrFail();
+        $x->options()->create(['code' => 'gri_test', 'label' => 'Gri test', 'is_active' => true, 'sort' => 1]);
+        $base = ['sph_min' => '-6,00', 'sph_max' => '+6,00', 'cyl_min' => '-2,50', 'cyl_max' => '0', 'pret' => '280', 'stare' => 'neconfirmat', 'verificare' => '1'];
+        $this->post('/panou/lentile/oferte/'.$o->id.'/', $base + ['t' => [$ot->id => ['pret' => '0', 'stare' => 'neconfirmat', 'nuante' => ['gri_test']]]])->assertSessionHasErrors();
+        $this->assertSame('inactiv', $ot->fresh()->status);
     }
 }
