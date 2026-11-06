@@ -33,7 +33,7 @@
                         <x-panou.field name="punte" type="number" label="Punte (mm)" :value="$spec?->bridge_mm" />
                         <x-panou.field name="brat" type="number" label="Braț (mm)" :value="$spec?->temple_mm" />
                         <x-panou.field name="inaltime" type="number" label="Înălțime lentilă (mm)" :value="$spec?->lens_height_mm" />
-                        <x-panou.field name="tip_rama" type="select" label="Tip ramă" :options="['full' => 'Ramă întreagă', 'semi_nylon' => 'Semi-ramă cu fir (nylon)', 'rimless_screw' => 'Fără ramă, cu capse']" :value="$spec?->rim_type" placeholder="necunoscut" hint="Folosit de regulile de compatibilitate (ex. indice minim pentru fir/capse)." />
+                        <x-panou.field name="tip_rama" type="select" label="Tip ramă" :options="['full' => 'Ramă întreagă', 'semi_nylon' => 'Semi-ramă cu fir (nylon)', 'rimless_screw' => 'Fără contur (montaj prin găurire, șuruburi/capse)']" :value="$spec?->rim_type" placeholder="necunoscut" hint="Folosit de regulile de compatibilitate (ex. la montajul prin găurire nu se pot folosi lentile fotocromatice)." />
                     @endif
                     <x-panou.field name="seo_titlu" label="Titlu SEO" :value="$product->seo_title" />
                     <x-panou.field name="seo_descriere" label="Descriere SEO" :value="$product->seo_description" />

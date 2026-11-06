@@ -11,7 +11,7 @@ class FrameSpec extends Model
     public const RIM_TYPES = [
         'full' => 'Ramă întreagă',
         'semi_nylon' => 'Semi-ramă (fir de nylon)',
-        'rimless_screw' => 'Fără ramă (prindere în șuruburi/capse)',
+        'rimless_screw' => 'Fără contur (montaj prin găurire, șuruburi/capse)',
     ];
 
     protected $guarded = ['id'];

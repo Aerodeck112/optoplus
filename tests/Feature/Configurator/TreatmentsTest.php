@@ -137,42 +137,45 @@ class TreatmentsTest extends TestCase
         $this->post('/panou/lentile/tratamente/'.$foto.'/', ['nume' => 'X', 'ce_face' => 'x', 'limite' => 'x'])->assertForbidden();
     }
 
-    /** Activează Xtractive pe o lentilă, cu o culoare și un preț de TEST (în teste; pe site le completează laboratorul). */
-    private function enableXtractive(string $offering): int
+    private function xtractiveId(): int
     {
-        $x = LensTreatment::where('code', 'transitions-xtractive')->firstOrFail();
-        $x->options()->updateOrCreate(['code' => 'gri_test'], ['label' => 'Gri test', 'swatch' => '#444444', 'is_active' => true, 'sort' => 1]);
-        LensOfferingTreatment::where('offering_id', $this->offering($offering)->id)->where('treatment_id', $x->id)
-            ->update(['price' => 12300, 'status' => 'neconfirmat', 'option_codes' => json_encode(['gri_test'])]);
-
-        return $x->id;
+        return LensTreatment::where('code', 'transitions-xtractive')->value('id');
     }
 
-    public function test_photochromic_is_split_into_helio_and_xtractive(): void
+    public function test_helio_and_xtractive_have_the_confirmed_colors_and_price(): void
     {
-        $helio = LensTreatment::where('code', 'fotocromatic')->firstOrFail();
-        $x = LensTreatment::where('code', 'transitions-xtractive')->firstOrFail();
+        $helio = LensTreatment::where('code', 'fotocromatic')->with('options')->firstOrFail();
+        $x = LensTreatment::where('code', 'transitions-xtractive')->with('options')->firstOrFail();
         $this->assertSame('Fotocromatic Helio', $helio->name);
         $this->assertStringContainsString('Nu se închid în mașină', $helio->limits);
         $this->assertSame('fotocromatic_condus', $x->kind);
         $this->assertTrue($x->is_active);
-        // la toate lentilele cu Helio, Xtractive există, dar inactiv și fără preț până îl completează laboratorul
-        $this->assertSame(LensOfferingTreatment::where('treatment_id', $helio->id)->count(), LensOfferingTreatment::where('treatment_id', $x->id)->where('status', 'inactiv')->where('price', 0)->count());
-        $cfg = $this->toStep4('distanta', 'monofocal-premium-150');
-        $this->get("/configurator/{$cfg->uuid}/pas/4/")->assertDontSee('Xtractive (și pentru condus)');
+        $this->assertSame(['Maro', 'Gri', 'Albastru', 'Verde', 'Mov'], $x->options->where('is_active', true)->pluck('label')->values()->all());
+        foreach (['Albastru', 'Verde', 'Mov'] as $c) {
+            $this->assertTrue($helio->options->firstWhere('label', $c)->is_active, "Helio {$c}");
+        }
+        // Xtractive: 250 lei, pe toate lentilele cu Helio (toți indicii, până la 1.74), cu toate cele 5 culori
+        $rows = LensOfferingTreatment::with('offering')->where('treatment_id', $x->id)->get();
+        $this->assertSame(LensOfferingTreatment::where('treatment_id', $helio->id)->count(), $rows->count());
+        $this->assertTrue($rows->every(fn ($r) => $r->price === 25000 && $r->status !== 'inactiv' && count((array) $r->option_codes) === 5));
+        $this->assertTrue($rows->contains(fn ($r) => str_ends_with($r->offering->code, '-174')));
+
+        $cfg = $this->toStep4('distanta', 'monofocal-premium-174');
+        $this->get("/configurator/{$cfg->uuid}/pas/4/")->assertSee('Fotocromatic Xtractive (și pentru condus)')->assertSee('+250,00 lei')->assertSee('Albastru')->assertSee('Mov');
     }
 
     public function test_only_one_photochromic_can_be_chosen(): void
     {
-        $xId = $this->enableXtractive('monofocal-premium-150');
+        $xId = $this->xtractiveId();
         $cfg = $this->toStep4('distanta', 'monofocal-premium-150');
         $helio = $this->treatmentId('fotocromatic');
-        $this->get("/configurator/{$cfg->uuid}/pas/4/")->assertSee('Fotocromatic Xtractive (și pentru condus)')->assertSee('În mașină')->assertSee('data-exclusive="fotocromatic"', false);
-        $this->post("/configurator/{$cfg->uuid}/pas/4/", ['tratamente' => [$helio, $xId], 'optiune' => [$helio => 'gri_85', $xId => 'gri_test']])->assertSessionHasErrors();
-        $this->post("/configurator/{$cfg->uuid}/pas/4/", ['tratamente' => [$xId], 'optiune' => [$xId => 'gri_test']])->assertSessionHasNoErrors();
+        $this->get("/configurator/{$cfg->uuid}/pas/4/")->assertSee('În mașină')->assertSee('data-exclusive="fotocromatic"', false);
+        $this->post("/configurator/{$cfg->uuid}/pas/4/", ['tratamente' => [$helio, $xId], 'optiune' => [$helio => 'gri_85', $xId => 'gri']])->assertSessionHasErrors();
+        $this->post("/configurator/{$cfg->uuid}/pas/4/", ['tratamente' => [$xId], 'optiune' => [$xId => 'verde']])->assertSessionHasNoErrors();
+        $this->post("/configurator/{$cfg->uuid}/pas/4/", ['tratamente' => [$helio], 'optiune' => [$helio => 'mov']])->assertSessionHasNoErrors();
     }
 
-    public function test_rimless_drilled_frame_cannot_get_helio(): void
+    public function test_rimless_drilled_frame_gets_no_photochromic_at_all(): void
     {
         $frame = $this->frame(30000, [], ['rim_type' => 'rimless_screw']);
         $this->post('/configurator/start/', ['intrare' => 'cu_rama', 'varianta' => $frame->id])->assertRedirect();
@@ -182,28 +185,29 @@ class TreatmentsTest extends TestCase
         $this->post($base.'2/', ['od' => ['sph' => '-2,00'], 'os' => ['sph' => '-1,75'], 'dp_mod' => 'binocular', 'dp' => '63'])->assertSessionHasNoErrors();
         $this->post($base.'3/', ['oferta' => $this->offering('monofocal-premium-160')->id])->assertSessionHasNoErrors();
         $helio = $this->treatmentId('fotocromatic');
-        $this->get($base.'4/')->assertSee('lentilele prinse prin găurire, nu putem folosi lentile fotocromatice Helio');
+        $xId = $this->xtractiveId();
+        $html = $this->get($base.'4/')->assertSee('nu putem folosi lentile fotocromatice (nici Helio, nici Xtractive)')->getContent();
+        $this->assertMatchesRegularExpression('~<input[^>]*value="'.$xId.'"[^>]*disabled~', $html);
         $this->post($base.'4/', ['tratamente' => [$helio], 'optiune' => [$helio => 'gri_85']])->assertSessionHasErrors();
+        $this->post($base.'4/', ['tratamente' => [$xId], 'optiune' => [$xId => 'gri']])->assertSessionHasErrors();
         // antireflexul rămâne posibil
         $this->post($base.'4/', ['tratamente' => [$this->treatmentId('antireflex-hidrofob')]])->assertSessionHasNoErrors();
     }
 
     public function test_reading_glasses_block_both_photochromic_variants(): void
     {
-        $xId = $this->enableXtractive('monofocal-premium-150');
+        $xId = $this->xtractiveId();
         $cfg = $this->toStep4('aproape', 'monofocal-premium-150');
-        $this->post("/configurator/{$cfg->uuid}/pas/4/", ['tratamente' => [$xId], 'optiune' => [$xId => 'gri_test']])->assertSessionHasErrors();
+        $this->post("/configurator/{$cfg->uuid}/pas/4/", ['tratamente' => [$xId], 'optiune' => [$xId => 'gri']])->assertSessionHasErrors();
     }
 
     public function test_treatment_cannot_be_activated_on_a_lens_without_price(): void
     {
         $this->actingAsRole(Roles::MANAGER);
         $o = LensOffering::where('code', 'monofocal-premium-150')->firstOrFail();
-        $x = LensTreatment::where('code', 'transitions-xtractive')->firstOrFail();
-        $ot = LensOfferingTreatment::where('offering_id', $o->id)->where('treatment_id', $x->id)->firstOrFail();
-        $x->options()->create(['code' => 'gri_test', 'label' => 'Gri test', 'is_active' => true, 'sort' => 1]);
+        $ot = LensOfferingTreatment::where('offering_id', $o->id)->where('treatment_id', $this->xtractiveId())->firstOrFail();
         $base = ['sph_min' => '-6,00', 'sph_max' => '+6,00', 'cyl_min' => '-2,50', 'cyl_max' => '0', 'pret' => '280', 'stare' => 'neconfirmat', 'verificare' => '1'];
-        $this->post('/panou/lentile/oferte/'.$o->id.'/', $base + ['t' => [$ot->id => ['pret' => '0', 'stare' => 'neconfirmat', 'nuante' => ['gri_test']]]])->assertSessionHasErrors();
-        $this->assertSame('inactiv', $ot->fresh()->status);
+        $this->post('/panou/lentile/oferte/'.$o->id.'/', $base + ['t' => [$ot->id => ['pret' => '0', 'stare' => 'neconfirmat', 'nuante' => ['gri']]]])->assertSessionHasErrors();
+        $this->assertSame(25000, $ot->fresh()->price);
     }
 }

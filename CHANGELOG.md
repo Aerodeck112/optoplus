@@ -3,6 +3,20 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.11] — 2026-11-06
+
+Se poate instala direct peste 1.0.0 – 1.0.10.
+
+- **Fotocromatic Xtractive activ:** 250 lei, pe toate lentilele care au și Helio, la toți indicii (1.50, 1.60,
+  1.67, 1.74), în culorile Maro, Gri, Albastru, Verde, Mov.
+- **Fotocromatic Helio:** pe lângă Maro și Gri (cu intensitățile 65% / 85% de până acum), are acum și Albastru,
+  Verde și Mov, la toți indicii.
+- **Ramele fără contur (montaj prin găurire): niciun fotocromatic,** nici Helio, nici Xtractive — clientul vede
+  ambele variante inactive, cu motivul. Verificarea de specialist pentru Xtractive pe găurire a fost înlocuită
+  de această interdicție.
+- În fișa ramei din panou, tipul se numește acum „Fără contur (montaj prin găurire, șuruburi/capse)”.
+- Prețurile și culorile modificate deja în panou nu sunt suprascrise.
+
 ## [1.0.10] — 2026-11-05
 
 Se poate instala direct peste 1.0.0 – 1.0.9.

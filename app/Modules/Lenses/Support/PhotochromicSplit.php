@@ -36,7 +36,7 @@ final class PhotochromicSplit
                 'benefits' => in_array($helio->benefits, [self::HELIO_OLD_BENEFITS, null, ''], true)
                     ? 'Lentilele se închid la culoare afară, la lumina soarelui, și redevin aproape transparente în interior. O singură pereche pentru interior și exterior.'
                     : $helio->benefits,
-                'limits' => 'Nu se închid în mașină: parbrizul oprește razele UV care le activează, deci nu țin loc de ochelari de soare la volan (pentru condus, alegeți Xtractive). Viteza de închidere și de deschidere depinde de temperatură. Nu se pot monta pe ramele fără ramă, cu lentilele prinse prin găurire.',
+                'limits' => 'Nu se închid în mașină: parbrizul oprește razele UV care le activează, deci nu țin loc de ochelari de soare la volan (pentru condus, alegeți Xtractive). Viteza de închidere și de deschidere depinde de temperatură. Nu se pot monta pe ramele fără contur, cu lentilele prinse prin găurire.',
                 'updated_at' => $now,
             ]);
         }
