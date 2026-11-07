@@ -12,9 +12,9 @@ o decizie pentru noul site și o întrebare pentru client (centralizate în `doc
 | 3 | Termeni și condiții | livrare „1–9 zile lucrătoare” | idem | idem |
 | 4 | Tabul „Livrare” pe produse | expediere „5 – 15 zile lucrătoare” | idem | idem |
 | 5 | Politica UE | procesare 1–3 zile, livrare 3–10 zile | idem | idem |
-| 6 | Firmă | „SC Optica Optofarm SRL” (date structurate) vs „SC Ofa SRL” (termeni) vs „SC OFA SRL” (fabrica) | Cine e vânzătorul și cine e producătorul? | Datele firmei sunt câmpuri în panou, goale până la confirmare; textele juridice rămân „ciornă” |
-| 7 | Termeni | „Nr. Reg. Com. J20/1100/1019267” cu sediul în județul Mureș | Formatul/prefixul nu pare să corespundă județului (de verificat la ONRC) | Nu îl republicăm până la confirmare |
-| 8 | Adrese | Str. Poștei nr. 3, Târgu Mureș (contact) vs Sat Crăciunești nr. 235/A (sediu social) | Pot fi corecte ambele (punct de lucru vs sediu) | Câmpuri separate „sediu social” și „punct de lucru/ridicare” |
+| 6 | Firmă | „SC Optica Optofarm SRL” (date structurate) vs „SC Ofa SRL” (termeni) vs „SC OFA SRL” (fabrica) | Cine e vânzătorul și cine e producătorul? | **Rezolvat 2026-11-07:** clientul a confirmat OFA SRL; datele din ANAF (1.0.12). Textele juridice rămân „ciornă” |
+| 7 | Termeni | „Nr. Reg. Com. J20/1100/1019267” cu sediul în județul Mureș | Formatul/prefixul nu pare să corespundă județului (de verificat la ONRC) | **Rezolvat 2026-11-07:** ANAF dă J2011001019267 (formatul nou ONRC) |
+| 8 | Adrese | Str. Poștei nr. 3, Târgu Mureș (contact) vs Sat Crăciunești nr. 235/A (sediu social) | Pot fi corecte ambele (punct de lucru vs sediu) | **2026-11-07:** clientul: adresa din Târgu Mureș e greșită; contactul arată sediul social din ANAF. Locul laboratorului: `INTREBARI.md` #21 |
 | 9 | Telefoane / email | +40771653905, contact@optoplus.ro (contact); +40 771 048 936, ofalentile@gmail.com (B2B) | Două canale | Contact B2C și contact B2B separate, editabile |
 | 10 | Politica de retur | „prin e-mail la: **[emailul tău de contact]**” | Text-șablon publicat necompletat | Politicile importate rămân ciornă, marcate „necesită completare juridică” |
 | 11 | Politica de retur | rambursare în „14 zile lucrătoare de la recepția produsului” | OUG 34/2014 vorbește de 14 zile de la informarea despre retragere | De verificat de jurist; nu publicăm ca final |

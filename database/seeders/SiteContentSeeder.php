@@ -38,12 +38,15 @@ class SiteContentSeeder extends Seeder
         $defaults = [
             'contact.phone_b2c' => '+40 771 653 905',
             'contact.email_b2c' => 'contact@optoplus.ro',
-            'contact.address' => 'Str. Poștei nr. 3, Târgu Mureș',
+            'contact.address' => \App\Modules\Settings\Support\CompanyDetails::ADDRESS,
             'contact.phone_b2b' => '+40 771 048 936',
             'contact.email_b2b' => 'ofalentile@gmail.com',
             'contact.hours' => null,
-            // Datele firmei sunt contradictorii pe siteul vechi (docs/audit/OBSERVATII-CONTINUT.md #6–7): goale.
-            'company.name' => null, 'company.vat_code' => null, 'company.registry' => null, 'company.address' => null,
+            // Firma confirmată de client (OFA SRL), cu datele din registrul ANAF — vezi CompanyDetails.
+            'company.name' => \App\Modules\Settings\Support\CompanyDetails::NAME,
+            'company.vat_code' => \App\Modules\Settings\Support\CompanyDetails::VAT_CODE,
+            'company.registry' => \App\Modules\Settings\Support\CompanyDetails::REGISTRY,
+            'company.address' => \App\Modules\Settings\Support\CompanyDetails::ADDRESS,
             'tax.confirmed' => false,
         ];
         foreach ($defaults as $key => $value) {

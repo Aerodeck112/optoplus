@@ -114,7 +114,8 @@ class SiteContext
             $this->setting('company.name'),
             ($c = $this->setting('company.vat_code')) ? 'CUI '.$c : null,
             ($r = $this->setting('company.registry')) ? 'Reg. Com. '.$r : null,
-            $this->setting('company.address'),
+            // sediul apare o singură dată: dacă e și adresa de contact, e deja în coloana de contact
+            (($a = $this->setting('company.address')) && $a !== $this->setting('contact.address')) ? 'Sediul social: '.$a : null,
         ]);
 
         return $parts ? implode(' · ', $parts) : null;

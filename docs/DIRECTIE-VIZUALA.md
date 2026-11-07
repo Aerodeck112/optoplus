@@ -28,8 +28,8 @@ Contrast (calculat WCAG 2.1): `--grafit` pe `--sticla` 9,25:1; `--bleumarin` pe 
 
 **Tipografie**
 
-- Titluri: **Spectral** (600/500) — serif de ecran, cu diacritice ș/ț corecte, ecou al literelor romane din
-  logo fără să le copieze.
+- Titluri: **Hanken Grotesk** 800/700, drepte și îngroșate (din 1.0.12, la cererea clientului: „fonturi moderne
+  fără serif”). Până la 1.0.11 titlurile erau în Spectral (serif).
 - Text și interfață: **Hanken Grotesk** (400/500/600) — varianta open-source a familiei HK Grotesk folosite
   azi, deci continuitate.
 - Valori optice (SPH, CYL, AX, DP): cifre tabulare din Hanken Grotesk (`font-variant-numeric: tabular-nums`),
@@ -41,6 +41,16 @@ Contrast (calculat WCAG 2.1): `--grafit` pe `--sticla` 9,25:1; `--bleumarin` pe 
 **Spațiere și formă**: grilă de 8 px; secțiuni separate prin spațiu, nu prin chenare; colțuri rotunjite mici
 (4 px) la câmpuri, mai mari (12 px) doar la fotografii; fără umbre decorative — umbra apare numai la elemente
 care plutesc (bara de total, meniul).
+
+**1.0.12 — stilul de magazin** (aprobat de client pe 2026-11-07, inspirat ca structură de magazinele de optică
+online, fără texte, imagini sau identitate preluate):
+- accente vii, folosite pentru navigare și oferte: azur `#1f7fd6`, portocaliu `#f2a516`, roșu `#e5484d`, verde
+  `#2e9a6b`, mov `#7b5aa6`; fundaluri pastelate pentru bannere și antete (`--bg-bleu`, `--bg-piersica`,
+  `--bg-menta`, `--bg-lavanda`, `--bg-galben`). Bleumarinul rămâne culoarea mărcii (butoane, titluri);
+- butoane „pastilă”, colțuri mari (18–28 px) la carduri și panouri, fără umbre decorative;
+- prima pagină: bandă de anunț, bannere mari în carusel (ilustrații vectoriale de persoane, nu fotografii de oameni
+  reali; echipa le poate înlocui cu fotografii proprii din panou), scurtături colorate, categorii, rafturi de rame;
+- paginile de listă (rame, lentile, configurator) au un antet colorat cu scurtături spre categorii.
 
 ## 3. Elementul memorabil: marcajul de montaj
 

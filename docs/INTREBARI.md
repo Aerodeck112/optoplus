@@ -5,7 +5,7 @@ decizia provizorie din coloana a treia (reversibilă din panou).
 
 | # | Întrebare | Decizie provizorie |
 |---|---|---|
-| 1 | Care firmă vinde pe site și care produce lentilele (Optica Optofarm SRL / OFA SRL)? Datele complete ale fiecăreia? | Câmpurile firmei sunt goale; textele juridice rămân ciornă |
+| 1 | Care firmă vinde pe site și care produce lentilele (Optica Optofarm SRL / OFA SRL)? Datele complete ale fiecăreia? | **Răspuns 2026-11-07:** firma este **OFA SRL**. Datele vin din registrul ANAF (CUI 29223337, J2011001019267, sediul: sat Crăciunești nr. 235/A, C5, com. Crăciunești, jud. Mureș); listafirme.ro blochează accesul automat. Textele juridice rămân ciornă până la revizuire. Deschis: unde e laboratorul (vezi #21) |
 | 2 | Ce produse-lentilă fabricați efectiv (familii, designuri, indici, tratamente, culori)? Care sunt de la alți producători? | Pornim de la ce vinde azi configuratorul, marcat „neconfirmat” |
 | 3 | Ce forme de livrare oferiți (brută, semifinisată, finită nedebitată, personalizată, montată) și cui? | Nomenclatorul propus în `OBSERVATII-CONTINUT.md`; doar „personalizată” și „montată” active |
 | 4 | Prețurile din configuratorul actual sunt per pereche? Ce include „Standard” (antireflex? durificare?) | Per pereche; „Standard” = fără tratamente adiționale |
@@ -25,3 +25,4 @@ decizia provizorie din coloana a treia (reversibilă din panou).
 | 18 | Condițiile B2B: liste de preț, praguri, termene de plată, credit, cine aprobă? | Liste și praguri configurabile, goale |
 | 19 | Putem folosi fotografiile primite ca „fotografii reale din laborator”? Sunt editate digital? | Folosite cu mențiunea „fotografie de produs”; comparațiile marcate „ilustrativ” |
 | 20 | Ramele „OPTOFARM”: marcă proprie produsă de un furnizor? | Prezentată ca „marcă proprie”, fără „producție proprie” |
+| 21 | Unde este laboratorul (și magazinul, dacă există)? Adresa „Str. Poștei nr. 3, Târgu Mureș” de pe siteul vechi este greșită, deci și „laboratorul nostru din Târgu Mureș” trebuie verificat. | 1.0.12: banda de sus nu mai pomenește localitatea. Textele publicate deja în 1.0.5 (filmul de pe prima pagină și de pe „Producția noastră”) încă spun „din Târgu Mureș” — se corectează după răspuns |

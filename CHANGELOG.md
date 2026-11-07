@@ -3,6 +3,24 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.12] — 2026-11-07
+
+Se poate instala direct peste 1.0.0 – 1.0.11.
+
+- **Aspect nou, de magazin online:** titluri moderne fără serife, culori mai vii, butoane rotunjite.
+- **Prima pagină:** bandă de anunț sus (textul se schimbă din Setări → Lansare), bannere mari care se schimbă
+  singure (cu desene de persoane și fotografiile produselor), scurtături colorate, categorii (Femei, Bărbați,
+  Copii, Clip-on, Optofarm, Lentile), rafturi cu cele mai noi rame și cu Optofarm. Lentila 3D s-a mutat mai jos,
+  în secțiunea laboratorului. Dacă prima pagină a fost modificată din panou, varianta nouă rămâne ciornă.
+- **Catalog, lentile, configurator:** antet colorat cu scurtături spre categorii; lentilele pe panouri colorate,
+  câte unul pe familie; configuratorul începe cu trei variante clare, fiecare cu butonul ei.
+- **Pagina ramei:** poze și descriere în stânga, cumpărarea în dreapta (rămâne vizibilă la derulare), ramele
+  similare într-un raft derulabil. Pe telefon pagina nu mai iese din ecran.
+- **Datele firmei:** OFA SRL, CUI 29223337, J2011001019267, sediul în sat Crăciunești nr. 235/A, C5, com.
+  Crăciunești, jud. Mureș (din registrul ANAF). Adresa veche din subsol (Str. Poștei nr. 3, Târgu Mureș) a fost
+  înlocuită. Ce a fost completat deja în Setări → Firma nu se suprascrie.
+- În subsol: „Powered by VITIM”.
+
 ## [1.0.11] — 2026-11-06
 
 Se poate instala direct peste 1.0.0 – 1.0.10.

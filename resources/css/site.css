@@ -1087,3 +1087,138 @@ main > .section:nth-of-type(even) { background: var(--sticla) !important; }
     .card:hover .card__img img, .tile:hover .tile__img img { transform: none; }
     .banners__dots button { transition: none; }
 }
+
+/* ===== 1.0.12 — paginile magazinului: catalog, produs, lentile, configurator, coș, cont ===== */
+/* Antetul colorat al paginilor de listă, cu scurtături spre categorii. */
+.page-hero { margin: var(--s3) 0 var(--s6); padding: clamp(24px, 4vw, 48px); border-radius: 28px; background: var(--bg-bleu); display: grid; gap: var(--s5); }
+.page-hero--piersica { background: var(--bg-piersica); } .page-hero--menta { background: var(--bg-menta); }
+.page-hero--lavanda { background: var(--bg-lavanda); } .page-hero--galben { background: var(--bg-galben); }
+.page-hero h1 { margin: 0 0 var(--s3); font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.04; letter-spacing: -0.03em; }
+.page-hero .lead { margin: 0; max-width: 46rem; color: #3c4a55; }
+.page-hero__note { margin: var(--s3) 0 0; color: #4f5d68; }
+.page-hero .btn-row { margin-top: var(--s5); }
+.page-hero .btn:not(.btn--primary) { background: #fff; border-color: #fff; }
+.cat-nav { display: flex; gap: var(--s2); flex-wrap: wrap; }
+.cat-nav__link { display: inline-flex; align-items: center; min-height: 42px; padding: 0 18px; border-radius: 999px; background: rgb(255 255 255 / .8); color: var(--bleumarin); font-weight: 700; text-decoration: none; font-size: .98rem; transition: background-color .2s ease; }
+.cat-nav__link:hover { background: #fff; color: var(--bleumarin); }
+.cat-nav__link[aria-current="page"] { background: var(--bleumarin); color: #fff; }
+@media (max-width: 699px) {
+    .cat-nav { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * clamp(24px, 4vw, 48px)); padding: 0 clamp(24px, 4vw, 48px); }
+    .cat-nav::-webkit-scrollbar { display: none; }
+    .cat-nav__link { flex: none; }
+}
+
+/* Catalogul: filtre pe gri deschis, rezultate aerisite. */
+.filters { border: 0; border-radius: 22px; background: var(--sticla); padding: var(--s4) var(--s5); }
+.filters details { border-bottom-color: var(--linie); }
+.filters summary { font-weight: 800; }
+.filters .count { background: #fff; border-radius: 999px; padding: 0 8px; font-size: .8rem; }
+.filters-toggle { border-radius: 999px; }
+.toolbar__count { margin: 0; font-weight: 700; color: var(--bleumarin); }
+.grid { gap: var(--s6) var(--s4); }
+.card__brand { display: inline-block; align-self: flex-start; font-size: .78rem; font-weight: 700; color: var(--azur); }
+.card__meta { order: 5; }
+.pagination a, .pagination span { border-radius: 999px; }
+
+/* Pagina de produs: galeria și descrierea în stânga, cumpărarea în dreapta. */
+@media (min-width: 1000px) {
+    .product { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); grid-template-areas: "media buy" "info buy"; column-gap: clamp(32px, 4vw, 64px); }
+    .product__media { grid-area: media; }
+    .product .buy { grid-area: buy; align-self: start; }
+    .product__info { grid-area: info; }
+}
+.product__info { display: grid; gap: var(--s6); }
+.product__info h2 { font-size: 1.5rem !important; }
+.gallery__main { border: 0; border-radius: 24px; background: var(--sticla); }
+.gallery__main img { mix-blend-mode: multiply; }
+.gallery__thumbs button { border-radius: 12px; background: var(--sticla); }
+.gallery__thumbs img { mix-blend-mode: multiply; }
+.frame-dims { border: 0; border-radius: 24px; background: var(--sticla); }
+.buy h1 { font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.08; letter-spacing: -0.03em; }
+.buy__brand { display: flex; gap: var(--s2); align-items: center; flex-wrap: wrap; }
+.buy__brand-chip { display: inline-flex; align-items: center; min-height: 32px; padding: 0 14px; border-radius: 999px; background: var(--bg-bleu); color: var(--bleumarin); font-weight: 700; text-decoration: none; font-size: .92rem; }
+.buy__brand-chip:hover { background: #c7e4fd; }
+.buy__own { display: inline-flex; align-items: center; min-height: 32px; padding: 0 14px; border-radius: 999px; background: var(--bg-lavanda); color: var(--mov); font-weight: 700; font-size: .85rem; }
+.buy__price { font-size: 2rem; font-weight: 800; color: var(--bleumarin); }
+.split-note { border-radius: 18px; background: var(--bg-menta); color: #1f4d39; }
+.split-note .ico { color: var(--verde-viu); }
+.buy__box { border: 1.5px solid var(--linie); border-radius: 24px; }
+.buy__box .btn { min-height: 54px; font-size: 1.02rem; }
+.buy__box .form { gap: var(--s3); }
+.variants label { border-radius: 999px; padding: 8px 16px; }
+.perks { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+.perks__item { display: flex; align-items: center; gap: var(--s3); font-weight: 700; color: var(--bleumarin); font-size: .98rem; }
+.perks__icon { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px; }
+.perks__item--verde .perks__icon { background: #ddf3e8; color: var(--verde-viu); }
+.perks__item--mov .perks__icon { background: #efe7fb; color: var(--mov); }
+.perks__item--portocaliu .perks__icon { background: #fff0d4; color: #c47d00; }
+.faq details { padding: var(--s4) 0; }
+.faq summary { font-weight: 700; }
+
+/* Lentilele: câte un panou colorat pentru fiecare familie. */
+.lens-fam { display: grid; gap: var(--s5); margin: 0 0 var(--s4); padding: clamp(24px, 4vw, 48px); border-radius: 28px; background: var(--bg-bleu); scroll-margin-top: 96px; }
+@media (min-width: 900px) { .lens-fam { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 72px); align-items: start; } }
+.lens-fam--piersica { background: var(--bg-piersica); } .lens-fam--menta { background: var(--bg-menta); }
+.lens-fam--lavanda { background: var(--bg-lavanda); } .lens-fam--galben { background: var(--bg-galben); }
+.lens-fam__intro h2 { margin: var(--s4) 0 var(--s3); }
+.lens-fam__intro p { margin: 0; color: #3c4a55; max-width: 34rem; }
+.lens-fam .family__diagram { max-width: 220px; padding: 14px; background: #fff; border-radius: 22px; }
+.lens-fam__list { display: grid; gap: var(--s3); }
+.lens-offer { display: grid; gap: 6px; padding: var(--s5); border-radius: 22px; background: #fff; text-decoration: none; color: var(--grafit); border: 1.5px solid transparent; transition: border-color .2s ease; }
+.lens-offer:hover { border-color: var(--bleumarin); color: var(--grafit); }
+.lens-offer .tag { justify-self: start; }
+.lens-offer__name { font-size: 1.25rem; font-weight: 800; color: var(--bleumarin); letter-spacing: -0.01em; }
+.lens-offer__text { color: var(--grafit-2); font-size: .98rem; }
+.lens-offer__meta { color: var(--grafit-2); font-size: .9rem; }
+.lens-offer__foot { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); margin-top: var(--s2); flex-wrap: wrap; }
+.lens-offer__price { font-weight: 800; color: var(--bleumarin); font-size: 1.1rem; }
+.lens-offer__price small { font-weight: 500; color: var(--grafit-2); font-size: .85rem; }
+.lens-offer__go { display: inline-flex; align-items: center; gap: 2px; font-weight: 700; color: var(--azur); }
+.tag { border-radius: 999px; padding: 4px 12px; font-weight: 700; }
+.tag--lab, .entry .tag--lab, .lens-offer .tag--lab { background: var(--bg-menta); color: #1f6b4a; }
+.diagram-note { margin-top: var(--s4); }
+.table-wrap.box { border-radius: 22px; }
+
+/* Configuratorul: alegerea drumului, pe carduri colorate. */
+.step-pills { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2); counter-reset: ms; }
+.step-pills li { counter-increment: ms; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px 0 6px; border-radius: 999px; background: rgb(255 255 255 / .8); font-weight: 700; color: var(--bleumarin); font-size: .95rem; }
+.step-pills li::before { content: counter(ms); display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--bleumarin); color: #fff; font-size: .85rem; }
+.resume-box { margin: 0 0 var(--s5); border-radius: 22px; }
+.paths { display: grid; gap: var(--s4); margin-bottom: var(--s8); }
+@media (min-width: 700px) { .paths { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .paths { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); } }
+.path { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s3); margin: 0; padding: var(--s5); border: 1.5px solid var(--linie); border-radius: 24px; background: #fff; text-decoration: none; color: var(--grafit); transition: border-color .2s ease; }
+.path:hover { border-color: currentColor; color: var(--grafit); }
+.path__icon { display: grid; place-items: center; width: 60px; height: 60px; border-radius: 18px; }
+.path--azur .path__icon { background: #e1efff; color: var(--azur); }
+.path--verde .path__icon { background: #ddf3e8; color: var(--verde-viu); }
+.path--portocaliu .path__icon { background: #fff0d4; color: #c47d00; }
+.path--mov .path__icon { background: #efe7fb; color: var(--mov); }
+.path__title { font-size: 1.3rem; font-weight: 800; color: var(--bleumarin); letter-spacing: -0.01em; line-height: 1.2; }
+.path__text { color: var(--grafit-2); font-size: .98rem; }
+.path__btn { margin-top: auto; }
+.path__btn .ico { margin: 0 0 0 4px; }
+
+/* Pașii configuratorului, coșul și contul: casete rotunjite, fără chenare grele. */
+.box { border-radius: 22px; }
+.choice { border-radius: 18px; }
+.stepper li, .progress li { font-weight: 700; }
+.auth .box { border-radius: 24px; }
+.auth h1 { text-align: left; }
+.account-nav a { border-radius: 999px; padding: 8px 16px; font-weight: 700; }
+input:not([type]), input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="number"], input[type="search"], select, textarea { border-radius: 12px; border-color: #c9d5de; }
+.empty { border-radius: 24px; }
+.line__img { width: 96px; height: 80px; border-radius: 14px; }
+.line__img img { mix-blend-mode: multiply; }
+@media (min-width: 700px) { .line { grid-template-columns: 120px 1fr auto; } .line__img { width: 120px; height: 96px; } .line__total { grid-column: 3; } }
+.line__actions label { display: inline-flex; align-items: center; gap: var(--s2); }
+.line__actions .qty-input { width: 76px; min-height: 40px; text-align: center; }
+.line__total { font-weight: 800; }
+.product > * { min-width: 0; } /* rândul de miniaturi nu are voie să lățească pagina pe telefon */
+.site-footer__credit { margin-top: var(--s3); font-size: .85rem; letter-spacing: .02em; opacity: .75; }
+.site-footer__credit strong { font-weight: 800; letter-spacing: .08em; }
+.site-footer__credit a { color: inherit; text-decoration: none; }
+.site-footer__credit a:hover { text-decoration: underline; }
+.gallery__thumbs { position: relative; } /* textele sr-only din miniaturi rămân în containerul derulabil */
+.gallery__thumbs button { position: relative; }
+.page-hero { overflow: hidden; }

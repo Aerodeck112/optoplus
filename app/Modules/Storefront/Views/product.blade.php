@@ -9,7 +9,7 @@
 <div class="wrap">
     <x-site.breadcrumbs :items="array_filter(['Ochelari și rame' => '/rame/', $product->brand?->name => $product->brand?->url(), $product->name => null])" />
     <div class="product">
-        <div>
+        <div class="product__media">
             <div class="gallery" data-module="gallery">
                 @php($first = $product->images->first())
                 <div class="gallery__main" data-gallery-main>
@@ -31,17 +31,10 @@
                 <p class="small muted" style="margin-top: 8px">Atingeți imaginea pentru a o mări.</p>
             </div>
 
-            @if ($spec && $spec->lens_width_mm)
-                <section class="frame-dims" style="margin-top: 32px" aria-labelledby="dimensiuni">
-                    <h2 id="dimensiuni" style="font-size: 1.4rem">Dimensiunile ramei</h2>
-                    @include('storefront::partials.frame-dims', ['spec' => $spec])
-                    <p class="small muted">Comparați cu cifrele gravate pe brațul ochelarilor pe care îi purtați (ex. {{ $spec->sizeNotation() }}). O diferență de 1–2 mm la lățime este de obicei confortabilă.</p>
-                </section>
-            @endif
         </div>
 
         <div class="buy">
-            @if ($product->brand)<p class="buy__brand"><a href="{{ $product->brand->url() }}">{{ $product->brand->name }}</a>@if($product->brand->is_own_brand) · marcă proprie @endif</p>@endif
+            @if ($product->brand)<p class="buy__brand"><a class="buy__brand-chip" href="{{ $product->brand->url() }}">{{ $product->brand->name }}</a>@if($product->brand->is_own_brand)<span class="buy__own">marcă proprie</span>@endif</p>@endif
             <h1>{{ $product->name }}</h1>
             <div class="buy__price">
                 @if ($price !== null)<x-site.price :amount="$price" /><small>prețul ramei, fără lentile</small>@endif
@@ -76,6 +69,22 @@
                 </dl>
                 <p class="small muted" style="margin: 0"><x-site.icon name="truck" :size="18" /> Livrarea și costul ei se văd în coș, înainte de plată. Timpul de producție al lentilelor se adaugă celui de transport.</p>
             </div>
+            <ul class="perks" aria-label="Pe scurt">
+                @if ($product->configurable_with_lenses)
+                    <li class="perks__item perks__item--verde"><span class="perks__icon"><x-site.icon name="lab" /></span>Lentile produse în laboratorul nostru</li>
+                    <li class="perks__item perks__item--mov"><span class="perks__icon"><x-site.icon name="shield" /></span>Rețeta verificată de un specialist optic</li>
+                @endif
+                <li class="perks__item perks__item--portocaliu"><span class="perks__icon"><x-site.icon name="truck" /></span>Livrare prin curier în toată România</li>
+            </ul>
+        </div>
+        <div class="product__info">
+            @if ($spec && $spec->lens_width_mm)
+                <section class="frame-dims" aria-labelledby="dimensiuni">
+                    <h2 id="dimensiuni" style="font-size: 1.4rem">Dimensiunile ramei</h2>
+                    @include('storefront::partials.frame-dims', ['spec' => $spec])
+                    <p class="small muted">Comparați cu cifrele gravate pe brațul ochelarilor pe care îi purtați (ex. {{ $spec->sizeNotation() }}). O diferență de 1–2 mm la lățime este de obicei confortabilă.</p>
+                </section>
+            @endif
             @if ($product->short_description || $product->description)
                 <section class="prose" aria-labelledby="descriere">
                     <h2 id="descriere" style="font-size: 1.4rem">Despre ramă</h2>
@@ -93,8 +102,14 @@
     </div>
     @if ($similar->isNotEmpty())
         <section class="section" style="padding-top: 0" aria-labelledby="similare">
-            <h2 id="similare">Alte rame {{ $product->brand?->name }}</h2>
-            <div class="grid grid--4">@foreach ($similar as $card)@include('storefront::partials.card', ['card' => $card])@endforeach</div>
+            <div class="section-head"><h2 id="similare">Alte rame {{ $product->brand?->name }}</h2>@if($product->brand)<a class="btn" href="{{ $product->brand->url() }}">Toate ramele {{ $product->brand->name }}</a>@endif</div>
+            <div class="shelf" data-module="carousel">
+                <div class="shelf__track" data-carousel-track>
+                    @foreach ($similar as $card)<div class="shelf__item" data-carousel-slide>@include('storefront::partials.card', ['card' => $card])</div>@endforeach
+                </div>
+                <button class="shelf__arrow shelf__arrow--prev" type="button" data-carousel-prev aria-label="Ramele anterioare"><x-site.icon name="chevron-left" /></button>
+                <button class="shelf__arrow shelf__arrow--next" type="button" data-carousel-next aria-label="Ramele următoare"><x-site.icon name="chevron-right" /></button>
+            </div>
         </section>
     @endif
 </div>

@@ -128,6 +128,7 @@
         @if ($company = $site->companyLine())<p>{{ $company }}</p>@endif
         <p>© {{ date('Y') }} Optoplus. {{ \App\Core\Support\Tax::note() }}@if(\App\Core\Support\Tax::payer()) Excepție: prețurile afișate partenerilor ca „fără TVA”.@endif</p>
         <p><a href="https://anpc.ro/ce-este-sal/" rel="noopener">ANPC — Soluționarea alternativă a litigiilor (SAL)</a> · <a href="https://ec.europa.eu/consumers/odr" rel="noopener">Soluționarea online a litigiilor (SOL)</a></p>
+        <p class="site-footer__credit">Powered by <a href="https://vitim.ro" rel="noopener" target="_blank"><strong>VITIM</strong></a></p>
     </div>
 </footer>
 @stack('scripts')

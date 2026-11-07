@@ -36,7 +36,7 @@ class PreLaunchTest extends TestCase
     public function test_logged_in_staff_sees_the_real_site(): void
     {
         $this->actingAsRole(Roles::EDITOR_SITE);
-        $this->get('/rame/')->assertOk()->assertDontSee('VITIM');
+        $this->get('/rame/')->assertOk()->assertDontSee('Magazinul online este în lucru');
     }
 
     public function test_turning_it_off_from_settings_opens_the_site(): void
@@ -46,6 +46,6 @@ class PreLaunchTest extends TestCase
         $this->withRecentReauth()->post('/panou/setari/lansare', ['site__prelaunch' => '0'])->assertSessionHasNoErrors();
         auth()->logout();
         $this->flushSession();
-        $this->get('/rame/')->assertOk()->assertDontSee('VITIM');
+        $this->get('/rame/')->assertOk()->assertDontSee('Magazinul online este în lucru');
     }
 }

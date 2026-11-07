@@ -71,8 +71,8 @@ au prioritate față de ele:
 - Orice animație respectă `prefers-reduced-motion` (`gsap.matchMedia()`), iar pagina funcționează și fără JS.
 - Scenele 3D (ex. o lentilă care se rotește) au o imagine statică de rezervă și nu încetinesc telefoanele
   (fără umbre/HDR grele; o singură scenă pe pagină).
-- `frontend-design` nu schimbă identitatea Optoplus (bleumarinul logo-ului, Spectral + Hanken Grotesk,
-  `docs/DIRECTIE-VIZUALA.md`); se aplică în interiorul ei.
+- `frontend-design` nu schimbă identitatea Optoplus (bleumarinul logo-ului, Hanken Grotesk, stilul de magazin
+  din 1.0.12 — `docs/DIRECTIE-VIZUALA.md`); se aplică în interiorul ei.
 
 ## Mediu local
 

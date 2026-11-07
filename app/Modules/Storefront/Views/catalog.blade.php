@@ -6,10 +6,23 @@
 @section('content')
 <div class="wrap" data-module="filters">
     <x-site.breadcrumbs :items="$crumbs" />
-    <header class="page-head">
-        <h1>{{ $heading }}</h1>
-        @if ($intro)<p class="lead">{{ $intro }}</p>@endif
-        <p class="muted small">Ramele sunt produse de mărcile afișate; Optoplus produce lentilele pe care le montăm în ele.</p>
+    @php
+        // Scurtăturile spre categoriile principale (aceleași ca pe prima pagină) și culoarea antetului.
+        $catNav = ['/rame/' => ['Toate ramele', 'bleu'], '/rame/femei/' => ['Femei', 'piersica'], '/rame/barbati/' => ['Bărbați', 'bleu'],
+            '/rame/copii/' => ['Copii', 'menta'], '/rame/clip-on/' => ['Clip-on', 'galben'], '/marci/optofarm/' => ['Optofarm', 'lavanda']];
+        $tone = $catNav[$basePath][1] ?? (($brand?->is_own_brand ?? false) ? 'lavanda' : 'bleu');
+    @endphp
+    <header class="page-hero page-hero--{{ $tone }}">
+        <div class="page-hero__text">
+            <h1>{{ $heading }}</h1>
+            @if ($intro)<p class="lead">{{ $intro }}</p>@endif
+            <p class="small page-hero__note">Ramele sunt produse de mărcile afișate; Optoplus produce lentilele pe care le montăm în ele.</p>
+        </div>
+        <nav class="cat-nav" aria-label="Categorii de rame">
+            @foreach ($catNav as $url => [$label, $_])
+                <a class="cat-nav__link" href="{{ $url }}" @if($basePath === $url) aria-current="page" @endif>{{ $label }}</a>
+            @endforeach
+        </nav>
     </header>
     <div class="catalog">
         <aside aria-label="Filtre">
@@ -59,7 +72,7 @@
             </div>
         </aside>
         <section aria-label="Rezultate">
-            <div class="toolbar"><p class="muted" style="margin: 0">{{ $products->total() }} {{ $products->total() === 1 ? 'ramă' : 'rame' }}</p></div>
+            <div class="toolbar"><p class="toolbar__count">{{ $products->total() }} {{ $products->total() === 1 ? 'ramă' : 'rame' }}</p></div>
             @if ($cards->isEmpty())
                 <div class="empty">
                     <h2>Nicio ramă nu se potrivește filtrelor alese</h2>

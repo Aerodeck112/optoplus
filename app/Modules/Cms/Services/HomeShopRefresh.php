@@ -23,6 +23,9 @@ class HomeShopRefresh
 {
     public function run(): ?string
     {
+        if (! Page::where('path', '/')->exists()) {
+            return null; // instalare de la zero: rulează din nou ContentRefreshSeeder, după setările de livrare
+        }
         $this->topbar();
 
         return DB::transaction(function () {
@@ -60,7 +63,7 @@ class HomeShopRefresh
             return; // păstrăm ce a scris echipa (și gol = fără bandă)
         }
         $price = $s->get('shipping.courier_price');
-        $s->set('site.topbar_text', 'Lentile produse în laboratorul nostru, din Târgu Mureș.'
+        $s->set('site.topbar_text', 'Lentile produse în laboratorul nostru.'
             .($price !== null ? ' Livrare prin curier în toată România: '.Money::format((int) $price).'.' : ''));
     }
 
