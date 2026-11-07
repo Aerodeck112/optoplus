@@ -38,6 +38,11 @@
 @if ($site->isStaging())
     <div class="stage-band" role="status">Mediu de test — comenzile și plățile nu sunt reale.</div>
 @endif
+@php($topbar = app(\App\Core\Settings\Settings::class)->get('site.topbar_text'))
+@if ($topbar)
+    @php($topbarUrl = \App\Modules\Cms\Services\BlockRegistry::url((string) app(\App\Core\Settings\Settings::class)->get('site.topbar_url')))
+    <div class="topbar">@if ($topbarUrl)<a href="{{ $topbarUrl }}">{{ $topbar }}</a>@else<span>{{ $topbar }}</span>@endif</div>
+@endif
 <header class="site-header" data-module="header">
     <div class="site-header__bar wrap">
         <button class="icon-btn site-header__menu-btn" type="button" aria-expanded="false" aria-controls="meniu-principal" data-menu-toggle>

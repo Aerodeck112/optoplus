@@ -4,10 +4,11 @@
 @php($s = app(\App\Core\Settings\Settings::class))
 @php($dMin = $s->get('orders.production_days_min'))
 @php($dMax = $s->get('orders.production_days_max'))
-<section class="hero hero--lens">
+@php($top = $first ?? false)
+<section class="{{ $top ? 'hero hero--lens' : 'section lab-lens' }}">
     <div class="wrap hero__grid">
-        <div class="hero__text" data-module="hero-intro">
-            <h1 class="hero__title">{{ $d['title'] }}</h1>
+        <div class="hero__text" @if($top) data-module="hero-intro" @endif>
+            @if ($top)<h1 class="hero__title">{{ $d['title'] }}</h1>@else<h2 class="hero__title">{{ $d['title'] }}</h2>@endif
             @if (! empty($d['subtitle']))<p class="lead">{{ $d['subtitle'] }}</p>@endif
             <div class="btn-row hero__actions">
                 @if (! empty($d['primary']['url']))<a class="btn btn--primary btn--lg" href="{{ $d['primary']['url'] }}">{{ $d['primary']['label'] }}</a>@endif
@@ -30,6 +31,7 @@
             </figure>
         @endif
     </div>
+    @if ($top)
     <div class="wrap">
         <ul class="hero__facts">
             <li>Lentilele le facem în laboratorul nostru din Târgu Mureș.</li>
@@ -37,4 +39,5 @@
             @if ($dMin && $dMax)<li>Producția durează {{ $dMin }}–{{ $dMax }} zile lucrătoare.</li>@endif
         </ul>
     </div>
+    @endif
 </section>

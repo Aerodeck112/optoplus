@@ -2,12 +2,12 @@
  * Sistemul vizual al siteului public Optoplus — vezi docs/DIRECTIE-VIZUALA.md.
  * Bleumarinul logo-ului, alb rece, griul grafit; accentul „gravură” (culoarea marcajelor de pe lentilele
  * progresive reale) se folosește doar pentru marcaje explicative, pasul curent și focus.
- * Titluri: Spectral. Text și interfață: Hanken Grotesk (versiunea liberă a HK Grotesk, fontul siteului actual).
+ * Titluri și text: Hanken Grotesk (versiunea liberă a HK Grotesk, fontul siteului vechi); titlurile îngroșate, fără serife (1.0.12).
  */
-@import '@fontsource/spectral/latin-500.css';
-@import '@fontsource/spectral/latin-ext-500.css';
-@import '@fontsource/spectral/latin-600.css';
-@import '@fontsource/spectral/latin-ext-600.css';
+@import '@fontsource/hanken-grotesk/latin-700.css';
+@import '@fontsource/hanken-grotesk/latin-ext-700.css';
+@import '@fontsource/hanken-grotesk/latin-800.css';
+@import '@fontsource/hanken-grotesk/latin-ext-800.css';
 @import '@fontsource/hanken-grotesk/latin-400.css';
 @import '@fontsource/hanken-grotesk/latin-ext-400.css';
 @import '@fontsource/hanken-grotesk/latin-500.css';
@@ -32,7 +32,7 @@
     --rosu-blocat: #a23b2a;
     --rosu-pal: #f8e7e3;
 
-    --font-titlu: 'Spectral', 'Iowan Old Style', Georgia, serif;
+    --font-titlu: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --font-text: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
     --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px;
@@ -915,66 +915,155 @@ body { background: linear-gradient(180deg, #f7fbff 0%, #ffffff 40%, #fffaf3 100%
 .swatch:has(input:focus-visible) { outline: 3px solid var(--gravura); outline-offset: 2px; }
 .swatches:not(.is-active) .swatch:has(input:checked) { box-shadow: none; border-color: var(--linie); }
 
-/* ===== 1.0.12 — design modern: alb curat, tipografie mare, o singură scenă memorabilă (lentila 3D) =====
-   Restul paginii e liniștit: fără pete de culoare, fără gradiente decorative, fără umbre și ridicări la fiecare
-   card, fără apariții la derulare pe fiecare secțiune. */
-:root { --sticla: #f3f6f9; --linie: #dde6ed; --r-mare: 24px; }
+/* ===== 1.0.12 — stil de magazin: titluri drepte și îngroșate, culori vii, bannere, categorii, carusele =====
+   Bleumarinul rămâne culoarea mărcii (butoane, titluri); accentele vii marchează navigarea și ofertele. */
+:root {
+    --sticla: #f4f7fa; --linie: #e1e8ee;
+    --azur: #1f7fd6; --portocaliu: #f2a516; --rosu: #e5484d; --verde-viu: #2e9a6b; --mov: #7b5aa6;
+    --bg-bleu: #dcefff; --bg-piersica: #ffe4cc; --bg-menta: #d6f2e5; --bg-lavanda: #ebe3fb; --bg-galben: #fff0c2;
+}
 body { background: #fff; }
+h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.75rem, 2.6vw, 2.4rem); line-height: 1.1; }
+h3 { font-weight: 700; letter-spacing: -0.01em; }
+.lead { font-size: clamp(1.05rem, 1.3vw, 1.2rem); color: #4a5155; }
+.eyebrow { text-transform: none; letter-spacing: 0; font-size: .95rem; font-weight: 700; color: var(--azur); }
 
-/* Secțiuni: alb și „sticlă”, alternativ; spațiul separă, nu chenarele. */
+/* Secțiuni: alb și gri foarte deschis, fără gradiente sau pete de culoare. */
 main > .section { background: #fff !important; }
-main > .section:nth-of-type(even):not(.hero) { background: var(--sticla) !important; }
-.hero::before, .hero::after, .b2b-hero::after, .b2b-card::before, .partner-login::before { display: none !important; }
+main > .section:nth-of-type(even) { background: var(--sticla) !important; }
+.hero::before, .hero::after, .b2b-hero::after, .b2b-card::before { display: none !important; }
 .js [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+.section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--s4); flex-wrap: wrap; margin-bottom: var(--s5); }
+.section-head h2 { margin: 0; }
+.section-head .lead { margin: var(--s2) 0 0; }
 
-/* Tipografie: titluri mari și strânse, fără etichete cu majuscule deasupra. */
-h2 { font-size: clamp(2rem, 3.2vw, 2.9rem); line-height: 1.08; letter-spacing: -0.012em; }
-.section > .wrap > h2 { max-width: 22ch; }
-.lead { font-size: clamp(1.1rem, 1.4vw, 1.3rem); line-height: 1.55; color: #4a5155; }
-.eyebrow { text-transform: none; letter-spacing: 0; font-size: .98rem; font-weight: 600; color: var(--gravura); }
+/* Butoane: pastilă, îngroșate. */
+.btn { border-radius: 999px; min-height: 48px; padding: 0 24px; font-weight: 700; }
+.btn--small { min-height: 40px; padding: 0 16px; }
+.btn--lg { min-height: 54px; padding: 0 28px; font-size: 1.04rem; }
 
-/* Butoane: pastilă, mai înalte. */
-.btn { border-radius: 999px; min-height: 50px; padding: 0 26px; }
-.btn--small { min-height: 40px; padding: 0 18px; }
-.btn--lg { min-height: 56px; padding: 0 30px; font-size: 1.04rem; }
-.btn--primary { box-shadow: none; }
+/* Banda de sus și antetul. */
+.topbar { background: var(--bleumarin); color: #fff; text-align: center; font-size: .9rem; font-weight: 600; padding: 9px var(--s4); }
+.topbar a { color: #fff; text-decoration: none; }
+.topbar a:hover { text-decoration: underline; }
+.site-header { background: rgb(255 255 255 / .92); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); border-bottom-color: var(--linie); }
+.main-nav__link { font-weight: 600; }
 
-/* Antet: alb translucid. */
-.site-header { background: rgb(255 255 255 / .88); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); border-bottom-color: var(--linie); }
+/* Bannerele mari. */
+.banners { padding: var(--s4) 0 var(--s3); }
+.banners__track { display: flex; gap: var(--s4); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.banners__track::-webkit-scrollbar { display: none; }
+.banner { flex: 0 0 100%; scroll-snap-align: center; position: relative; overflow: hidden; display: grid; align-items: center; gap: var(--s5); border-radius: 28px; padding: clamp(24px, 4vw, 56px); min-height: clamp(420px, 40vw, 520px); background: var(--bg-bleu); }
+@media (min-width: 900px) { .banner { grid-template-columns: 1.05fr 1fr; } }
+.banner--piersica { background: var(--bg-piersica); }
+.banner--menta { background: var(--bg-menta); }
+.banner--lavanda { background: var(--bg-lavanda); }
+.banner--galben { background: var(--bg-galben); }
+.banner--bleumarin { background: var(--bleumarin); color: #e6f0f7; }
+.banner--bleumarin .banner__title { color: #fff; }
+.banner--bleumarin .banner__lead { color: #d3e3ee; }
+.banner--bleumarin .btn--primary { background: #fff; color: var(--bleumarin); border-color: #fff; }
+.banner--bleumarin .banner__btn2 { background: transparent; color: #fff; border-color: rgb(255 255 255 / .7); }
+.banner__text { position: relative; z-index: 2; max-width: 38rem; }
+.banner__badge { display: inline-block; margin: 0 0 var(--s3); padding: 6px 14px; border-radius: 999px; background: var(--portocaliu); color: #2a1a00; font-weight: 800; font-size: .9rem; }
+.banner__title { font-size: clamp(2rem, 3.5vw, 3.1rem); line-height: 1.02; letter-spacing: -0.03em; margin: 0 0 var(--s4); }
+.banner__lead { font-size: clamp(1.05rem, 1.3vw, 1.22rem); color: #3c4a55; margin: 0 0 var(--s5); max-width: 32rem; }
+.banner__visual { position: relative; height: 100%; min-height: 260px; display: grid; place-items: end center; }
+.banner__disc { position: absolute; width: min(420px, 82%); aspect-ratio: 1; border-radius: 50%; background: rgb(255 255 255 / .55); left: 50%; top: 50%; transform: translate(-50%, -48%); }
+.banner--bleumarin .banner__disc { background: rgb(255 255 255 / .08); }
+.banner__person { position: relative; width: min(380px, 78%); margin-bottom: calc(-1 * clamp(24px, 4vw, 56px)); }
+.banner__person svg { display: block; width: 100%; height: auto; }
+.banner__photo { position: relative; width: 100%; max-height: 440px; object-fit: cover; border-radius: 22px; }
+.banner__product { position: absolute; left: -2%; bottom: 3%; width: min(44%, 260px); padding: 10px; background: #fff; border-radius: 18px; box-shadow: 0 18px 40px -18px rgb(5 59 94 / .45); transform: rotate(-4deg); z-index: 2; }
+.banner__product img { display: block; width: 100%; height: auto; border-radius: 12px; }
+.banner__product--2 { left: auto; right: 0; top: 6%; bottom: auto; width: min(36%, 210px); transform: rotate(5deg); }
+@media (max-width: 899px) {
+    .banner { padding-bottom: 0; }
+    .banner__visual { order: -1; min-height: 230px; }
+    .banner__person { width: 220px; margin-bottom: 0; }
+    .banner__product { width: 46%; bottom: 4%; }
+    .banner__product--2 { width: 34%; }
+    .banner__text { padding-bottom: var(--s5); }
+}
+.banners__nav { display: flex; align-items: center; justify-content: center; gap: var(--s3); margin-top: var(--s3); }
+.banners__arrow { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--linie); background: #fff; color: var(--bleumarin); display: grid; place-items: center; cursor: pointer; }
+.banners__arrow:hover { border-color: var(--bleumarin); }
+.banners__dots { display: flex; gap: 8px; }
+.banners__dots button { width: 10px; height: 10px; border-radius: 999px; border: 0; padding: 0; background: #c6d3dd; cursor: pointer; transition: width .25s ease, background-color .25s ease; }
+.banners__dots button[aria-current] { width: 28px; background: var(--bleumarin); }
 
-/* Prima secțiune: textul la stânga, lentila (scena 3D) la dreapta; dedesubt, trei lucruri concrete. */
-.hero--lens { background: #fff !important; padding: clamp(28px, 5vw, 72px) 0 0; overflow: hidden; }
-.hero--lens .hero__grid { display: grid; gap: clamp(28px, 4vw, 64px); align-items: center; }
-@media (min-width: 960px) { .hero--lens .hero__grid { grid-template-columns: 1.02fr 1fr; } }
-.hero__title { font-size: clamp(2.4rem, 4.8vw, 4.1rem); line-height: 1.03; letter-spacing: -0.02em; font-weight: 500; max-width: 14ch; margin: 0 0 var(--s5); }
-.hero--lens .lead { max-width: 34em; }
-.hero--lens .hero__actions { margin-top: var(--s6); }
-.hero--lens .hero__b2b { display: block; margin-top: var(--s5); padding-top: 0; border-top: 0; color: var(--grafit-2); max-width: 36em; }
-.hero--lens .hero__b2b a { white-space: nowrap; }
-.hero__facts { list-style: none; margin: clamp(32px, 5vw, 64px) 0 0; padding: var(--s5) 0 clamp(32px, 4vw, 56px); border-top: 1px solid var(--linie); display: grid; gap: var(--s3) var(--s6); color: var(--grafit); font-size: 1.02rem; }
-@media (min-width: 800px) { .hero__facts { grid-template-columns: repeat(3, 1fr); } }
-.hero__facts li { max-width: 30ch; }
+/* Scurtăturile colorate. */
+.quick { padding: var(--s4) 0 var(--s6); }
+.quick__grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s3); grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 700px) { .quick__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1100px) { .quick__grid { grid-template-columns: repeat(6, 1fr); } }
+.quick__item { height: 100%; display: grid; justify-items: center; text-align: center; gap: 8px; padding: 20px 14px; border: 1.5px solid var(--linie); border-radius: 20px; background: #fff; text-decoration: none; color: var(--bleumarin); transition: border-color .2s ease; }
+.quick__item:hover { border-color: currentColor; }
+.quick__icon { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 18px; }
+.quick__title { font-weight: 800; font-size: 1rem; line-height: 1.25; }
+.quick__text { font-size: .86rem; color: var(--grafit-2); }
+.quick__item--azur { color: var(--azur); } .quick__item--azur .quick__icon { background: #e1efff; }
+.quick__item--verde { color: var(--verde-viu); } .quick__item--verde .quick__icon { background: #ddf3e8; }
+.quick__item--portocaliu { color: #c47d00; } .quick__item--portocaliu .quick__icon { background: #fff0d4; }
+.quick__item--rosu { color: var(--rosu); } .quick__item--rosu .quick__icon { background: #fde3e4; }
+.quick__item--mov { color: var(--mov); } .quick__item--mov .quick__icon { background: #efe7fb; }
+.quick__item--bleumarin { color: var(--bleumarin); } .quick__item--bleumarin .quick__icon { background: #e3ebf0; }
+.quick__item .quick__title { color: var(--bleumarin); }
 
-.lens-stage { position: relative; margin: 0; aspect-ratio: 1; width: 100%; max-width: 620px; justify-self: end; }
+/* Categoriile cu fotografii. */
+.tiles { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s3); grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 800px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1200px) { .tiles { grid-template-columns: repeat(6, 1fr); } }
+.tile { position: relative; display: flex; flex-direction: column; justify-content: space-between; aspect-ratio: 4 / 5; padding: 16px; border-radius: 22px; overflow: hidden; background: var(--bg-bleu); text-decoration: none; color: var(--bleumarin); }
+.tile--piersica { background: var(--bg-piersica); } .tile--menta { background: var(--bg-menta); } .tile--lavanda { background: var(--bg-lavanda); } .tile--galben { background: var(--bg-galben); } .tile--bleumarin { background: var(--bleumarin); color: #fff; }
+.tile__img { flex: 1; display: grid; place-items: center; }
+.tile__img img { width: 100%; height: auto; max-height: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform .35s ease; }
+.tile--bleumarin .tile__img img { mix-blend-mode: normal; }
+.tile:hover .tile__img img { transform: scale(1.06); }
+.tile__title { font-weight: 800; font-size: 1.12rem; letter-spacing: -0.01em; }
+.tile__title::after { content: ''; display: inline-block; width: 8px; height: 8px; margin-left: 8px; border-right: 2.5px solid currentColor; border-top: 2.5px solid currentColor; transform: rotate(45deg) translateY(-2px); }
+
+/* Caruselul de produse. */
+.shelf { position: relative; }
+.shelf__track { display: flex; gap: var(--s4); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 4px; }
+.shelf__track::-webkit-scrollbar { display: none; }
+.shelf__item { flex: 0 0 72%; scroll-snap-align: start; }
+@media (min-width: 640px) { .shelf__item { flex-basis: calc((100% - 2 * var(--s4)) / 3); } }
+@media (min-width: 1000px) { .shelf__item { flex-basis: calc((100% - 3 * var(--s4)) / 4); } }
+.shelf__arrow { position: absolute; top: 34%; width: 46px; height: 46px; border-radius: 50%; border: 0; background: #fff; color: var(--bleumarin); box-shadow: 0 6px 18px -6px rgb(5 59 94 / .45); display: grid; place-items: center; cursor: pointer; z-index: 2; }
+.shelf__arrow--prev { left: -14px; } .shelf__arrow--next { right: -14px; }
+@media (max-width: 639px) { .shelf__arrow { display: none; } }
+
+/* Cardurile de produs: imagine pe gri deschis, nume îngroșat, preț vizibil. */
+.card, .card:hover { box-shadow: none !important; transform: none !important; }
+.card__img { border-radius: 18px; background: var(--sticla); border: 0; }
+.card__img img { mix-blend-mode: multiply; transition: transform .35s ease; }
+.card:hover .card__img img { transform: scale(1.04); }
+.card__name { font-weight: 700; font-size: 1rem; letter-spacing: 0; }
+.card__price { font-size: 1.1rem; font-weight: 800; color: var(--bleumarin); }
+
+/* Secțiunea laboratorului (lentila 3D, mutată mai jos). */
+.lab-lens .hero__grid { display: grid; gap: clamp(28px, 4vw, 64px); align-items: center; }
+@media (min-width: 960px) { .lab-lens .hero__grid { grid-template-columns: 1fr 1fr; } }
+.lab-lens .hero__title { font-size: clamp(2rem, 3.4vw, 3rem); max-width: 16ch; }
+.lab-lens .hero__actions { margin-top: var(--s5); }
+.lab-lens .hero__b2b { display: none; }
+.lens-stage { position: relative; margin: 0; aspect-ratio: 1; width: 100%; max-width: 560px; justify-self: center; }
 .lens-stage__photo { position: absolute; inset: 0; display: grid; place-items: center; }
-.lens-stage__photo img { width: 100%; height: 100%; object-fit: contain; animation: none !important; filter: drop-shadow(0 24px 40px rgb(5 59 94 / .16)); }
-.lens-stage__canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border-radius: var(--r-mare); background: #f7fafc; touch-action: pan-y; }
+.lens-stage__photo img { width: 100%; height: 100%; object-fit: contain; animation: none !important; }
+.lens-stage__canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border-radius: 28px; background: #f7fafc; touch-action: pan-y; }
 .lens-stage.is-3d .lens-stage__photo { visibility: hidden; }
 .lens-stage figcaption { position: absolute; left: 0; right: 0; bottom: -2.2em; font-size: .86rem; color: var(--grafit-2); text-align: center; }
 .lens-stage.is-3d .lens-stage__pin--1 { left: 41% !important; top: 32% !important; }
 .lens-stage.is-3d .lens-stage__pin--2 { left: 26% !important; top: 49% !important; }
 .lens-stage.is-3d .lens-stage__pin--3 { left: 60% !important; top: 75% !important; }
-@media (max-width: 959px) { .lens-stage { justify-self: center; margin-bottom: 2.4em; } }
+@media (max-width: 959px) { .lens-stage { margin-bottom: 2.4em; } }
 
-/* Pașii: puncte pe linia de referință (ca pe lentila progresivă). */
+/* Pașii: puncte pe linia de referință. Familiile de lentile: listă aerisită. */
 .steps { position: relative; }
-@media (min-width: 900px) {
-    .steps::before { content: ''; position: absolute; left: 18px; right: 18px; top: 18px; height: 1.5px; background: var(--gravura); opacity: .45; }
-}
-.steps li::before { border-color: var(--gravura); color: var(--gravura); }
-.steps h3 { font-size: 1.3rem; }
-
-/* Familiile de lentile: o listă aerisită, nu o grilă de carduri. */
+@media (min-width: 900px) { .steps::before { content: ''; position: absolute; left: 18px; right: 18px; top: 18px; height: 2px; background: var(--azur); opacity: .35; } }
+.steps li::before { border-color: var(--azur); color: var(--azur); }
 .families { display: block !important; margin-top: var(--s6); border-top: 1px solid var(--linie); }
 .family { display: grid !important; grid-template-columns: 1fr; gap: var(--s2); padding: var(--s6) 0 !important; margin: 0 !important; border: 0 !important; border-bottom: 1px solid var(--linie) !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; transform: none !important; }
 @media (min-width: 900px) {
@@ -985,19 +1074,16 @@ h2 { font-size: clamp(2rem, 3.2vw, 2.9rem); line-height: 1.08; letter-spacing: -
     .family__price { grid-area: price; text-align: right; }
     .family__link { grid-area: link; justify-self: end; align-self: end; }
 }
-.family h3 { font-size: clamp(1.6rem, 2.4vw, 2.1rem); margin: 0; }
-.family > p:not(.family__price) { margin: 0; max-width: 58ch; color: var(--grafit); }
-.family__price { margin: 0; font-weight: 600; color: var(--bleumarin); white-space: nowrap; }
+.family h3 { font-size: clamp(1.4rem, 2vw, 1.8rem); margin: 0; }
+.family > p:not(.family__price) { margin: 0; max-width: 58ch; }
+.family__price { margin: 0; font-weight: 800; color: var(--bleumarin); white-space: nowrap; }
 
-/* Produse și carduri: fără umbre și fără ridicare la trecerea mouse-ului. */
-.card, .card:hover, .audience__card, .audience__card:hover, .entry, .entry:hover, .stat, .stat:hover { box-shadow: none !important; transform: none !important; }
-.card__img { border-radius: 16px; background: var(--sticla); border: 0; }
-.card__img img { transition: transform .4s ease; }
-.card:hover .card__img img { transform: scale(1.03); }
+/* Banda pentru parteneri și alte carduri: chenar fin, fără umbre. */
+.b2b-card { background: #fff !important; box-shadow: none !important; border: 1px solid var(--linie) !important; border-radius: 28px; backdrop-filter: none; }
+.audience__card, .audience__card:hover, .entry:hover, .stat:hover { box-shadow: none !important; transform: none !important; }
 .photo-row figure img, .compare figure img { transform: none !important; }
 
-/* Banda pentru parteneri: chenar fin, fără umbră și gradient. */
-.b2b-card { background: #fff !important; box-shadow: none !important; border: 1px solid var(--linie) !important; border-radius: 28px; backdrop-filter: none; }
-.section--b2b { background: var(--sticla) !important; }
-
-@media (prefers-reduced-motion: reduce) { .card:hover .card__img img { transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+    .card:hover .card__img img, .tile:hover .tile__img img { transform: none; }
+    .banners__dots button { transition: none; }
+}

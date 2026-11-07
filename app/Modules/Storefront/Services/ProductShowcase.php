@@ -12,10 +12,11 @@ class ProductShowcase
 {
     public function __construct(private PriceEngine $prices) {}
 
-    public function frames(?string $brandSlug = null, int $limit = 8): Collection
+    public function frames(?string $brandSlug = null, int $limit = 8, ?string $gender = null): Collection
     {
         $products = Product::published()->frames()
             ->when($brandSlug, fn ($q) => $q->whereHas('brand', fn ($b) => $b->where('slug', $brandSlug)))
+            ->when($gender, fn ($q) => $q->whereHas('attributeValues', fn ($a) => $a->where('slug', $gender)->whereHas('attribute', fn ($x) => $x->where('code', 'gen'))))
             ->whereHas('images', fn ($i) => $i->where('status', 'ready'))
             ->with(['brand', 'frameSpec', 'variants' => fn ($v) => $v->where('is_active', true), 'images' => fn ($i) => $i->where('status', 'ready')->with('media')])
             ->orderByDesc('legacy_wc_id')->limit(max(1, min(24, $limit)))->get();

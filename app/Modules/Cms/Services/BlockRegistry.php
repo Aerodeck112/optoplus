@@ -19,6 +19,16 @@ final class BlockRegistry
         'chat' => 'Discuție', 'ruler' => 'Măsurare', 'check' => 'Bifă',
     ];
 
+    /** Ilustrațiile cu persoane (desene, nu fotografii), pentru bannere. */
+    public const ILLUSTRATIONS = ['' => 'Fără', 'femeie' => 'Femeie, ramă cat-eye', 'barbat' => 'Bărbat cu barbă, ramă dreptunghiulară',
+        'copil' => 'Copil, ramă rotundă', 'senior' => 'Persoană în vârstă, citește (progresive)', 'fotocromatic' => 'Persoană cu lentile fotocromatice'];
+
+    /** Fundalurile bannerelor și ale plăcilor de categorie. */
+    public const BANNER_COLORS = ['bleu' => 'Bleu deschis', 'bleumarin' => 'Bleumarin', 'piersica' => 'Piersică', 'menta' => 'Mentă', 'lavanda' => 'Lavandă', 'galben' => 'Galben'];
+
+    /** Culorile vii ale scurtăturilor. */
+    public const ACCENTS = ['azur' => 'Azur', 'verde' => 'Verde', 'portocaliu' => 'Portocaliu', 'rosu' => 'Roșu', 'mov' => 'Mov', 'bleumarin' => 'Bleumarin'];
+
     /** Ecranele portalului pentru care avem machete animate (date fictive). */
     public const PORTAL_SCREENS = [
         'quick' => 'Comandă rapidă', 'csv' => 'Import din CSV', 'tracking' => 'Urmărirea producției',
@@ -102,6 +112,8 @@ final class BlockRegistry
                     'title' => ['type' => 'text', 'label' => 'Titlu'],
                     'intro' => ['type' => 'textarea', 'label' => 'Introducere'],
                     'brand' => ['type' => 'text', 'label' => 'Marca (slug, opțional)'],
+                    'gen' => ['type' => 'select', 'label' => 'Pentru', 'options' => ['' => 'Toate', 'femei' => 'Femei', 'barbati' => 'Bărbați', 'copii' => 'Copii']],
+                    'layout' => ['type' => 'select', 'label' => 'Așezare', 'options' => ['grila' => 'Grilă', 'carusel' => 'Carusel (derulare orizontală)']],
                     'limit' => ['type' => 'number', 'label' => 'Număr de produse'],
                     'cta' => ['type' => 'group', 'label' => 'Link', 'fields' => $link],
                 ],
@@ -136,6 +148,50 @@ final class BlockRegistry
                     'bullets' => ['type' => 'list', 'label' => 'Puncte', 'fields' => ['text' => ['type' => 'text', 'label' => 'Text']]],
                     'primary' => ['type' => 'group', 'label' => 'Butonul principal', 'fields' => $link],
                     'secondary' => ['type' => 'group', 'label' => 'Butonul secundar', 'fields' => $link],
+                ],
+            ],
+            'banner_carousel' => [
+                'label' => 'Bannere mari (carusel)',
+                'description' => 'Bannere pe toată lățimea, care se schimbă: titlu, text, butoane, o ilustrație cu o persoană care poartă ochelari sau o fotografie, plus o fotografie de produs. Primul banner este titlul paginii.',
+                'fields' => [
+                    'slides' => ['type' => 'list', 'label' => 'Bannere', 'fields' => [
+                        'badge' => ['type' => 'text', 'label' => 'Etichetă mică (opțional, ex. „Nou”)'],
+                        'title' => ['type' => 'text', 'label' => 'Titlu'],
+                        'text' => ['type' => 'textarea', 'label' => 'Text'],
+                        'primary' => ['type' => 'group', 'label' => 'Butonul principal', 'fields' => $link],
+                        'secondary' => ['type' => 'group', 'label' => 'Butonul secundar', 'fields' => $link],
+                        'illustration' => ['type' => 'select', 'label' => 'Ilustrație', 'options' => self::ILLUSTRATIONS],
+                        'photo' => ['type' => 'media', 'label' => 'Fotografie (în locul ilustrației, opțional)'],
+                        'product' => ['type' => 'media', 'label' => 'Fotografie de produs (rame / lentile)'],
+                        'product2' => ['type' => 'media', 'label' => 'A doua fotografie de produs (opțional)'],
+                        'background' => ['type' => 'select', 'label' => 'Culoarea fundalului', 'options' => self::BANNER_COLORS],
+                    ]],
+                ],
+            ],
+            'quick_links' => [
+                'label' => 'Scurtături cu pictograme',
+                'description' => 'Carduri mici, colorate, cu pictogramă și titlu, care duc la paginile importante.',
+                'fields' => [
+                    'items' => ['type' => 'list', 'label' => 'Scurtături', 'fields' => [
+                        'icon' => ['type' => 'select', 'label' => 'Pictogramă', 'options' => self::ICONS],
+                        'color' => ['type' => 'select', 'label' => 'Culoare', 'options' => self::ACCENTS],
+                        'title' => ['type' => 'text', 'label' => 'Titlu'],
+                        'text' => ['type' => 'text', 'label' => 'Text scurt (opțional)'],
+                        'url' => ['type' => 'url', 'label' => 'Link'],
+                    ]],
+                ],
+            ],
+            'category_tiles' => [
+                'label' => 'Categorii cu fotografii',
+                'description' => 'Plăci mari cu fotografie și nume, pentru categoriile principale (femei, bărbați, copii, lentile...).',
+                'fields' => [
+                    'title' => ['type' => 'text', 'label' => 'Titlu'],
+                    'items' => ['type' => 'list', 'label' => 'Categorii', 'fields' => [
+                        'title' => ['type' => 'text', 'label' => 'Nume'],
+                        'url' => ['type' => 'url', 'label' => 'Link'],
+                        'image' => ['type' => 'media', 'label' => 'Fotografie'],
+                        'background' => ['type' => 'select', 'label' => 'Culoarea fundalului', 'options' => self::BANNER_COLORS],
+                    ]],
                 ],
             ],
             'b2b_hero' => [
@@ -226,6 +282,31 @@ final class BlockRegistry
                 'fields' => ['block_id' => ['type' => 'reusable', 'label' => 'Blocul']],
             ],
         ];
+    }
+
+    /** Numele câmpurilor de tip imagine (media) din toate blocurile, inclusiv din liste și grupuri. */
+    public static function mediaKeys(): array
+    {
+        static $keys = null;
+        if ($keys !== null) {
+            return $keys;
+        }
+        $keys = [];
+        $walk = function (array $fields) use (&$walk, &$keys) {
+            foreach ($fields as $name => $def) {
+                if (($def['type'] ?? null) === 'media') {
+                    $keys[] = $name;
+                }
+                if (isset($def['fields'])) {
+                    $walk($def['fields']);
+                }
+            }
+        };
+        foreach (self::types() as $t) {
+            $walk($t['fields']);
+        }
+
+        return $keys = array_values(array_unique($keys));
     }
 
     public static function exists(string $type): bool

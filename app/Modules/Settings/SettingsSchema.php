@@ -19,6 +19,8 @@ final class SettingsSchema
                     'site.prelaunch' => ['Mod lucru: siteul public afișează pagina de pregătire', 'bool'],
                     'site.prelaunch_message' => ['Mesaj suplimentar pe pagina de pregătire (opțional)', 'textarea'],
                     'site.prelaunch_date' => ['Lansarea estimată (text liber, opțional; ex. „decembrie 2026”)', 'text'],
+                    'site.topbar_text' => ['Banda de sus a siteului (mesaj scurt; gol = fără bandă)', 'text'],
+                    'site.topbar_url' => ['Linkul benzii de sus (opțional, ex. /livrare/ sau https://…)', 'text'],
                 ],
             ],
             'firma' => [

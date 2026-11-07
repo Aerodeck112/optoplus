@@ -37,7 +37,7 @@ class PageRenderer
                 foreach ($value as $k => $v) {
                     $walk($v, $k);
                 }
-            } elseif (is_int($value) && is_string($key) && (in_array($key, ['image', 'media', 'compare_a', 'compare_b'], true))) {
+            } elseif (is_int($value) && is_string($key) && in_array($key, BlockRegistry::mediaKeys(), true)) {
                 $ids[] = $value;
             }
         };
