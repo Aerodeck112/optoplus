@@ -914,3 +914,90 @@ body { background: linear-gradient(180deg, #f7fbff 0%, #ffffff 40%, #fffaf3 100%
 .swatch:has(input:checked) .swatch__dot { box-shadow: inset 0 0 0 2px #fff, 0 0 0 2px var(--bleumarin); }
 .swatch:has(input:focus-visible) { outline: 3px solid var(--gravura); outline-offset: 2px; }
 .swatches:not(.is-active) .swatch:has(input:checked) { box-shadow: none; border-color: var(--linie); }
+
+/* ===== 1.0.12 — design modern: alb curat, tipografie mare, o singură scenă memorabilă (lentila 3D) =====
+   Restul paginii e liniștit: fără pete de culoare, fără gradiente decorative, fără umbre și ridicări la fiecare
+   card, fără apariții la derulare pe fiecare secțiune. */
+:root { --sticla: #f3f6f9; --linie: #dde6ed; --r-mare: 24px; }
+body { background: #fff; }
+
+/* Secțiuni: alb și „sticlă”, alternativ; spațiul separă, nu chenarele. */
+main > .section { background: #fff !important; }
+main > .section:nth-of-type(even):not(.hero) { background: var(--sticla) !important; }
+.hero::before, .hero::after, .b2b-hero::after, .b2b-card::before, .partner-login::before { display: none !important; }
+.js [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+
+/* Tipografie: titluri mari și strânse, fără etichete cu majuscule deasupra. */
+h2 { font-size: clamp(2rem, 3.2vw, 2.9rem); line-height: 1.08; letter-spacing: -0.012em; }
+.section > .wrap > h2 { max-width: 22ch; }
+.lead { font-size: clamp(1.1rem, 1.4vw, 1.3rem); line-height: 1.55; color: #4a5155; }
+.eyebrow { text-transform: none; letter-spacing: 0; font-size: .98rem; font-weight: 600; color: var(--gravura); }
+
+/* Butoane: pastilă, mai înalte. */
+.btn { border-radius: 999px; min-height: 50px; padding: 0 26px; }
+.btn--small { min-height: 40px; padding: 0 18px; }
+.btn--lg { min-height: 56px; padding: 0 30px; font-size: 1.04rem; }
+.btn--primary { box-shadow: none; }
+
+/* Antet: alb translucid. */
+.site-header { background: rgb(255 255 255 / .88); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); border-bottom-color: var(--linie); }
+
+/* Prima secțiune: textul la stânga, lentila (scena 3D) la dreapta; dedesubt, trei lucruri concrete. */
+.hero--lens { background: #fff !important; padding: clamp(28px, 5vw, 72px) 0 0; overflow: hidden; }
+.hero--lens .hero__grid { display: grid; gap: clamp(28px, 4vw, 64px); align-items: center; }
+@media (min-width: 960px) { .hero--lens .hero__grid { grid-template-columns: 1.02fr 1fr; } }
+.hero__title { font-size: clamp(2.4rem, 4.8vw, 4.1rem); line-height: 1.03; letter-spacing: -0.02em; font-weight: 500; max-width: 14ch; margin: 0 0 var(--s5); }
+.hero--lens .lead { max-width: 34em; }
+.hero--lens .hero__actions { margin-top: var(--s6); }
+.hero--lens .hero__b2b { display: block; margin-top: var(--s5); padding-top: 0; border-top: 0; color: var(--grafit-2); max-width: 36em; }
+.hero--lens .hero__b2b a { white-space: nowrap; }
+.hero__facts { list-style: none; margin: clamp(32px, 5vw, 64px) 0 0; padding: var(--s5) 0 clamp(32px, 4vw, 56px); border-top: 1px solid var(--linie); display: grid; gap: var(--s3) var(--s6); color: var(--grafit); font-size: 1.02rem; }
+@media (min-width: 800px) { .hero__facts { grid-template-columns: repeat(3, 1fr); } }
+.hero__facts li { max-width: 30ch; }
+
+.lens-stage { position: relative; margin: 0; aspect-ratio: 1; width: 100%; max-width: 620px; justify-self: end; }
+.lens-stage__photo { position: absolute; inset: 0; display: grid; place-items: center; }
+.lens-stage__photo img { width: 100%; height: 100%; object-fit: contain; animation: none !important; filter: drop-shadow(0 24px 40px rgb(5 59 94 / .16)); }
+.lens-stage__canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border-radius: var(--r-mare); background: #f7fafc; touch-action: pan-y; }
+.lens-stage.is-3d .lens-stage__photo { visibility: hidden; }
+.lens-stage figcaption { position: absolute; left: 0; right: 0; bottom: -2.2em; font-size: .86rem; color: var(--grafit-2); text-align: center; }
+.lens-stage.is-3d .lens-stage__pin--1 { left: 41% !important; top: 32% !important; }
+.lens-stage.is-3d .lens-stage__pin--2 { left: 26% !important; top: 49% !important; }
+.lens-stage.is-3d .lens-stage__pin--3 { left: 60% !important; top: 75% !important; }
+@media (max-width: 959px) { .lens-stage { justify-self: center; margin-bottom: 2.4em; } }
+
+/* Pașii: puncte pe linia de referință (ca pe lentila progresivă). */
+.steps { position: relative; }
+@media (min-width: 900px) {
+    .steps::before { content: ''; position: absolute; left: 18px; right: 18px; top: 18px; height: 1.5px; background: var(--gravura); opacity: .45; }
+}
+.steps li::before { border-color: var(--gravura); color: var(--gravura); }
+.steps h3 { font-size: 1.3rem; }
+
+/* Familiile de lentile: o listă aerisită, nu o grilă de carduri. */
+.families { display: block !important; margin-top: var(--s6); border-top: 1px solid var(--linie); }
+.family { display: grid !important; grid-template-columns: 1fr; gap: var(--s2); padding: var(--s6) 0 !important; margin: 0 !important; border: 0 !important; border-bottom: 1px solid var(--linie) !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; transform: none !important; }
+@media (min-width: 900px) {
+    .family { grid-template-columns: 200px minmax(0, 1fr) auto; grid-template-areas: "diag name price" "diag text link"; column-gap: var(--s7); align-items: start; }
+    .family__diagram { grid-area: diag; width: 200px; }
+    .family h3 { grid-area: name; }
+    .family > p:not(.family__price) { grid-area: text; }
+    .family__price { grid-area: price; text-align: right; }
+    .family__link { grid-area: link; justify-self: end; align-self: end; }
+}
+.family h3 { font-size: clamp(1.6rem, 2.4vw, 2.1rem); margin: 0; }
+.family > p:not(.family__price) { margin: 0; max-width: 58ch; color: var(--grafit); }
+.family__price { margin: 0; font-weight: 600; color: var(--bleumarin); white-space: nowrap; }
+
+/* Produse și carduri: fără umbre și fără ridicare la trecerea mouse-ului. */
+.card, .card:hover, .audience__card, .audience__card:hover, .entry, .entry:hover, .stat, .stat:hover { box-shadow: none !important; transform: none !important; }
+.card__img { border-radius: 16px; background: var(--sticla); border: 0; }
+.card__img img { transition: transform .4s ease; }
+.card:hover .card__img img { transform: scale(1.03); }
+.photo-row figure img, .compare figure img { transform: none !important; }
+
+/* Banda pentru parteneri: chenar fin, fără umbră și gradient. */
+.b2b-card { background: #fff !important; box-shadow: none !important; border: 1px solid var(--linie) !important; border-radius: 28px; backdrop-filter: none; }
+.section--b2b { background: var(--sticla) !important; }
+
+@media (prefers-reduced-motion: reduce) { .card:hover .card__img img { transform: none; } }

@@ -82,5 +82,5 @@ function initAssistant() {
 
 initMenu();
 loadModules();
-initReveal();
+// initReveal(); — scos în 1.0.12: un singur moment orchestrat (prima secțiune), nu apariții la fiecare secțiune
 initAssistant();
