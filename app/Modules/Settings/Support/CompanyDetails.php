@@ -35,7 +35,8 @@ class CompanyDetails
         }
         $contact = trim((string) $s->get('contact.address'));
         if ($contact === '' || $contact === self::OLD_CONTACT_ADDRESS) {
-            $s->set('contact.address', self::ADDRESS);
+            // aceeași scriere ca sediul din Setări → Firma (dacă echipa l-a completat deja), ca subsolul să-l arate o dată
+            $s->set('contact.address', trim((string) $s->get('company.address')) ?: self::ADDRESS);
             $changed[] = 'contact.address';
         }
         // Banda de sus (1.0.12): fără localitate pentru laborator până la confirmare.

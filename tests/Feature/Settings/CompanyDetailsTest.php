@@ -52,6 +52,17 @@ class CompanyDetailsTest extends TestCase
         $this->assertSame('29223337', $s->get('company.vat_code'), 'câmpurile goale se completează');
     }
 
+    public function test_contact_address_follows_the_registered_office_written_by_the_team(): void
+    {
+        $s = app(Settings::class);
+        $s->set('company.address', 'Sat Crăciunești nr. 235/A, jud. Mureș');
+        $s->set('contact.address', CompanyDetails::OLD_CONTACT_ADDRESS);
+
+        CompanyDetails::run();
+
+        $this->assertSame('Sat Crăciunești nr. 235/A, jud. Mureș', $s->get('contact.address'));
+    }
+
     public function test_footer_shows_the_company_once(): void
     {
         $this->seed(SiteContentSeeder::class);
