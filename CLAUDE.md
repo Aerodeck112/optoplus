@@ -61,6 +61,19 @@ Citește întâi: `docs/ARHITECTURA.md`, `docs/SCHEMA-BD.md`, `docs/STATUS.md`, 
 - Teste: PHPUnit pe MariaDB (`optoplus_test`), `tests/Feature/<Modul>/`. Rulează `php artisan test` înainte de
   fiecare commit.
 
+## Skilluri de proiect (`.claude/skills/`)
+
+Preluate din repository-ul `elgarom` (2026-11-07): `frontend-design`, `gsap-*` (core, timeline, scrolltrigger,
+performance) și `threejs-*` (core, geometry, materials, lighting, animation, performance). Regulile de mai sus
+au prioritate față de ele:
+- GSAP / Three.js se instalează cu `npm` și se împachetează cu Vite (fără CDN: CSP-ul permite doar scripturi
+  proprii) și se încarcă doar pe paginile care le folosesc (`data-module`), nu în pachetul comun.
+- Orice animație respectă `prefers-reduced-motion` (`gsap.matchMedia()`), iar pagina funcționează și fără JS.
+- Scenele 3D (ex. o lentilă care se rotește) au o imagine statică de rezervă și nu încetinesc telefoanele
+  (fără umbre/HDR grele; o singură scenă pe pagină).
+- `frontend-design` nu schimbă identitatea Optoplus (bleumarinul logo-ului, Spectral + Hanken Grotesk,
+  `docs/DIRECTIE-VIZUALA.md`); se aplică în interiorul ei.
+
 ## Mediu local
 
 ```
