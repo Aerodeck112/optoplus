@@ -124,7 +124,8 @@ function thickness(root) {
     sync();
 }
 
-// Comparație „fără / cu” pentru antireflex și filtrul de lumină albastră; urmează și bifa din formular.
+// Comparație „fără / cu” pentru antireflex și filtrul de lumină albastră, legată în ambele sensuri de bifa din
+// formular: „Cu filtru” / „Cu antireflex” alege tratamentul (prețul se recalculează pe server), „Fără” îl scoate.
 function toggle(root) {
     const checkbox = document.querySelector(`[data-treatment="${root.dataset.treatmentRef}"]`);
     const cap = root.querySelector('[data-demo-caption]');
@@ -139,7 +140,16 @@ function toggle(root) {
         root.querySelectorAll('[data-demo]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.demo === state)));
         cap.textContent = texts[state];
     };
-    root.addEventListener('click', (e) => { const b = e.target.closest('[data-demo]'); if (b) set(b.dataset.demo); });
+    root.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-demo]');
+        if (!b) return;
+        set(b.dataset.demo);
+        const want = b.dataset.demo === 'on';
+        if (checkbox && !checkbox.disabled && checkbox.checked !== want) {
+            checkbox.checked = want;
+            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
     checkbox?.addEventListener('change', () => set(checkbox.checked ? 'on' : 'off'));
     set(checkbox?.checked ? 'on' : 'off');
 }

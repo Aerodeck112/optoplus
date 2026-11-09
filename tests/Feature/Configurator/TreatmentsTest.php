@@ -51,6 +51,25 @@ class TreatmentsTest extends TestCase
         $this->get("/configurator/{$cfg2->uuid}/pas/4/")->assertOk()->assertDontSee('Nu este disponibil pentru alegerea ta');
     }
 
+    public function test_every_treatment_adds_its_price_to_the_live_total_and_is_clearly_selectable(): void
+    {
+        $cfg = $this->toStep4('distanta', 'monofocal-premium-160');
+        $html = $this->get("/configurator/{$cfg->uuid}/pas/4/")->assertOk()->getContent();
+        // 1.0.13: cardul întreg se poate apăsa și arată „Adaugă” / „Adăugat” lângă preț
+        $this->assertStringContainsString('data-tx-card', $html);
+        $this->assertStringContainsString('tx-state__on', $html);
+
+        $base = $this->postJson("/configurator/{$cfg->uuid}/calcul/", ['pas' => 4])->assertOk()->json('total');
+        $toLei = fn (string $t) => (int) round((float) str_replace(['.', ',', ' lei'], ['', '.', ''], $t) * 100);
+        foreach (['antireflex-hidrofob', 'filtru-lumina-albastra'] as $code) {
+            $id = $this->treatmentId($code);
+            $price = (int) \Illuminate\Support\Facades\DB::table('lens_offering_treatments')->where('offering_id', $cfg->lens_offering_id)->where('treatment_id', $id)->value('price');
+            $this->assertGreaterThan(0, $price);
+            $with = $this->postJson("/configurator/{$cfg->uuid}/calcul/", ['pas' => 4, 'tratamente' => [$id]])->json('total');
+            $this->assertSame($toLei($base) + $price, $toLei($with), "prețul tratamentului {$code} intră în total");
+        }
+    }
+
     public function test_live_price_does_not_shout_for_missing_shade_but_submit_requires_it(): void
     {
         $cfg = $this->toStep4('distanta', 'monofocal-premium-160');

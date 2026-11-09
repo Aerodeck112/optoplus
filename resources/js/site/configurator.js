@@ -56,6 +56,15 @@ export default function configurator(root) {
     }));
     syncOptions();
 
+    // Tot cardul tratamentului se poate apăsa (în afara butoanelor, culorilor și a ilustrației, care au rolul lor).
+    form?.querySelectorAll('[data-tx-card]').forEach((card) => card.addEventListener('click', (e) => {
+        if (e.target.closest('a, button, input, label, select, textarea, .tx-demo, .swatches')) return;
+        const cb = card.querySelector('input[name="tratamente[]"]');
+        if (!cb || cb.disabled) return;
+        cb.checked = !cb.checked;
+        cb.dispatchEvent(new Event('change', { bubbles: true }));
+    }));
+
     // AX are sens doar cu CYL.
     form?.querySelectorAll('[data-cyl]').forEach((cyl) => {
         const axis = form.querySelector(`[data-axis="${cyl.dataset.cyl}"]`);

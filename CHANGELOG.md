@@ -3,6 +3,15 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.13] — 2026-11-09
+
+Se poate instala direct peste 1.0.0 – 1.0.12.
+
+- **Tratamentele se aleg ușor și prețul lor intră în total:** la pasul „Tratamente” căsuța de bifat nu se vedea,
+  iar butoanele din ilustrații („Cu antireflex”, „Cu filtru”) schimbau doar desenul. Acum căsuța se vede, lângă
+  preț apare „Adaugă” / „✓ Adăugat”, un clic oriunde pe card alege tratamentul, iar „Cu antireflex” / „Cu filtru”
+  îl adaugă (și „Fără” îl scoate). Totalul se recalculează imediat.
+
 ## [1.0.12] — 2026-11-07
 
 Se poate instala direct peste 1.0.0 – 1.0.11.

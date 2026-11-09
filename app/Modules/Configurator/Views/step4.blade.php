@@ -14,11 +14,11 @@
             @foreach ($available as $ot)
                 @php($t = $ot->treatment)
                 @php($why = $blocked[$t->id] ?? null)
-                <div class="choice @if($why) choice--blocked @endif" style="cursor: default">
+                <div class="choice tx-card @if($why) choice--blocked @endif" @unless($why) data-tx-card @endunless>
                     <label class="check" style="flex: 1">
                         <input type="checkbox" name="tratamente[]" value="{{ $t->id }}" @checked(! $why && $chosen->has($t->id)) @disabled($why) data-calc data-treatment="{{ $t->id }}" @if($t->requires_option) data-needs-option @endif @if(str_starts_with((string) $t->kind, 'fotocromatic')) data-exclusive="fotocromatic" @endif>
                         <span class="choice__body">
-                            <span class="choice__title"><span>{{ $t->name }}</span><span>@if($ot->is_included) inclus @else +{{ \App\Core\Support\Money::format($ot->price) }} @endif</span></span>
+                            <span class="choice__title"><span>{{ $t->name }}</span><span class="tx-price">@if($ot->is_included) inclus @else +{{ \App\Core\Support\Money::format($ot->price) }} @endif @unless($why)<span class="tx-state" aria-hidden="true"><span class="tx-state__off">Adaugă</span><span class="tx-state__on">✓ Adăugat</span></span>@endunless</span></span>
                             <span class="choice__text"><strong>Ce face:</strong> {{ $t->benefits }}</span>
                             <span class="choice__text"><strong>Limite:</strong> {{ $t->limits }}</span>
                             @if ($why)<span class="choice__blocked"><strong>Nu este disponibil pentru alegerea ta:</strong> {{ $why }}</span>@endif
