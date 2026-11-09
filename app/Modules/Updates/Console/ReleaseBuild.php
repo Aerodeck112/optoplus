@@ -128,8 +128,9 @@ class ReleaseBuild extends Command
                 return true;
             }
         }
-        // Instantaneul siteului vechi e necesar doar la instalarea inițială (importul conținutului).
-        if ($type === 'update' && str_starts_with($rel, 'database/content/')) {
+        // Instantaneul siteului vechi e necesar doar la instalarea inițială (importul conținutului). Traducerile
+        // (database/content/i18n) se livrează însă și în actualizări: migrarea limbilor le încarcă.
+        if ($type === 'update' && str_starts_with($rel, 'database/content/') && ! str_starts_with($rel, 'database/content/i18n/')) {
             return true;
         }
 
