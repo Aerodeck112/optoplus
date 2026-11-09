@@ -84,7 +84,7 @@ class OrderStatus
             Audit::log("order.{$axis}", $order, ['from' => $from, 'to' => $to, 'actor' => $actor], $order->customer_id);
             app(OrderNotifier::class)->onEvent($order, $axis, $to);
         } elseif ($visible && $message) {
-            DB::afterCommit(fn () => OrderNotifier::safely(fn () => Notification::route('mail', $order->email)->notify(new OrderUpdate($order->id, 'message', $message)), $order->id, 'message'));
+            DB::afterCommit(fn () => OrderNotifier::safely(fn () => Notification::route('mail', $order->email)->notify((new OrderUpdate($order->id, 'message', $message))->locale($order->locale ?: 'ro')), $order->id, 'message'));
         }
 
         return $event;

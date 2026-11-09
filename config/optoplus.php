@@ -45,6 +45,14 @@ return [
     ],
 
     // Configurator: limite de plauzibilitate (nu de fabricație — acelea sunt în matrice), în zecimi de mm / sutimi dpt.
+    // Limbile siteului (vezi App\Modules\I18n). „collect”: notează textele netraduse ale paginilor vizitate (doar în
+    // dezvoltare; pe server textele noi se găsesc cu „Scanează siteul” din Panou → Traduceri).
+    'i18n' => [
+        'collect' => (bool) env('OPTOPLUS_I18N_COLLECT', false),
+        // doar în dezvoltare, cu date fictive: colectează și din cont / portal / pagina comenzii
+        'collect_private' => (bool) env('OPTOPLUS_I18N_COLLECT_PRIVATE', false),
+    ],
+
     'configurator' => [
         'pd_binocular_range' => [500, 800],
         'pd_monocular_range' => [250, 400],

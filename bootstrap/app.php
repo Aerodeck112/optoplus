@@ -37,6 +37,8 @@ $app = Application::configure(basePath: dirname(__DIR__))
         })->everyFiveMinutes()->name('htaccess-optoplus')->withoutOverlapping(5);
     })
     ->withMiddleware(function (Middleware $middleware): void {
+        // /en/… și /hu/…: limba din adresă (vezi LocalizeSite); rulează după CanonicalHost și TrailingSlash.
+        $middleware->prepend(\App\Modules\I18n\Http\Middleware\LocalizeSite::class);
         // optoplus.ro ↔ www.optoplus.ro: o singură adresă (vezi CanonicalHost), înainte de orice altă procesare.
         $middleware->prepend(\App\Core\Http\Middleware\CanonicalHost::class);
         $middleware->prepend(\App\Modules\Storefront\Http\Middleware\TrailingSlash::class);

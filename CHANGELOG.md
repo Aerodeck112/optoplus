@@ -3,6 +3,24 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.15] — 2026-11-09
+
+Se poate instala direct peste 1.0.0 – 1.0.14.
+
+- **Siteul în engleză și maghiară:** comutator de limbă sus, în meniu — pe ecranele late „RO · EN · HU”, pe
+  ecranele mai mici și pe telefon un buton cu globul și limba curentă (lista completă e și în meniul lateral).
+  Adresele: `/en/…` și `/hu/…` (româna rămâne fără prefix), cu legăturile hreflang pentru motoarele de căutare.
+- **Ce e tradus:** interfața, prima pagină, catalogul și filtrele, paginile ramelor (inclusiv cele 405 descrieri),
+  lentilele și tratamentele, configuratorul complet, coșul, finalizarea comenzii, contul clientului, portalul
+  pentru parteneri, ghidurile, întrebările frecvente, pagina „mod lucru” și emailurile comenzii (clientul le
+  primește în limba în care a comandat). Traducerile sunt făcute automat și **trebuie verificate**.
+- **Textele juridice rămân în română** (versiunea valabilă), cu o notă în engleză / maghiară.
+- **Panou → Site → Traduceri (EN, HU):** fiecare text românesc cu traducerea lui, căutare, stare („de verificat”,
+  „verificată”, „din siteul vechi”, „lipsă”) și corectare. „Scanează siteul” găsește textele noi (ex. o ramă
+  adăugată); scanarea rulează și zilnic, din cron. O traducere marcată „verificată” nu e suprascrisă de
+  actualizări.
+- Meniul de sus încape acum la orice lățime de ecran, în toate limbile.
+
 ## [1.0.14] — 2026-11-09
 
 Se poate instala direct peste 1.0.0 – 1.0.13.

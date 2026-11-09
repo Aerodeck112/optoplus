@@ -60,6 +60,10 @@ Citește întâi: `docs/ARHITECTURA.md`, `docs/SCHEMA-BD.md`, `docs/STATUS.md`, 
   (`data-module`). CSP cu nonce: scripturile inline au `nonce="{{ app('csp-nonce') }}"`; preferă fișiere JS.
 - Teste: PHPUnit pe MariaDB (`optoplus_test`), `tests/Feature/<Modul>/`. Rulează `php artisan test` înainte de
   fiecare commit.
+- Limbi (1.0.15): siteul public se scrie în română; engleza (`/en/`) și maghiara (`/hu/`) vin din dicționarul
+  `translations` (modulul I18n), aplicat paginii la afișare. Orice text nou vizibil clientului primește traducerea
+  în `database/content/i18n/en.json` și `hu.json` (cifrele ca {0}, {1}…; {t} = parte variabilă). Textele afișate
+  din JavaScript trec prin `JsStrings`. Textele juridice nu se traduc.
 
 ## Skilluri de proiect (`.claude/skills/`)
 

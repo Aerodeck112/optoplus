@@ -7,6 +7,12 @@
     $canonical = trim($__env->yieldContent('canonical')) ?: $site->canonical(request());
     $robots = trim($__env->yieldContent('robots')) ?: $site->robots();
     $phone = $site->setting('contact.phone_b2c');
+    // Limbile: aceeași pagină în română (fără prefix), engleză (/en/) și maghiară (/hu/).
+    $locale = app()->getLocale();
+    $plainPath = '/'.ltrim(request()->getPathInfo(), '/');
+    $queryString = request()->getQueryString();
+    $langUrl = fn (string $code) => \App\Modules\I18n\Support\Locales::path($code, $plainPath).($queryString ? '?'.$queryString : '');
+    $host = rtrim((string) config('optoplus.site.canonical_host'), '/');
 @endphp
 <!doctype html>
 <html lang="ro">
@@ -21,6 +27,10 @@
     <meta property="og:title" content="{{ $metaTitle }}">
     @if ($metaDescription !== '')<meta property="og:description" content="{{ $metaDescription }}">@endif
     <meta property="og:url" content="{{ $canonical }}">
+    @unless (str_contains($robots, 'noindex'))
+        @foreach (\App\Modules\I18n\Support\Locales::ALL as $code => $_)<link rel="alternate" hreflang="{{ $code }}" href="{{ $host.\App\Modules\I18n\Support\Locales::path($code, $plainPath) }}" data-no-localize>@endforeach
+        <link rel="alternate" hreflang="x-default" href="{{ $host.$plainPath }}" data-no-localize>
+    @endunless
     <meta property="og:type" content="@yield('og_type', 'website')">
     @hasSection('og_image')<meta property="og:image" content="@yield('og_image')">@endif
     <meta name="theme-color" content="#053b5e">
@@ -32,6 +42,9 @@
         <script type="application/ld+json" nonce="{{ app('csp-nonce') }}">{!! json_encode($ld, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
     @endforeach
     @stack('jsonld')
+    @if (\App\Modules\I18n\Support\Locales::isTranslated($locale))
+        <script type="application/json" id="i18n-js" nonce="{{ app('csp-nonce') }}">{!! json_encode(\App\Modules\I18n\Support\JsStrings::for($locale), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
+    @endif
 </head>
 <body class="@yield('body_class')">
 <a class="skip" href="#continut">Sari la conținut</a>
@@ -75,11 +88,30 @@
                     </li>
                 @endforeach
             </ul>
+            <nav class="lang-switch lang-switch--menu" aria-label="Limba site-ului / Language / Nyelv" translate="no">
+                @foreach (\App\Modules\I18n\Support\Locales::ALL as $code => $name)
+                    <a href="{{ $langUrl($code) }}" hreflang="{{ $code }}" lang="{{ $code }}" data-no-localize @if($code === $locale) aria-current="true" @endif>{{ $name }}</a>
+                @endforeach
+            </nav>
             @if ($phone)
                 <a class="main-nav__phone" href="tel:{{ preg_replace('/[^+\d]/', '', $phone) }}"><x-site.icon name="phone" :size="18" />Comandă la telefon: {{ $phone }}</a>
             @endif
         </nav>
         <div class="site-header__tools">
+            {{-- Comutatorul de limbă: pe desktop RO · EN · HU; pe telefon un buton compact cu listă. --}}
+            <nav class="lang-switch lang-switch--bar" aria-label="Limba site-ului / Language / Nyelv" translate="no">
+                @foreach (\App\Modules\I18n\Support\Locales::ALL as $code => $name)
+                    <a href="{{ $langUrl($code) }}" hreflang="{{ $code }}" lang="{{ $code }}" title="{{ $name }}" data-no-localize @if($code === $locale) aria-current="true" @endif>{{ strtoupper($code) }}</a>
+                @endforeach
+            </nav>
+            <details class="lang-drop" translate="no">
+                <summary class="icon-btn lang-drop__btn" aria-label="Limba / Language / Nyelv"><x-site.icon name="globe" :size="20" /><span>{{ strtoupper($locale) }}</span></summary>
+                <div class="lang-drop__menu">
+                    @foreach (\App\Modules\I18n\Support\Locales::ALL as $code => $name)
+                        <a href="{{ $langUrl($code) }}" hreflang="{{ $code }}" lang="{{ $code }}" data-no-localize @if($code === $locale) aria-current="true" @endif>{{ $name }}</a>
+                    @endforeach
+                </div>
+            </details>
             <a class="icon-btn search-link" href="/cautare/"><x-site.icon name="search" /><span class="sr-only">Caută</span></a>
             <a class="icon-btn" href="{{ $site->accountUrl() }}"><x-site.icon name="user" /><span class="sr-only">{{ $site->customer() ? 'Contul meu' : 'Autentificare' }}</span></a>
             <a class="icon-btn cart-link" href="/cos/"><x-site.icon name="bag" /><span class="sr-only">Coșul</span>@if($n = $site->cartCount())<span class="cart-link__count" aria-label="{{ $n }} produse în coș">{{ $n }}</span>@endif</a>

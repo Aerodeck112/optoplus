@@ -43,6 +43,7 @@ Legendă: ✅ da · ⚠️ parțial / cu condiții · ❌ nu · 🔒 blocat de a
 | Datele firmei (OFA SRL) în subsol și setări | ✅ 1.0.12 | ✅ | ❌ | ✅ registrul ANAF, 2026-11-07 | firma confirmată de client; locul laboratorului încă neconfirmat (`INTREBARI.md` #21) |
 | Stil de magazin (prima pagină, catalog, produs, lentile, configurator) | ✅ 1.0.12 | ✅ desktop + mobil | ❌ | — | persoanele din bannere sunt ilustrații; se pot înlocui cu fotografii proprii din panou |
 | Coduri de reducere LENTILE25 / STUDENT10 (protocol MAPN), dovadă la comandă | ✅ 1.0.14 | ✅ | ❌ | — | refăcute după modulul WordPress primit de la client (v1.2.0); STUDENT10 a expirat la 31.10.2026 (se prelungește din panou) |
+| Siteul în engleză și maghiară (/en/, /hu/), panou Traduceri | ✅ 1.0.15 | ✅ | ❌ | — | ⚠️ traduceri automate, de verificat; maghiara se completează cu exportul TranslatePress (comanda optoplus:i18n:import-translatepress); textele juridice rămân în română |
 | Texte juridice | ⚠️ ciorne | ✅ | ❌ | — | de verificat și publicat de Optoplus (Site → Pagini → Juridice) |
 | Emailuri comenzi | ✅ | ✅ | ❌ | 🔒 | serverul SMTP se configurează în `shared/.env` la instalare |
 | Asistent AI | ❌ | ❌ | ❌ | — | urmează |

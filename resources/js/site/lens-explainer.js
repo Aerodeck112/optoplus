@@ -5,7 +5,16 @@ const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const GAZE_Y = { far: 0.22, mid: 0.55, near: 0.84 };          // poziția privirii pe lentilă (fracție din înălțime)
 const TARGET = { far: [399, 70], mid: [408, 176], near: [298, 268] };
+// Traducerile textelor (pagina în engleză / maghiară le primește în #i18n-js); fără ele rămâne româna.
+let DICT = null;
+function t(text, vars = {}) {
+    if (DICT === null) {
+        try { DICT = JSON.parse(document.getElementById('i18n-js')?.textContent || '{}'); } catch { DICT = {}; }
+    }
+    return (DICT[text] ?? text).replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
+}
 const LABEL = { far: 'departe', mid: 'la ecran', near: 'aproape' };
+const label = (k) => t(LABEL[k]);
 
 // Ce obiect e clar, pentru fiecare tip de lentilă și direcție a privirii.
 function sharpness(family, gaze, mono) {
@@ -18,22 +27,22 @@ function sharpness(family, gaze, mono) {
 
 function caption(family, gaze, mono) {
     const ok = sharpness(family, gaze, mono);
-    const where = LABEL[gaze];
+    const where = label(gaze);
     const texts = {
         monofocal: ok
-            ? `Monofocale pentru ${LABEL[mono]}: vezi clar ${where}, prin toată lentila.`
-            : `Monofocale pentru ${LABEL[mono]}: ${where} imaginea nu e clară — lentila are o singură distanță de focalizare. Dacă ai nevoie de ochelari și pentru ${where}, ai nevoie de o a doua pereche sau de lentile progresive.`,
+            ? t('Monofocale pentru {label}: vezi clar {where}, prin toată lentila.', { label: label(mono), where })
+            : t('Monofocale pentru {label}: {where} imaginea nu e clară — lentila are o singură distanță de focalizare. Dacă ai nevoie de ochelari și pentru {where}, ai nevoie de o a doua pereche sau de lentile progresive.', { label: label(mono), where }),
         progresiv: {
-            far: 'Progresive: privind prin partea de sus, vezi clar departe (condus, stradă).',
-            mid: 'Progresive: prin mijlocul lentilei vezi clar la distanța unui ecran. Coridorul e îngust: privești drept înainte.',
-            near: 'Progresive: coborând privirea, vezi clar aproape (telefon, carte). Lateral, jos, imaginea e mai puțin clară — întorci puțin capul. Adaptarea durează câteva zile.',
+            far: t('Progresive: privind prin partea de sus, vezi clar departe (condus, stradă).'),
+            mid: t('Progresive: prin mijlocul lentilei vezi clar la distanța unui ecran. Coridorul e îngust: privești drept înainte.'),
+            near: t('Progresive: coborând privirea, vezi clar aproape (telefon, carte). Lateral, jos, imaginea e mai puțin clară — întorci puțin capul. Adaptarea durează câteva zile.'),
         }[gaze],
         degresiv: ok
-            ? `Degresive (de birou): vezi clar ${where}, cu o zonă largă, confortabilă pentru lucru.`
-            : 'Degresive (de birou): departe imaginea nu e clară — nu sunt pentru condus sau pentru mers pe stradă.',
+            ? t('Degresive (de birou): vezi clar {where}, cu o zonă largă, confortabilă pentru lucru.', { where })
+            : t('Degresive (de birou): departe imaginea nu e clară — nu sunt pentru condus sau pentru mers pe stradă.'),
         bifocal: ok
-            ? (gaze === 'far' ? 'Bifocale: prin partea mare vezi clar departe.' : 'Bifocale: prin segmentul de jos (vizibil pe lentilă) vezi clar aproape.')
-            : 'Bifocale: la distanța unui ecran nu există o zonă dedicată — imaginea „sare” între departe și aproape.',
+            ? (gaze === 'far' ? t('Bifocale: prin partea mare vezi clar departe.') : t('Bifocale: prin segmentul de jos (vizibil pe lentilă) vezi clar aproape.'))
+            : t('Bifocale: la distanța unui ecran nu există o zonă dedicată — imaginea „sare” între departe și aproape.'),
     };
     return texts[family];
 }
@@ -54,7 +63,7 @@ function vision(root) {
 
     const render = () => {
         root.querySelectorAll('[data-zones]').forEach((z) => { z.style.display = z.dataset.zones === family ? '' : 'none'; });
-        root.querySelectorAll('.vx-mono-label').forEach((t) => { t.textContent = `clar: ${LABEL[mono]}`; });
+        root.querySelectorAll('.vx-mono-label').forEach((el) => { el.textContent = t('clar: {x}', { x: label(mono) }); });
         monoTabs.hidden = family !== 'monofocal';
         const ok = sharpness(family, gaze, mono);
         scene.querySelectorAll('.vx-target').forEach((t) => {
@@ -132,8 +141,8 @@ function toggle(root) {
     const texts = {
         off: cap.textContent,
         on: root.querySelector('.demo-glare')
-            ? 'Cu antireflex: reflexiile scad mult; ochii se văd natural, iar în lumina farurilor apar mai puține străluciri.'
-            : 'Cu filtru: o parte din lumina albastră-violet este reținută de lentilă; restul culorilor trec. Ilustrație, nu o măsurătoare.',
+            ? t('Cu antireflex: reflexiile scad mult; ochii se văd natural, iar în lumina farurilor apar mai puține străluciri.')
+            : t('Cu filtru: o parte din lumina albastră-violet este reținută de lentilă; restul culorilor trec. Ilustrație, nu o măsurătoare.'),
     };
     const set = (state) => {
         root.classList.toggle('is-on', state === 'on');
@@ -178,13 +187,13 @@ function photo(root) {
         car.setAttribute('opacity', scene === 'masina' ? '1' : '0');
         sky.setAttribute('fill', scene === 'casa' ? '#e9eef2' : '#cfe6f7');
         chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.scene === scene)));
-        const shade = code ? ` în nuanța aleasă (până la aproximativ ${Math.round(max * 100)}%)` : '';
+        const shade = code ? t(' în nuanța aleasă (până la aproximativ {pct}%)', { pct: Math.round(max * 100) }) : '';
         cap.textContent = {
-            casa: 'În casă: lentila este aproape transparentă.',
+            casa: t('În casă: lentila este aproape transparentă.'),
             masina: xtractive
-                ? 'În mașină: Xtractive se închide și în spatele parbrizului, deci vă ajută și la volan. Cât de mult depinde de lumină și de temperatură.'
-                : 'În mașină: Helio rămâne aproape transparent, pentru că parbrizul oprește razele UV care îl închid. Pentru condus, alegeți Xtractive.',
-            afara: `Afară, la soare: lentila se închide${shade}. Viteza reală depinde de lumina UV și de temperatură.`,
+                ? t('În mașină: Xtractive se închide și în spatele parbrizului, deci vă ajută și la volan. Cât de mult depinde de lumină și de temperatură.')
+                : t('În mașină: Helio rămâne aproape transparent, pentru că parbrizul oprește razele UV care îl închid. Pentru condus, alegeți Xtractive.'),
+            afara: t('Afară, la soare: lentila se închide{shade}. Viteza reală depinde de lumina UV și de temperatură.', { shade }),
         }[scene];
     };
     root.addEventListener('click', (e) => { const b = e.target.closest('[data-scene]'); if (b) { root.dataset.touched = '1'; scene = b.dataset.scene; render(); } });

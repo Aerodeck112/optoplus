@@ -19,7 +19,7 @@ decizia provizorie din coloana a treia (reversibilă din panou).
 | 12 | Oferiți ramburs sau plata la ridicare? Pentru produse personalizate cereți avans? | Inactive până la confirmare |
 | 13 | Ce curier folosiți și ce soluție de facturare? | Expediere manuală (AWB introdus de mână); facturare: stare „neconectată” |
 | 14 | Serviciul „lentile pentru rama mea” există? | Intrarea e ascunsă până la activare |
-| 15 | Păstrăm limba maghiară la lansare sau într-o etapă ulterioară? | Etapă ulterioară; `/hu/` → redirect temporar |
+| 15 | Păstrăm limba maghiară la lansare sau într-o etapă ulterioară? | **Răspuns 2026-11-09:** engleză și maghiară acum (1.0.15), tot siteul, cu traduceri automate de verificat; maghiara se completează cu exportul TranslatePress de pe siteul vechi (de primit) |
 | 16 | Widgetul `ai.vitim.ro` rămâne? Ce furnizor AI preferați și ce buget lunar? | Asistent propriu fără AI extern; adaptor pregătit |
 | 17 | Cine sunt specialiștii optici care validează rețetele (rol în panou)? | Rol „specialist optic” fără utilizatori reali în demo |
 | 18 | Condițiile B2B: liste de preț, praguri, termene de plată, credit, cine aprobă? | Liste și praguri configurabile, goale |

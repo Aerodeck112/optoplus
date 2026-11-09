@@ -91,6 +91,7 @@ class OrderPlacer
             [$daysMin, $daysMax] = $this->productionDays($items);
             $order = Order::create([
                 'number' => $this->numbers->next(), 'uuid' => (string) Str::uuid(), 'channel' => $ctx->channel,
+                'locale' => \App\Modules\I18n\Support\Locales::isTranslated(app()->getLocale()) ? app()->getLocale() : 'ro',
                 'customer_id' => $ctx->customerId, 'organization_id' => $ctx->organizationId,
                 'email' => $data['email'], 'phone' => $data['phone'] ?? null,
                 'payment_method' => $data['payment_method'], 'shipping_method_code' => $data['shipping_method'],

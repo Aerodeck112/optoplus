@@ -67,6 +67,7 @@ h1 .hl{background:linear-gradient(90deg,#fff 0%,var(--glass) 40%,var(--amber) 60
 @keyframes pulse{0%{opacity:.6;transform:scale(.6)}100%{opacity:0;transform:scale(1.35)}}
 @keyframes work{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}}
 @keyframes spark{0%{opacity:0;transform:translate(0,0)}15%{opacity:1}100%{opacity:0;transform:translate(26px,-34px)}}
+.langs{display:flex;gap:6px;margin:0 0 18px}.langs a{color:#cfe0ec;text-decoration:none;font-weight:800;font-size:.8rem;letter-spacing:.06em;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.25)}.langs a[aria-current]{background:#fff;color:#053b5e}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.frame{stroke-dashoffset:0}.lens,.steps li{opacity:1;transform:none}}
 </style>
 </head>
@@ -75,6 +76,8 @@ h1 .hl{background:linear-gradient(90deg,#fff 0%,var(--glass) 40%,var(--amber) 60
 <main class="wrap">
     <section>
         <span class="logo"><img src="/images/optoplus-logo.webp" alt="Optoplus — Expertul vederii" width="150" height="51"></span>
+        @php($plainPath = '/'.ltrim(request()->getPathInfo(), '/'))
+        <nav class="langs" aria-label="Limba / Language / Nyelv" translate="no">@foreach (\App\Modules\I18n\Support\Locales::ALL as $code => $name)<a href="{{ \App\Modules\I18n\Support\Locales::path($code, $plainPath) }}" hreflang="{{ $code }}" lang="{{ $code }}" data-no-localize @if($code === app()->getLocale()) aria-current="true" @endif>{{ strtoupper($code) }}</a>@endforeach</nav>
         <p class="badge"><span class="dot" aria-hidden="true"></span>Magazinul online este în lucru</p>
         <h1>Noul magazin <span class="hl">Optoplus</span> prinde contur</h1>
         <p class="lead">Echipa <strong>VITIM</strong> lucrează chiar acum la magazinul online: rame alese pentru tine și <strong>lentile produse în laboratorul Optoplus</strong>, configurate pas cu pas, după rețeta ta.</p>

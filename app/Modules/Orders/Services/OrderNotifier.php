@@ -34,8 +34,9 @@ class OrderNotifier
         }
         $email = $order->email;
         $orderId = $order->id;
-        DB::afterCommit(function () use ($kind, $email, $orderId, $to) {
-            self::safely(fn () => Notification::route('mail', $email)->notify(new OrderUpdate($orderId, $kind, $to)), $orderId, $kind);
+        $locale = $order->locale ?: 'ro'; // emailul către client, în limba în care a comandat
+        DB::afterCommit(function () use ($kind, $email, $orderId, $to, $locale) {
+            self::safely(fn () => Notification::route('mail', $email)->notify((new OrderUpdate($orderId, $kind, $to))->locale($locale)), $orderId, $kind);
             if ($kind === 'placed' && ($staff = $this->settings->get('notifications.orders_email'))) {
                 self::safely(fn () => Notification::route('mail', $staff)->notify(new NewOrderForStaff($orderId)), $orderId, 'staff');
             }
