@@ -27,7 +27,7 @@ class Dictionary
 
     public function lookup(string $locale, string $text): ?string
     {
-        $normalized = Locales::normalize(html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8'), $numbers);
+        $normalized = Locales::normalize(str_replace("\u{00A0}", ' ', html_entity_decode(html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')), $numbers);
         if ($normalized === '' || ! preg_match('/\p{L}/u', $normalized) || mb_strlen($normalized) > 4000) {
             return null;
         }
