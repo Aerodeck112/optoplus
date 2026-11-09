@@ -251,6 +251,10 @@ class ConfiguratorController extends Controller
     {
         abort_unless(preg_match('/^[0-9a-f-]{36}$/', $uuid), 404);
         $cfg = Configuration::where('uuid', $uuid)->with('prescription')->first();
+        if ($cfg && $cfg->customer_id !== null && ! Auth::guard('client')->check() && $request->isMethod('get')) {
+            // configurația e salvată în contul clientului, iar sesiunea a expirat: autentificare, apoi înapoi aici
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(redirect('/cont/autentificare/?inapoi='.urlencode($cfg->stepUrl(5))));
+        }
         abort_unless($cfg && $this->service->canAccess($request, $cfg), 404);
         abort_if($cfg->status === 'in_comanda', 410, 'Această configurație a fost deja comandată.');
 

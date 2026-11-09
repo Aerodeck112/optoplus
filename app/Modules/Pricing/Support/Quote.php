@@ -26,6 +26,12 @@ final class Quote
 
     public bool $requiresProofCheck = false;
 
+    /** @var array<string, string> starea fiecărui cod introdus: valid | expirat | invalid | neaplicat */
+    public array $coupons = [];
+
+    /** @var array<int, array{promotion_id:int, code:?string, label:string, help:?string}> dovezile cerute de promoțiile aplicate */
+    public array $proofs = [];
+
     /** @var list<int> */
     public array $appliedPromotionIds = [];
 
@@ -66,6 +72,24 @@ final class Quote
     }
 
     /** Mesajele pentru client (fără codurile interne). @return list<string> */
+    /**
+     * Reducerile pe promoție (de produs și de comandă), pentru afișare: „Reducere MAPN lentile −75 lei”.
+     *
+     * @return list<array{label:string, amount:int}>
+     */
+    public function discountBreakdown(): array
+    {
+        $out = [];
+        foreach ($this->components() as $c) {
+            foreach ($c->discounts as $d) {
+                $out[$d['promotion_id']] ??= ['label' => $d['label'], 'amount' => 0];
+                $out[$d['promotion_id']]['amount'] += $d['amount'];
+            }
+        }
+
+        return array_values($out);
+    }
+
     public function customerMessages(): array
     {
         return array_values(array_filter($this->messages, fn ($m) => ! preg_match('/^[a-z_]+$/', $m)));
@@ -100,6 +124,8 @@ final class Quote
             'shipping' => $this->shipping,
             'coupon_status' => $this->couponStatus,
             'requires_proof_check' => $this->requiresProofCheck,
+            'coupons' => $this->coupons,
+            'proofs' => array_values($this->proofs),
             'applied_promotions' => $this->appliedPromotionIds,
             'subtotal' => $this->subtotal,
             'discount_total' => $this->discountTotal,

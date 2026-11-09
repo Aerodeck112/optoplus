@@ -98,7 +98,7 @@ class OrderPlacer
                 'shipping_total' => (int) ($quote->shipping['gross'] ?? 0), 'vat_total' => $quote->vatTotal,
                 'total' => $quote->totalGross, 'prices_include_vat' => $quote->basisIncludesVat,
                 'billing_address' => $data['billing'], 'shipping_address' => $data['shipping'] ?? null,
-                'coupon_code' => $quote->couponStatus === 'valid' ? $ctx->couponCode : null,
+                'coupon_code' => mb_substr(implode(',', array_keys(array_filter($quote->coupons, fn ($st) => $st === 'valid'))), 0, 60) ?: null,
                 'customer_note' => $data['note'] ?? null, 'idempotency_key' => $idempotencyKey,
                 'purchase_order_ref' => $data['po_ref'] ?? null,
                 'placed_ip_hash' => $ip ? hash_hmac('sha256', $ip, (string) config('app.key')) : null,
@@ -136,8 +136,18 @@ class OrderPlacer
                 }
             }
 
-            if ($order->coupon_code && ($coupon = Coupon::where('code', Coupon::normalize($order->coupon_code))->lockForUpdate()->first())) {
-                DB::table('coupon_redemptions')->insert(['coupon_id' => $coupon->id, 'order_id' => $order->id, 'customer_id' => $order->customer_id, 'discount' => $quote->discountTotal, 'created_at' => now()]);
+            // Fiecare cod aplicat (pot fi mai multe) se înregistrează cu reducerea promoției lui.
+            $byPromotion = [];
+            foreach ($quote->components() as $c) {
+                foreach ($c->discounts as $d) {
+                    $byPromotion[$d['promotion_id']] = ($byPromotion[$d['promotion_id']] ?? 0) + $d['amount'];
+                }
+            }
+            foreach (array_filter(explode(',', (string) $order->coupon_code)) as $code) {
+                if (! $coupon = Coupon::where('code', Coupon::normalize($code))->lockForUpdate()->first()) {
+                    continue;
+                }
+                DB::table('coupon_redemptions')->insert(['coupon_id' => $coupon->id, 'order_id' => $order->id, 'customer_id' => $order->customer_id, 'discount' => $byPromotion[$coupon->promotion_id] ?? 0, 'created_at' => now()]);
                 $coupon->increment('uses_count');
             }
 

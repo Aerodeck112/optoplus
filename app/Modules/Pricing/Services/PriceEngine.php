@@ -53,6 +53,7 @@ class PriceEngine
         $promotions = $this->promotions($ctx, $quote);
         $this->applyComponentPromotions($quote, $promotions, $ctx);
         $this->applyOrderPromotions($quote, $promotions, $ctx);
+        $this->settleCoupons($quote);
         $this->computeVat($quote);
 
         $goodsGross = array_sum(array_map(fn (PricedComponent $c) => $c->gross, $quote->components()));
@@ -205,6 +206,22 @@ class PriceEngine
         };
     }
 
+    /** @var array<int, string> promoțiile deblocate de codurile din calculul curent: id promoție => cod */
+    private array $couponPromotions = [];
+
+    /** Un cod valid a cărui promoție nu s-a aplicat (ex. doar la lentile, iar coșul are doar rame) devine „neaplicat”. */
+    private function settleCoupons(Quote $quote): void
+    {
+        foreach ($this->couponPromotions as $promotionId => $code) {
+            if (! in_array($promotionId, $quote->appliedPromotionIds, true)) {
+                $quote->coupons[$code] = 'neaplicat';
+            }
+        }
+        if ($quote->coupons !== [] && ! in_array('valid', $quote->coupons, true)) {
+            $quote->couponStatus = 'invalid';
+        }
+    }
+
     /** @var array<string, Collection<int, Promotion>> promoțiile active, memorate pe durata cererii */
     private array $running = [];
 
@@ -222,25 +239,34 @@ class PriceEngine
             ->whereIn('channel', [$ctx->channel, 'all'])
             ->orderBy('priority')->orderBy('id')->get();
 
-        $couponPromotionId = null;
-        if ($ctx->couponCode) {
-            $coupon = Coupon::where('code', Coupon::normalize($ctx->couponCode))->first();
-            if (! $coupon || ! $coupon->isUsable($ctx->now) || ! $all->contains('id', $coupon->promotion_id)) {
-                $quote->couponStatus = 'invalid';
-            } else {
-                $couponPromotionId = $coupon->promotion_id;
-                $quote->couponStatus = 'valid';
-            }
-        }
+        // Pot fi mai multe coduri (ex. LENTILE25 + STUDENT10); fiecare își deblochează promoția.
+        $this->couponPromotions = [];
+        foreach ($ctx->couponCodes() as $code) {
+            $coupon = Coupon::with('promotion')->where('code', Coupon::normalize($code))->first();
+            if ($coupon && $coupon->isUsable($ctx->now) && $all->contains('id', $coupon->promotion_id)) {
+                $this->couponPromotions[$coupon->promotion_id] = $coupon->code;
+                $quote->coupons[$coupon->code] = 'valid';
 
-        return $all->filter(function (Promotion $p) use ($ctx, $quote, $couponPromotionId) {
-            if ($p->requires_coupon && $p->id !== $couponPromotionId) {
+                continue;
+            }
+            $expired = $coupon && $coupon->is_active && (($coupon->expires_at && $coupon->expires_at < $ctx->now)
+                || ($coupon->promotion?->ends_at && $coupon->promotion->ends_at < $ctx->now));
+            $quote->coupons[$coupon->code ?? Coupon::normalize($code)] = $expired ? 'expirat' : 'invalid';
+        }
+        if ($quote->coupons !== []) {
+            $quote->couponStatus = in_array('valid', $quote->coupons, true) ? 'valid' : 'invalid';
+        }
+        $couponPromotions = $this->couponPromotions;
+
+        return $all->filter(function (Promotion $p) use ($ctx, $quote, $couponPromotions) {
+            if ($p->requires_coupon && ! isset($couponPromotions[$p->id])) {
                 return false;
             }
             if ($p->min_order_total !== null && $quote->subtotal < $p->min_order_total) {
                 return false;
             }
-            if ($p->beneficiary_category && $p->beneficiary_category !== $ctx->declaredBeneficiary) {
+            // Codul primit de beneficiar ține loc de declarație (dovada se verifică la comandă).
+            if ($p->beneficiary_category && $p->beneficiary_category !== $ctx->declaredBeneficiary && ! isset($couponPromotions[$p->id])) {
                 return false;
             }
             if ($p->max_uses_per_customer !== null && $ctx->customerId !== null && $this->customerUses($p, $ctx->customerId) >= $p->max_uses_per_customer) {
@@ -269,6 +295,7 @@ class PriceEngine
             'frames' => $c->type === 'frame',
             'lenses' => $c->type === 'lens',
             'treatments' => $c->type === 'treatment',
+            'lenses_treatments' => in_array($c->type, ['lens', 'treatment'], true),
             'category' => array_intersect($c->categoryIds, $ids) !== [],
             'brand' => $c->brandId !== null && in_array($c->brandId, $ids, true),
             'product' => $c->productId !== null && in_array($c->productId, $ids, true),
@@ -276,10 +303,11 @@ class PriceEngine
         };
     }
 
-    private function discountFor(Promotion $p, int $remaining, int $quantity): int
+    private function discountFor(Promotion $p, int $remaining, int $quantity, ?int $original = null): int
     {
         $d = match ($p->type) {
-            'percent' => Money::percent($remaining, (int) $p->value),
+            // „din prețul inițial”: reducerile cumulate se adună (25% + 10% = 35%), ca în modulul WordPress
+            'percent' => Money::percent($p->percent_of_original && $original !== null ? $original : $remaining, (int) $p->value),
             'fixed_amount' => (int) $p->value * $quantity,
             'fixed_price' => $remaining - (int) $p->value * $quantity,
             default => 0,
@@ -299,7 +327,7 @@ class PriceEngine
                 if ($hasExclusive || (! $p->stackable && $c->discounts !== [])) {
                     continue;
                 }
-                $amount = $this->discountFor($p, $c->afterDiscount(), $c->quantity);
+                $amount = $this->discountFor($p, $c->afterDiscount(), $c->quantity, $c->amount());
                 if ($amount <= 0) {
                     continue;
                 }
@@ -351,6 +379,11 @@ class PriceEngine
         }
         if ($p->requires_proof) {
             $quote->requiresProofCheck = true;
+            $quote->proofs[$p->id] = [
+                'promotion_id' => $p->id, 'code' => $this->couponPromotions[$p->id] ?? null,
+                'label' => $p->proof_label ?: 'Dovada eligibilității pentru „'.$p->label().'”',
+                'help' => $p->proof_help,
+            ];
         }
     }
 

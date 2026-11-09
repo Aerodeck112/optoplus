@@ -22,8 +22,11 @@
                 <x-panou.field name="max_utilizari" type="number" label="Utilizări maxime în total" :value="$p->max_uses" />
                 <x-panou.field name="max_per_client" type="number" label="Utilizări maxime per client" :value="$p->max_uses_per_customer" />
                 <x-panou.field name="beneficiari" label="Categoria de beneficiari (ex. pensionari)" :value="$p->beneficiary_category" />
-                <x-panou.field name="dovada" type="checkbox" label="Cere dovada eligibilității (verificată de vânzări)" :value="$p->requires_proof" />
+                <x-panou.field name="dovada" type="checkbox" label="Cere dovada eligibilității (clientul o încarcă la finalizarea comenzii)" :value="$p->requires_proof" />
+                <x-panou.field name="dovada_eticheta" label="Ce dovadă se cere (textul câmpului)" :value="$p->proof_label" hint="Ex. Încarcă dovada (legitimație, cupon de pensie)" />
+                <x-panou.field name="dovada_ajutor" type="textarea" label="Explicație pentru client" :value="$p->proof_help" :full="true" />
                 <x-panou.field name="cumulabila" type="checkbox" label="Se cumulează cu alte promoții cumulabile" :value="$p->stackable" />
+                <x-panou.field name="din_initial" type="checkbox" label="Procentul se calculează din prețul inițial (reducerile cumulate se adună: 25% + 10% = 35%)" :value="$p->percent_of_original" />
                 <x-panou.field name="cu_cupon" type="checkbox" label="Se aplică doar cu cupon" :value="$p->requires_coupon" />
                 <x-panou.field name="activa" type="checkbox" label="Activă" :value="$p->is_active" />
                 <div class="form-actions">@can('pricing.manage')<button class="btn btn--primary" type="submit">Salvează</button>@endcan</div>

@@ -32,9 +32,9 @@ class PricingMediaImportTest extends TestCase
         $frame = $this->frame(30000);
         $this->actingAsRole(Roles::MANAGER);
         $this->post('/panou/preturi/promotii', ['nume' => 'Toamnă', 'aplicare' => 'frames', 'tip' => 'percent', 'valoare' => '10', 'prioritate' => 10, 'canal' => 'b2c', 'activa' => '1'])->assertSessionHasNoErrors();
-        $p = Promotion::firstOrFail();
+        $p = Promotion::where('name', 'Toamnă')->firstOrFail();
         $this->post('/panou/preturi/promotii/'.$p->id.'/cupoane', ['cod' => 'toamna10'])->assertSessionHasNoErrors();
-        $this->assertSame('TOAMNA10', Coupon::first()->code);
+        $this->assertSame('TOAMNA10', Coupon::where('promotion_id', $p->id)->value('code'));
         $engine = app(PriceEngine::class);
         $this->assertSame(30000, $engine->quote([PriceLine::product('a', $frame->id)], PricingContext::b2c())->totalGross);
         $this->assertSame(27000, $engine->quote([PriceLine::product('a', $frame->id)], PricingContext::b2c(['couponCode' => 'toamna10']))->totalGross);

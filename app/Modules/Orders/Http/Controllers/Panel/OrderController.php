@@ -46,10 +46,38 @@ class OrderController extends Controller
 
     public function show(string $uuid, ProductionFlow $flow)
     {
-        $order = Order::where('uuid', $uuid)->with(['items.configuration', 'payments.refunds', 'payments.confirmer', 'shipments', 'invoices', 'events.user', 'productionJobs.assignee', 'organization', 'customer'])->firstOrFail();
+        $order = Order::where('uuid', $uuid)->with(['proofs.verifier', 'items.configuration', 'payments.refunds', 'payments.confirmer', 'shipments', 'invoices', 'events.user', 'productionJobs.assignee', 'organization', 'customer'])->firstOrFail();
         Audit::log('order.viewed', $order, [], $order->customer_id);
 
         return view('orders::panel.show', ['order' => $order, 'stages' => $flow->stages()->pluck('name', 'code')]);
+    }
+
+    /** Dovada pentru un cod de reducere: fișier privat, deschis doar de aici, cu audit. */
+    public function proof(string $uuid, string $proof, \App\Modules\Orders\Services\ProofStore $store)
+    {
+        $order = Order::where('uuid', $uuid)->firstOrFail();
+        $p = $order->proofs()->where('uuid', $proof)->firstOrFail();
+        Audit::log('order.proof_downloaded', $order, ['dovada' => $p->uuid, 'cod' => $p->coupon_code], $order->customer_id);
+        $ext = $p->mime === 'application/pdf' ? 'pdf' : 'jpg';
+
+        return response($store->contents($p), 200, [
+            'Content-Type' => $p->mime,
+            'Content-Disposition' => 'inline; filename="dovada-'.$order->number.'-'.($p->coupon_code ?: 'reducere').'.'.$ext.'"',
+            'Cache-Control' => 'no-store, private', 'X-Content-Type-Options' => 'nosniff',
+        ]);
+    }
+
+    public function verifyProof(string $uuid, string $proof, OrderStatus $status)
+    {
+        $order = Order::where('uuid', $uuid)->firstOrFail();
+        $p = $order->proofs()->where('uuid', $proof)->firstOrFail();
+        if (! $p->verified_at) {
+            $p->update(['verified_at' => now(), 'verified_by' => auth()->id()]);
+            $status->note($order, 'Dovada pentru '.($p->coupon_code ?: 'reducere').' a fost verificată.');
+            Audit::log('order.proof_verified', $order, ['dovada' => $p->uuid, 'cod' => $p->coupon_code], $order->customer_id);
+        }
+
+        return back()->with('status', 'Dovada a fost marcată ca verificată.');
     }
 
     public function confirm(Request $request, string $uuid, OrderStatus $status)

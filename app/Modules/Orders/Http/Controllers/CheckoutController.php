@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Modules\Customers\Models\Consent;
 use App\Modules\Orders\Models\Order;
 use App\Modules\Orders\Services\OrderPlacer;
+use App\Modules\Orders\Services\OrderStatus;
+use App\Modules\Orders\Services\ProofStore;
 use App\Modules\Payments\Services\PaymentMethods;
 use App\Modules\Payments\Services\PaymentService;
 use App\Modules\Pricing\Support\PricingContext;
@@ -48,7 +50,7 @@ class CheckoutController extends Controller
         ])->header('Cache-Control', 'no-store, private');
     }
 
-    public function place(Request $request, OrderPlacer $placer, PaymentService $paymentService)
+    public function place(Request $request, OrderPlacer $placer, PaymentService $paymentService, ProofStore $proofStore, OrderStatus $status)
     {
         $cart = $this->carts->current($request);
         if (! $cart) {
@@ -99,10 +101,33 @@ class CheckoutController extends Controller
             'county' => $data['livrare_judet'], 'postal_code' => $data['livrare_cod_postal'] ?? null, 'country' => 'RO', 'phone' => $data['telefon'],
         ] : array_merge($billing, ['phone' => $data['telefon']]);
 
+        // Codurile cu dovadă (ex. LENTILE25): fișierul e obligatoriu și se verifică înainte de plasarea comenzii.
+        $ctx = $this->context($cart->coupon_code, $data['livrare']);
+        $proofs = [];
+        foreach ($this->carts->quote($cart, $ctx)->proofs as $promotionId => $proof) {
+            $field = 'dovada.'.$promotionId;
+            $file = $request->file('dovada')[$promotionId] ?? null;
+            if (! $file instanceof \Illuminate\Http\UploadedFile) {
+                return redirect('/comanda/?livrare='.urlencode($data['livrare']))->withInput($request->except('_token', 'dovada'))
+                    ->withErrors([$field => 'Pentru folosirea codului '.($proof['code'] ?? '').' trebuie să încarci dovada cerută.']);
+            }
+            try {
+                $proofs[$promotionId] = $proof + ['file' => $proofStore->prepare($file, $field)];
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                return redirect('/comanda/?livrare='.urlencode($data['livrare']))->withInput($request->except('_token', 'dovada'))->withErrors($e->errors());
+            }
+        }
+
         $order = $placer->place($cart, [
             'email' => mb_strtolower($data['email']), 'phone' => $data['telefon'], 'billing' => $billing, 'shipping' => $shipping,
             'shipping_method' => $data['livrare'], 'payment_method' => $data['plata'], 'note' => $data['observatii'] ?? null,
-        ], $this->context($cart->coupon_code, $data['livrare']), $data['cheie'], (int) $data['total_afisat'], $request->ip());
+        ], $ctx, $data['cheie'], (int) $data['total_afisat'], $request->ip());
+        foreach ($proofs as $promotionId => $proof) {
+            $proofStore->save($order, $promotionId, $proof['code'], $proof['label'], $proof['file']);
+        }
+        if ($proofs) {
+            $status->note($order, 'Reducere cu dovadă de verificat: '.implode(', ', array_filter(array_column($proofs, 'code'))).'. Deschideți dovezile din secțiunea „Dovezi pentru reduceri”.');
+        }
 
         $request->session()->forget('checkout_key');
         $request->session()->push('comenzi', $order->uuid);

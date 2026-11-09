@@ -1237,3 +1237,19 @@ input:not([type]), input[type="text"], input[type="email"], input[type="tel"], i
 .tx-state__on { display: none; background: var(--bleumarin); color: #fff; }
 .tx-card:has(input[name="tratamente[]"]:checked) .tx-state__off { display: none; }
 .tx-card:has(input[name="tratamente[]"]:checked) .tx-state__on { display: inline-flex; }
+
+/* 1.0.14 — coduri de reducere (mai multe în coș) și dovada cerută la finalizare. */
+.coupon__list { list-style: none; margin: var(--s3) 0 0; padding: 0; display: grid; gap: var(--s2); }
+.coupon__item { display: grid; grid-template-columns: auto 1fr auto; gap: 4px var(--s3); align-items: center; padding: 10px 14px; border-radius: 14px; background: var(--sticla); font-size: .92rem; }
+.coupon__code { font-weight: 800; letter-spacing: .04em; color: var(--bleumarin); }
+.coupon__item--valid { background: var(--bg-menta); }
+.coupon__item--valid .coupon__msg { color: #1f6b4a; font-weight: 700; }
+.coupon__item--expirat, .coupon__item--invalid { background: var(--rosu-pal); }
+.coupon__item--expirat .coupon__msg, .coupon__item--invalid .coupon__msg { color: var(--rosu-blocat); }
+.coupon__item--neaplicat { background: var(--gravura-pal); }
+.coupon__proof { margin: var(--s2) 0 0; padding: 10px 14px; border-radius: 14px; background: var(--bg-galben); color: #4d3b00; }
+.proof-box { margin-top: var(--s4); padding: var(--s4); border: 1.5px dashed #9fb1bf; border-radius: 18px; background: #f7fbff; display: grid; gap: var(--s2); }
+.proof-box label { font-weight: 800; color: var(--bleumarin); }
+.proof-box__code { display: inline-block; margin-left: 8px; padding: 2px 10px; border-radius: 999px; background: var(--bleumarin); color: #fff; font-size: .8rem; letter-spacing: .04em; }
+.proof-box p { margin: 0; }
+.proof-box input[type="file"] { width: 100%; padding: 10px; border: 1.5px solid #c9d5de; border-radius: 12px; background: #fff; }

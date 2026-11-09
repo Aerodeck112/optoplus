@@ -3,6 +3,27 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.14] — 2026-11-09
+
+Se poate instala direct peste 1.0.0 – 1.0.13.
+
+- **Codurile de reducere din modulul WordPress (protocol MAPN) funcționează pe noul site:**
+  - **LENTILE25:** 25% la lentile și tratamente (rama nu se reduce), permanent; cere dovada (legitimație,
+    cupon de pensie);
+  - **STUDENT10:** încă 10%, cumulat cu LENTILE25 (cele două se adună: 25% + 10% din prețul lentilelor), valabil
+    până la 31 octombrie 2026, 23:59:59 — deci **deja expirat**; data se poate prelungi din panou;
+  - în coș se pot pune mai multe coduri; fiecare arată dacă s-a aplicat, a expirat sau nu există;
+  - la finalizarea comenzii clientul încarcă dovada (fotografie sau PDF, max. 10 MB). Fără ea comanda nu se
+    plasează. Dovada e privată (nu are adresă publică): se deschide din panou, la comandă, în secțiunea
+    „Dovezi pentru reduceri”, unde se poate marca „verificată”; fiecare deschidere se înregistrează în jurnal.
+- **Promoții (Panou → Prețuri → Promoții):** se pot aplica la „Lentile și tratamente (tot în afară de ramă)”,
+  procentul se poate calcula din prețul inițial (reducerile cumulate se adună), iar textul dovezii cerute se
+  scrie pe promoție. O reducere pentru o categorie de beneficiari (ex. pensionari) cere acum un cod: înainte nu
+  se aplica deloc, pentru că clientul nu avea unde să-și declare categoria.
+- **„Modifică configurația” din coș** nu mai duce la „pagină inexistentă” după ce sesiunea expiră: configurațiile
+  din coș rămân ale vizitatorului cât timp e păstrat coșul (30 de zile). Dacă configurația e salvată în contul
+  clientului, iar acesta a fost delogat, siteul îl duce la autentificare și apoi înapoi la configurație.
+
 ## [1.0.13] — 2026-11-09
 
 Se poate instala direct peste 1.0.0 – 1.0.12.

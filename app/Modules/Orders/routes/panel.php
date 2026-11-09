@@ -7,6 +7,7 @@ Route::prefix('comenzi')->name('orders.')->group(function () {
     Route::middleware('permission:orders.view')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('index');
         Route::get('{uuid}', [OrderController::class, 'show'])->whereUuid('uuid')->name('show');
+        Route::get('{uuid}/dovezi/{proof}', [OrderController::class, 'proof'])->whereUuid('uuid')->whereUuid('proof')->name('proof');
     });
     Route::middleware('permission:orders.manage')->group(function () {
         Route::post('{uuid}/confirma', [OrderController::class, 'confirm'])->name('confirm');
@@ -14,6 +15,7 @@ Route::prefix('comenzi')->name('orders.')->group(function () {
         Route::post('{uuid}/livrare', [OrderController::class, 'shipment'])->name('shipment');
         Route::post('{uuid}/livrare/{id}', [OrderController::class, 'updateShipment'])->whereNumber('id')->name('shipment.update');
         Route::post('{uuid}/factura', [OrderController::class, 'invoice'])->name('invoice');
+        Route::post('{uuid}/dovezi/{proof}/verificata', [OrderController::class, 'verifyProof'])->whereUuid('proof')->name('proof.verify');
     });
     Route::post('{uuid}/anuleaza', [OrderController::class, 'cancel'])->middleware(['permission:orders.cancel', 'reauth'])->name('cancel');
     Route::post('{uuid}/plati/{payment}/confirma', [OrderController::class, 'confirmPayment'])->whereNumber('payment')->middleware(['permission:payments.confirm', 'reauth'])->name('payment.confirm');

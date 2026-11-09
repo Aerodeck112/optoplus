@@ -65,6 +65,8 @@ class PromotionController extends Controller
             'cu_cupon' => ['nullable', 'boolean'], 'canal' => ['required', 'in:b2c,b2b,all'],
             'minim' => ['nullable', 'string', 'max:20'], 'max_utilizari' => ['nullable', 'integer', 'min:1'], 'max_per_client' => ['nullable', 'integer', 'min:1'],
             'beneficiari' => ['nullable', 'string', 'max:60'], 'dovada' => ['nullable', 'boolean'],
+            'din_initial' => ['nullable', 'boolean'],
+            'dovada_eticheta' => ['nullable', 'string', 'max:160'], 'dovada_ajutor' => ['nullable', 'string', 'max:400'],
         ], ['pana_la.after_or_equal' => 'Data de sfârșit trebuie să fie după data de început.']);
 
         $value = $data['tip'] === 'percent'
@@ -85,6 +87,9 @@ class PromotionController extends Controller
         if (in_array($data['aplicare'], ['category', 'brand', 'product'], true) && ! $scopeIds) {
             throw ValidationException::withMessages(['aplicare' => 'Alegeți cel puțin o categorie, marcă sau un produs.']);
         }
+        if (($data['beneficiari'] ?? null) && ! ($data['cu_cupon'] ?? false)) {
+            throw ValidationException::withMessages(['beneficiari' => 'O reducere pentru o categorie de beneficiari se aplică doar cu un cod: clientul declară categoria folosind codul. Bifați „Se aplică doar cu cupon”.']);
+        }
         $p = $id ? Promotion::findOrFail($id) : new Promotion(['source' => 'manual']);
         $before = $p->exists ? $p->only(['value', 'type', 'scope', 'is_active', 'starts_at', 'ends_at']) : null;
         $p->fill([
@@ -95,6 +100,8 @@ class PromotionController extends Controller
             'min_order_total' => ($data['minim'] ?? '') !== '' ? Money::parse($data['minim']) : null,
             'max_uses' => $data['max_utilizari'] ?? null, 'max_uses_per_customer' => $data['max_per_client'] ?? null,
             'beneficiary_category' => $data['beneficiari'] ?? null, 'requires_proof' => (bool) ($data['dovada'] ?? false),
+            'percent_of_original' => (bool) ($data['din_initial'] ?? false),
+            'proof_label' => $data['dovada_eticheta'] ?? null, 'proof_help' => $data['dovada_ajutor'] ?? null,
             'updated_by' => $request->user()->id,
         ])->save();
         Audit::log($id ? 'pricing.promotion_updated' : 'pricing.promotion_created', $p, ['inainte' => $before, 'dupa' => $p->only(['value', 'type', 'scope', 'is_active', 'starts_at', 'ends_at'])]);

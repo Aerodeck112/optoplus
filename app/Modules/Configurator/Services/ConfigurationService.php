@@ -53,7 +53,19 @@ class ConfigurationService
             return $customer?->id === $cfg->customer_id;
         }
 
-        return in_array($cfg->uuid, (array) $request->session()->get(self::SESSION_KEY, []), true);
+        if (in_array($cfg->uuid, (array) $request->session()->get(self::SESSION_KEY, []), true)) {
+            return true;
+        }
+        // Coșul se păstrează 30 de zile (cookie), sesiunea doar câteva zeci de minute: o configurație aflată în
+        // coșul vizitatorului rămâne a lui și după expirarea sesiunii („Modifică configurația” din coș).
+        $cart = app(\App\Modules\Shop\Services\CartService::class)->current($request);
+        if ($cart && $cart->items()->where('configuration_id', $cfg->id)->exists()) {
+            $this->remember($request, $cfg);
+
+            return true;
+        }
+
+        return false;
     }
 
     public function remember(Request $request, Configuration $cfg): void

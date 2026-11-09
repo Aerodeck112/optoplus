@@ -18,7 +18,7 @@
         </div></div>
     @endif
 
-    <form method="post" action="/comanda/" class="layout-2" data-module="checkout" novalidate>
+    <form method="post" action="/comanda/" class="layout-2" data-module="checkout" enctype="multipart/form-data" novalidate>
         @csrf
         <input type="hidden" name="cheie" value="{{ $key }}">
         <input type="hidden" name="total_afisat" value="{{ $quote->totalGross }}">
@@ -104,11 +104,22 @@
             <dl style="margin-top: 16px">
                 <dt>Produse</dt><dd>{{ $fmt($quote->subtotal) }}</dd>
                 @if ($quote->discountTotal)<dt>Reduceri</dt><dd class="discount">−{{ $fmt($quote->discountTotal) }}</dd>@endif
+                @foreach ($quote->discountBreakdown() as $d)<dt class="small">{{ $d['label'] }}</dt><dd class="small discount">−{{ $fmt($d['amount']) }}</dd>@endforeach
                 <dt>Livrare</dt><dd>{{ $quote->shipping ? ($quote->shipping['gross'] ? $fmt($quote->shipping['gross']) : 'gratuit') : '—' }}</dd>
                 @if ($quote->vatConfirmed() && $quote->vatTotal > 0)<dt><small>din care TVA</small></dt><dd class="small">{{ $fmt($quote->vatTotal) }}</dd>@endif
             </dl>
             <div class="summary__total"><span>Total de plată</span><span>{{ $fmt($quote->totalGross) }}</span></div>
             @foreach ($quote->errors as $e)<p class="error-text">{{ $e }}</p>@endforeach
+            @foreach ($quote->proofs as $proof)
+                {{-- Dovada eligibilității pentru codul de reducere (ex. LENTILE25): fișier privat, văzut doar de echipă. --}}
+                <div class="proof-box">
+                    <label for="dovada_{{ $proof['promotion_id'] }}">{{ $proof['label'] }} <span aria-hidden="true">*</span>@if($proof['code'])<span class="proof-box__code">{{ $proof['code'] }}</span>@endif</label>
+                    @if ($proof['help'])<p class="small">{{ $proof['help'] }}</p>@endif
+                    <input id="dovada_{{ $proof['promotion_id'] }}" type="file" name="dovada[{{ $proof['promotion_id'] }}]" accept="image/jpeg,image/png,image/webp,application/pdf" required @error('dovada.'.$proof['promotion_id']) aria-invalid="true" @enderror>
+                    @error('dovada.'.$proof['promotion_id'])<p class="error-text">{{ $message }}</p>@enderror
+                    <p class="small muted">Fotografie (JPG, PNG) sau PDF, cel mult 10 MB. Pe telefon poți face poza direct. Dovada o vede doar echipa Optoplus, pentru verificarea reducerii.</p>
+                </div>
+            @endforeach
             <label class="check" style="margin-top: 16px"><input type="checkbox" name="acord_termeni" value="1" required @checked($v('acord_termeni'))><span>Am citit și accept <a href="/termeni-si-conditii/" target="_blank" rel="noopener">termenii și condițiile</a> și <a href="/politica-de-confidentialitate/" target="_blank" rel="noopener">politica de confidențialitate</a>.</span></label>
             <button class="btn btn--primary btn--block" type="submit" name="actiune" value="plaseaza" @disabled(! $paymentMethods || ! $quote->isValid() || $itemErrors) style="margin-top: 16px">Plasează comanda</button>
             <p class="summary__note">Lentilele se produc după comandă, în laboratorul nostru. Un specialist optic verifică rețeta înainte de producție și vă contactează dacă e nevoie de o clarificare.</p>

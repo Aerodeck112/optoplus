@@ -50,10 +50,20 @@ class CartController extends Controller
         if ($request->filled('sterge')) {
             $this->cart->remove($request, (int) $request->input('sterge'));
         }
-        if ($request->has('cupon')) {
+        // Codurile de reducere: se pot adăuga mai multe (ex. LENTILE25 și STUDENT10); câmpul gol nu le șterge.
+        $code = strtoupper(preg_replace('/\s+/', '', (string) $request->input('cupon')) ?? '');
+        $remove = strtoupper((string) $request->input('scoate_cupon'));
+        if ($code !== '' || $remove !== '') {
             $cart = $this->cart->current($request, true);
-            $code = trim((string) $request->input('cupon'));
-            $cart->update(['coupon_code' => $code === '' ? null : mb_substr($code, 0, 60)]);
+            $codes = PricingContext::b2c(['couponCode' => $cart->coupon_code])->couponCodes();
+            if ($remove !== '') {
+                $codes = array_values(array_diff($codes, [$remove]));
+            }
+            if ($code !== '' && ! in_array($code, $codes, true)) {
+                $codes[] = mb_substr($code, 0, 30);
+            }
+            $joined = implode(',', array_slice($codes, 0, 3));
+            $cart->update(['coupon_code' => $joined === '' ? null : mb_substr($joined, 0, 60)]);
         }
 
         return redirect('/cos/')->with('status', 'Coșul a fost actualizat.')->withCookie($this->cart->cookie($request));

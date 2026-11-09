@@ -58,7 +58,7 @@
                 <dl>
                     <dt>Produse</dt><dd>{{ $fmt($quote->subtotal) }}</dd>
                     @if ($quote->discountTotal)<dt>Reduceri</dt><dd>−{{ $fmt($quote->discountTotal) }}</dd>@endif
-                    @foreach ($quote->orderDiscounts as $d)<dt class="small">{{ $d['label'] }}</dt><dd class="small">−{{ $fmt($d['amount']) }}</dd>@endforeach
+                    @foreach ($quote->discountBreakdown() as $d)<dt class="small">{{ $d['label'] }}</dt><dd class="small">−{{ $fmt($d['amount']) }}</dd>@endforeach
                     <dt>Livrare</dt><dd class="small">la pasul următor</dd>
                 </dl>
                 <div class="summary__total"><span>Total produse</span><span>{{ $fmt($quote->totalGross) }}</span></div>
@@ -66,8 +66,26 @@
             @endif
             <div class="coupon">
                 <label for="cupon">Cod de reducere</label>
-                <div class="inline-field"><input id="cupon" name="cupon" value="{{ $cart->coupon_code }}" maxlength="60" autocomplete="off"><button class="btn btn--small" type="submit">Aplică</button></div>
-                @if ($quote?->couponStatus === 'invalid')<p class="error-text">Codul nu este valabil pentru acest coș.</p>@elseif($quote?->couponStatus === 'valid')<p class="small ok">Codul a fost aplicat.</p>@endif
+                <div class="inline-field"><input id="cupon" name="cupon" value="" maxlength="30" autocomplete="off" placeholder="ex. LENTILE25"><button class="btn btn--small" type="submit">Aplică</button></div>
+                @if ($quote && $quote->coupons)
+                    <ul class="coupon__list">
+                        @foreach ($quote->coupons as $code => $state)
+                            <li class="coupon__item coupon__item--{{ $state }}">
+                                <span class="coupon__code">{{ $code }}</span>
+                                <span class="coupon__msg">@switch($state)
+                                    @case('valid') Aplicat. @break
+                                    @case('expirat') Codul a expirat și nu mai poate fi folosit. @break
+                                    @case('neaplicat') Nu se aplică produselor din coș (ex. reducerea e doar la lentile). @break
+                                    @default Codul nu există sau nu este valabil.
+                                @endswitch</span>
+                                <button class="link-btn" type="submit" name="scoate_cupon" value="{{ $code }}" aria-label="Scoate codul {{ $code }}">Scoate</button>
+                            </li>
+                        @endforeach
+                    </ul>
+                    @foreach ($quote->proofs as $proof)
+                        <p class="small coupon__proof">Pentru {{ $proof['code'] ?: 'această reducere' }}, la finalizarea comenzii ți se cere: {{ \Illuminate\Support\Str::after($proof['label'], 'Încarcă ') }}.</p>
+                    @endforeach
+                @endif
             </div>
             @if ($quote && $quote->isValid() && ! $itemErrors)
                 <a class="btn btn--primary btn--block" href="/comanda/">Continuă spre finalizare</a>

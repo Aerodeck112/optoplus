@@ -50,6 +50,11 @@ class Order extends Model
         return $this->hasMany(OrderItem::class)->orderBy('id');
     }
 
+    public function proofs(): HasMany
+    {
+        return $this->hasMany(OrderProof::class)->orderBy('id');
+    }
+
     public function events(): HasMany
     {
         return $this->hasMany(OrderEvent::class)->orderBy('created_at')->orderBy('id');

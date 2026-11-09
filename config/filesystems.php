@@ -38,6 +38,14 @@ return [
             'throw' => true,
         ],
 
+        // Dovezile pentru codurile de reducere (legitimații, adeverințe): private, nume aleatoare, doar din panou.
+        'dovezi' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/dovezi'),
+            'serve' => false,
+            'throw' => true,
+        ],
+
         'documente' => [
             'driver' => 'local',
             'root' => storage_path('app/private/documente'),

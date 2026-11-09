@@ -55,6 +55,30 @@
                 <x-slot:footer><span class="small muted">Prețuri calculate de motorul de preț {{ $order->pricing_version }}@if($order->coupon_code) · cupon {{ $order->coupon_code }}@endif. Valorile rețetei sunt în fișa de lucru (acces auditat).</span></x-slot:footer>
             </x-panou.panel>
 
+            @if ($order->proofs->isNotEmpty())
+                <x-panou.panel title="Dovezi pentru reduceri" :flush="true">
+                    <table class="table"><tbody>
+                        @foreach ($order->proofs as $proof)
+                            <tr>
+                                <td><strong>{{ $proof->coupon_code ?: 'Reducere' }}</strong><br><span class="small muted">{{ $proof->label }}</span></td>
+                                <td><a href="{{ route('panou.orders.proof', [$order->uuid, $proof->uuid]) }}" target="_blank" rel="noopener">Deschide dovada</a> <span class="small muted">({{ $proof->mime === 'application/pdf' ? 'PDF' : 'imagine' }})</span></td>
+                                <td>
+                                    @if ($proof->verified_at)
+                                        <x-panou.badge tone="ok">verificată</x-panou.badge> <span class="small muted">{{ $proof->verifier?->name }}, {{ $proof->verified_at->format('d.m.Y H:i') }}</span>
+                                    @else
+                                        <x-panou.badge tone="warn">de verificat</x-panou.badge>
+                                        @can('orders.manage')
+                                            <form method="post" action="{{ route('panou.orders.proof.verify', [$order->uuid, $proof->uuid]) }}" style="display: inline">@csrf<button class="btn btn--small" type="submit">Marchează verificată</button></form>
+                                        @endcan
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody></table>
+                    <x-slot:footer><span class="small muted">Reducerea s-a aplicat pe baza codului. Dacă dovada nu este valabilă, contactați clientul înainte de confirmarea comenzii. Deschiderea dovezii se înregistrează în jurnal.</span></x-slot:footer>
+                </x-panou.panel>
+            @endif
+
             @if ($order->productionJobs->isNotEmpty())
                 <x-panou.panel title="Lucrări de producție" :flush="true">
                     <table class="table"><tbody>

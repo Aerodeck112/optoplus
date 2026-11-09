@@ -14,6 +14,7 @@ class Promotion extends Model
 {
     public const SCOPES = [
         'order' => 'Întreaga comandă', 'frames' => 'Rame', 'lenses' => 'Lentile', 'treatments' => 'Tratamente',
+        'lenses_treatments' => 'Lentile și tratamente (tot în afară de ramă)',
         'category' => 'Categorii', 'brand' => 'Mărci', 'product' => 'Produse',
     ];
 
@@ -29,6 +30,7 @@ class Promotion extends Model
             'ends_at' => 'datetime',
             'is_active' => 'boolean',
             'stackable' => 'boolean',
+            'percent_of_original' => 'boolean',
             'requires_coupon' => 'boolean',
             'requires_proof' => 'boolean',
         ];

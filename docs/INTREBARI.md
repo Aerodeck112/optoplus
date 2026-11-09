@@ -14,7 +14,7 @@ decizia provizorie din coloana a treia (reversibilă din panou).
 | 7 | Ce măsurători cereți pentru progresive (înălțime de montaj, DP monoculară)? Cine le ia la comenzile online? | Obligatorii pentru progresive; dacă lipsesc → „Clarificări” |
 | 8 | Termenele reale de producție pe familie și de livrare pe metodă? | Nu afișăm termene |
 | 9 | Ce stoc real au ramele? Afișăm „în stoc” sau „disponibil la comandă”? | „Disponibil la comandă” până la inventar |
-| 10 | Promoția Optofarm 210 → 99 lei: are perioadă? Ce cupoane există și cum se cumulează? | Promoțiile importate rămân inactive până la confirmare |
+| 10 | Promoția Optofarm 210 → 99 lei: are perioadă? Ce cupoane există și cum se cumulează? | **Parțial răspuns 2026-11-09:** cupoanele sunt cele din modulul WordPress „protocol MAPN” (LENTILE25 permanent, STUDENT10 până la 31.10.2026, cumulabile, doar lentile și tratamente, cu dovadă) — implementate în 1.0.14. Deschis: perioada promoției Optofarm 99 lei; prelungim STUDENT10? |
 | 11 | Ce procesator de card păstrați (BT iPay, WooPayments, altul)? Avem credențiale de test? | Simulator semnat + contract de adaptor; BT iPay blocat până la documentația oficială; card online inactiv |
 | 12 | Oferiți ramburs sau plata la ridicare? Pentru produse personalizate cereți avans? | Inactive până la confirmare |
 | 13 | Ce curier folosiți și ce soluție de facturare? | Expediere manuală (AWB introdus de mână); facturare: stare „neconectată” |

@@ -32,6 +32,18 @@ final class PricingContext
         return new self(...$overrides);
     }
 
+    /**
+     * Codurile de reducere introduse (mai multe, separate prin virgulă sau spațiu), normalizate, fără dubluri.
+     *
+     * @return list<string>
+     */
+    public function couponCodes(): array
+    {
+        $codes = preg_split('/[\s,;]+/', (string) $this->couponCode, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        return array_slice(array_values(array_unique(array_map(fn ($c) => strtoupper($c), $codes))), 0, 5);
+    }
+
     /** Prețurile din calcul conțin TVA (B2C sau listă B2B cu TVA)? */
     public function basisIncludesVat(): bool
     {

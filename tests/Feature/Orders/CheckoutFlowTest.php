@@ -69,6 +69,19 @@ class CheckoutFlowTest extends TestCase
         $this->get('/cos/')->assertSee('Coșul este gol');
     }
 
+    public function test_edit_from_cart_works_after_the_session_expired(): void
+    {
+        $frame = $this->frame(30000);
+        $cfg = $this->configureGlasses($frame);
+        $cart = session('cos_uuid');
+        $this->flushSession(); // sesiunea a expirat; coșul rămâne în cookie (30 de zile)
+        $this->withCookie('optoplus_cos', $cart)
+            ->get($cfg->stepUrl(5))->assertOk();
+        $this->flushSession();
+        $this->defaultCookies = [];
+        $this->get($cfg->stepUrl(5))->assertNotFound(); // fără coș și fără sesiune: configurația altcuiva rămâne ascunsă
+    }
+
     public function test_double_submit_creates_a_single_order(): void
     {
         $frame = $this->frame(30000);
