@@ -64,6 +64,8 @@ Citește întâi: `docs/ARHITECTURA.md`, `docs/SCHEMA-BD.md`, `docs/STATUS.md`, 
   `translations` (modulul I18n), aplicat paginii la afișare. Orice text nou vizibil clientului primește traducerea
   în `database/content/i18n/en.json` și `hu.json` (cifrele ca {0}, {1}…; {t} = parte variabilă). Textele afișate
   din JavaScript trec prin `JsStrings`. Textele juridice nu se traduc.
+  Fișierele JSON se încarcă în bază doar din migrări: o versiune care adaugă traduceri are o migrare care
+  rulează `TranslationSeed::run(dirname(__DIR__, 2).'/database/content/i18n')` (dosarul explicit, vezi 1.0.16).
 
 ## Skilluri de proiect (`.claude/skills/`)
 
