@@ -1,4 +1,4 @@
-{{-- Comparații interactive pentru tratamente (ilustrative). $kind: antireflex | lumina_albastra | fotocromatic. --}}
+{{-- Comparații interactive pentru tratamente (ilustrative). $kind: antireflex | lumina_albastra | fotocromatic; $group = ilustrația comună a fotocromaticelor. --}}
 @switch($kind)
 @case('antireflex')
 <div class="tx-demo" data-module="lens-explainer" data-explainer="toggle" data-treatment-ref="{{ $treatmentId }}">
@@ -32,7 +32,12 @@
 @break
 @case('fotocromatic')
 @case('fotocromatic_condus')
+@if (! empty($group))
+{{-- 1.0.16: o singură ilustrație pentru toate variantele; urmează varianta și culoarea bifate. --}}
+<div class="tx-demo" data-module="lens-explainer" data-explainer="photo" data-group="1">
+@else
 <div class="tx-demo" data-module="lens-explainer" data-explainer="photo" data-variant="{{ $kind === 'fotocromatic_condus' ? 'xtractive' : 'helio' }}" data-treatment-ref="{{ $treatmentId }}">
+@endif
     <svg viewBox="0 0 260 130" role="img" aria-label="Ilustrație: lentila fotocromatică se închide la lumina soarelui">
         <rect width="260" height="130" rx="10" class="photo-sky" fill="#e9eef2"/>
         <g class="photo-sun"><circle cx="222" cy="28" r="14" fill="#ffd34d"/><path d="M222 6 v-4 M222 54 v-4 M200 28 h-4 M248 28 h-4 M206 12 l-3 -3 M238 44 l3 3 M238 12 l3 -3 M206 44 l-3 3" stroke="#e0b54b" stroke-width="2"/></g>

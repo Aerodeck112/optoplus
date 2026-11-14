@@ -87,8 +87,8 @@ class HomeShopRefresh
                 'text' => 'Alegi rama, introduci rețeta și vezi prețul final la fiecare pas. Un specialist optic verifică rețeta înainte de producție.',
                 'primary' => ['label' => 'Configurează ochelarii', 'url' => '/configurator/'], 'secondary' => ['label' => 'Vezi ramele', 'url' => '/rame/'],
                 'illustration' => 'femeie', 'photo' => null, 'product' => $women, 'product2' => null, 'background' => 'bleu'],
-            ['badge' => 'Nou: Xtractive', 'title' => 'Lentile fotocromatice Helio și Xtractive',
-                'text' => 'Helio se închide afară, la soare. Xtractive se închide și în mașină, deci e potrivit și pentru condus. Maro, gri, albastru, verde sau mov.',
+            ['badge' => 'Lentile fotocromatice', 'title' => 'Lentile care se închid la soare', // textul din 1.0.16 (PhotochromicLineup)
+                'text' => 'Transitions se închide afară până la 80%. Xtractive se închide și în mașină, deci e potrivit pentru condus. PhotoFast vine în albastru sau mov.',
                 'primary' => ['label' => 'Alege lentilele', 'url' => '/configurator/'], 'secondary' => ['label' => 'Despre lentile', 'url' => '/lentile/'],
                 'illustration' => 'fotocromatic', 'photo' => null, 'product' => $lens('fotocromatica-maro-exterior.jpg'), 'product2' => $lens('fotocromatica-albastra-exterior.jpg'), 'background' => 'bleumarin'],
             ['badge' => '', 'title' => 'Progresive: o singură pereche pentru toate distanțele',

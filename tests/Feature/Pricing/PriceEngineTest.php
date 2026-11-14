@@ -57,12 +57,12 @@ class PriceEngineTest extends TestCase
     public function test_progressive_174_with_photochromic_and_blue_light(): void
     {
         $frame = $this->frame(76600);
-        $q = $this->engine()->quoteConfiguration($this->config($frame->id, 'progresive-174', [['fotocromatic', 'gri_85'], ['filtru-lumina-albastra']], [
+        $q = $this->engine()->quoteConfiguration($this->config($frame->id, 'progresive-174', [['transitions', 'gri'], ['filtru-lumina-albastra']], [
             'usage' => 'toate', 'od' => new EyeRx(-100, null, null, 200), 'os' => new EyeRx(-100, null, null, 200),
         ]), new PricingContext);
         // 766 + 1790 + 250 + 90 = 2896 lei.
         $this->assertSame(289600, $q->totalGross);
-        $this->assertStringContainsString('Gri 85%', $q->components()[2]->name);
+        $this->assertStringContainsString('Transitions (Gri)', $q->components()[2]->name);
     }
 
     public function test_lens_only_promotion_does_not_discount_frame_or_treatments(): void

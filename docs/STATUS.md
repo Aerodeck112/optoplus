@@ -44,6 +44,7 @@ Legendă: ✅ da · ⚠️ parțial / cu condiții · ❌ nu · 🔒 blocat de a
 | Stil de magazin (prima pagină, catalog, produs, lentile, configurator) | ✅ 1.0.12 | ✅ desktop + mobil | ❌ | — | persoanele din bannere sunt ilustrații; se pot înlocui cu fotografii proprii din panou |
 | Coduri de reducere LENTILE25 / STUDENT10 (protocol MAPN), dovadă la comandă | ✅ 1.0.14 | ✅ | ❌ | — | refăcute după modulul WordPress primit de la client (v1.2.0); STUDENT10 a expirat la 31.10.2026 (se prelungește din panou) |
 | Siteul în engleză și maghiară (/en/, /hu/), panou Traduceri | ✅ 1.0.15 | ✅ | ❌ | — | ⚠️ traduceri automate, de verificat; maghiara se completează cu exportul TranslatePress (comanda optoplus:i18n:import-translatepress); textele juridice rămân în română |
+| Lentile fotocromatice: Transitions, Xtractive, PhotoFast, Heliomatic (un singur card, pe indici) + găurire fără 1,50 / 1,56 | ✅ 1.0.16 | ✅ desktop + mobil | ❌ | — | ⚠️ Heliomatic doar pe 1,56: lentile 1,56 nu există încă în configurator (prețuri și intervale de primit), culorile Heliomatic neconfirmate; rândurile noi sunt „neconfirmat” (250 lei) |
 | Texte juridice | ⚠️ ciorne | ✅ | ❌ | — | de verificat și publicat de Optoplus (Site → Pagini → Juridice) |
 | Emailuri comenzi | ✅ | ✅ | ❌ | 🔒 | serverul SMTP se configurează în `shared/.env` la instalare |
 | Asistent AI | ❌ | ❌ | ❌ | — | urmează |

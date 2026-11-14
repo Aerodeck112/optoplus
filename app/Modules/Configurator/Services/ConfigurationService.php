@@ -223,7 +223,8 @@ class ConfigurationService
         return match ($step) {
             1 => in_array($code, ['entry', 'entry_own_frame', 'usage', 'frame', 'frame_not_configurable', 'frame_stock'], true),
             2 => str_starts_with($code, 'rx_') || str_starts_with($code, 'pd') || str_starts_with($field, 'od.') || str_starts_with($field, 'os.'),
-            3 => in_array($code, ['offering', 'matrix_sph', 'matrix_cyl', 'matrix_combined', 'matrix_add', 'add_missing', 'sale_unit_pair', 'quote_only'], true),
+            // Pasul 3 golește tratamentele, deci o regulă care blochează acum ține de lentilă și ramă (ex. găurire + 1,50).
+            3 => in_array($code, ['offering', 'matrix_sph', 'matrix_cyl', 'matrix_combined', 'matrix_add', 'add_missing', 'sale_unit_pair', 'quote_only'], true) || str_starts_with($code, 'rule_'),
             4 => str_starts_with($code, 'treatment') || str_starts_with($code, 'rule_'),
             default => false,
         };

@@ -29,6 +29,9 @@ final class JsStrings
         'În casă: lentila este aproape transparentă.',
         'În mașină: Xtractive se închide și în spatele parbrizului, deci vă ajută și la volan. Cât de mult depinde de lumină și de temperatură.',
         'În mașină: Helio rămâne aproape transparent, pentru că parbrizul oprește razele UV care îl închid. Pentru condus, alegeți Xtractive.',
+        'În mașină: lentila rămâne aproape transparentă, pentru că parbrizul oprește razele UV care o închid. Pentru condus, alegeți Xtractive.',
+        'În mașină: majoritatea lentilelor fotocromatice rămân aproape transparente, pentru că parbrizul oprește razele UV care le închid. Xtractive se închide și în mașină.',
+        ' în nuanța aleasă',
         'Afară, la soare: lentila se închide{shade}. Viteza reală depinde de lumina UV și de temperatură.',
         'Ilustrație: lentilă în fața unui tabel optotip',
     ];

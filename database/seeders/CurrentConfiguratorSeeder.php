@@ -140,6 +140,8 @@ class CurrentConfiguratorSeeder extends Seeder
             \App\Modules\Lenses\Support\PhotochromicSplit::run();
             // Culorile Helio / Xtractive, prețul Xtractive și regula ramelor fără contur (ca migrarea 1.0.11).
             \App\Modules\Lenses\Support\PhotochromicColors::run();
+            // Gama fotocromatică pe indici și regula găuririi (ca migrarea 1.0.16).
+            \App\Modules\Lenses\Support\PhotochromicLineup::run();
         });
     }
 

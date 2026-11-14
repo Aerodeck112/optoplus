@@ -224,7 +224,7 @@ class ConfigurationValidator
 
                 continue;
             }
-            // Helio și Xtractive sunt ambele fotocromatice: o lentilă poate avea doar unul.
+            // Transitions, Xtractive, PhotoFast, Heliomatic sunt toate fotocromatice: o lentilă poate avea doar unul.
             if (str_starts_with((string) $treatment->kind, 'fotocromatic')) {
                 $photochromic[] = $treatment->name;
                 if (count($photochromic) > 1) {

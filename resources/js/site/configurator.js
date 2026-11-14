@@ -43,7 +43,7 @@ export default function configurator(root) {
         fs.classList.toggle('is-active', !!cb?.checked);
         fs.querySelectorAll('input[type=radio]').forEach((r, i) => { r.required = !!cb?.checked && i === 0; });
     });
-    // Un singur fotocromatic: Helio sau Xtractive.
+    // Un singur fotocromatic (Transitions, Xtractive, PhotoFast sau Heliomatic).
     const exclusive = (cb) => {
         if (!cb.checked || !cb.dataset.exclusive) return;
         form.querySelectorAll(`[data-exclusive="${cb.dataset.exclusive}"]`).forEach((o) => { if (o !== cb && o.checked) { o.checked = false; o.dispatchEvent(new Event('change')); } });

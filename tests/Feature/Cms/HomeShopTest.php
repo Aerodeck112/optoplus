@@ -39,7 +39,7 @@ class HomeShopTest extends TestCase
 
         $html = $this->get('/')->assertOk()
             ->assertSee('class="banners"', false)->assertSee('data-module="carousel"', false)
-            ->assertSee('Lentile fotocromatice Helio și Xtractive')
+            ->assertSee('Lentile care se închid la soare')
             ->assertSee('class="topbar"', false)
             ->getContent();
         $this->assertSame(1, substr_count($html, '<h1'), 'o singură h1: titlul primului banner');
@@ -70,5 +70,21 @@ class HomeShopTest extends TestCase
         app(Settings::class)->set('site.topbar_text', 'Mesaj de test');
         app(Settings::class)->set('site.topbar_url', 'javascript:alert(1)');
         $this->get('/despre-noi/')->assertSee('Mesaj de test')->assertDontSee('javascript:', false);
+    }
+
+    public function test_photochromic_banner_text_follows_the_1016_lineup_on_existing_sites(): void
+    {
+        (new HomeShopRefresh)->run();
+        // un site instalat înainte de 1.0.16 are bannerul vechi „Helio și Xtractive”
+        $page = Page::where('path', '/')->first();
+        $v = $page->publishedVersion;
+        $blocks = $v->blocks;
+        $blocks[0]['data']['slides'][1]['title'] = \App\Modules\Lenses\Support\PhotochromicLineup::HOME_SLIDE_OLD;
+        $v->update(['blocks' => $blocks]);
+        $this->seed(\Database\Seeders\CatalogBaseSeeder::class);
+        $this->seed(\Database\Seeders\CurrentConfiguratorSeeder::class); // rulează și PhotochromicLineup
+
+        $this->assertSame('neschimbat', \App\Modules\Lenses\Support\PhotochromicLineup::run()['home']);
+        $this->get('/')->assertOk()->assertSee('Lentile care se închid la soare')->assertDontSee('Helio și Xtractive');
     }
 }

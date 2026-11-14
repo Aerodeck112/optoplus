@@ -164,22 +164,35 @@ function toggle(root) {
 }
 
 // Fotocromatic: „În casă / În mașină / Afară, la soare”, în nuanța și intensitatea alese (ilustrativ).
-// Helio se închide doar afară (parbrizul oprește UV); Xtractive se închide și în mașină.
+// Variantele obișnuite se închid doar afară (parbrizul oprește UV); Xtractive se închide și în mașină.
+// 1.0.16: în cardul grupat (data-group) o singură ilustrație urmează varianta bifată și culoarea ei.
 const TINTS = { gri: '#454a50', maro: '#6b4a2f', verde: '#3f5a45', albastru: '#2f4c6e', mov: '#5a3f6e' };
 function photo(root) {
     const cap = root.querySelector('[data-demo-caption]');
-    const fieldset = document.querySelector(`[data-option-for="${root.dataset.treatmentRef}"]`);
-    const xtractive = root.dataset.variant === 'xtractive';
+    const form = root.closest('form');
+    const group = root.dataset.group === '1';
     const sun = root.querySelector('.photo-sun');
     const room = root.querySelector('.photo-room');
     const sky = root.querySelector('.photo-sky');
     const car = root.querySelector('.photo-car');
     const chips = [...root.querySelectorAll('[data-scene]')];
     let scene = 'casa';
+    // Varianta afișată: cea bifată (în cardul grupat) sau tratamentul ilustrației (card separat).
+    const current = () => {
+        if (!group) {
+            const ref = root.dataset.treatmentRef;
+            return { cb: document.querySelector(`[data-treatment="${ref}"]`), variant: root.dataset.variant, fieldset: document.querySelector(`[data-option-for="${ref}"]`) };
+        }
+        const cb = form?.querySelector('[data-exclusive="fotocromatic"]:checked') || null;
+        return { cb, variant: cb?.dataset.photoVariant || null, fieldset: cb ? form.querySelector(`[data-option-for="${cb.dataset.treatment}"]`) : null };
+    };
     const render = () => {
+        const { cb, variant, fieldset } = current();
         const code = fieldset?.querySelector('input:checked')?.value || '';
         const [color, pct] = code.split('_');
-        const max = (Number(pct) || 80) / 100;
+        const known = Number(pct) || Number(cb?.dataset.photoMax) || 0;
+        const max = (known || 80) / 100;
+        const xtractive = variant === 'xtractive';
         const level = { casa: 0, masina: xtractive ? 0.6 : 0.06, afara: 1 }[scene];
         root.querySelectorAll('.photo-tint').forEach((el) => { el.setAttribute('fill', TINTS[color] || TINTS.gri); el.setAttribute('fill-opacity', (level * max).toFixed(2)); });
         sun.style.opacity = scene === 'casa' ? '0.15' : '1';
@@ -187,18 +200,25 @@ function photo(root) {
         car.setAttribute('opacity', scene === 'masina' ? '1' : '0');
         sky.setAttribute('fill', scene === 'casa' ? '#e9eef2' : '#cfe6f7');
         chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.scene === scene)));
-        const shade = code ? t(' în nuanța aleasă (până la aproximativ {pct}%)', { pct: Math.round(max * 100) }) : '';
+        const shade = code && known ? t(' în nuanța aleasă (până la aproximativ {pct}%)', { pct: known }) : (code ? t(' în nuanța aleasă') : '');
+        let inCar;
+        if (xtractive) inCar = t('În mașină: Xtractive se închide și în spatele parbrizului, deci vă ajută și la volan. Cât de mult depinde de lumină și de temperatură.');
+        else if (group && !variant) inCar = t('În mașină: majoritatea lentilelor fotocromatice rămân aproape transparente, pentru că parbrizul oprește razele UV care le închid. Xtractive se închide și în mașină.');
+        else inCar = t('În mașină: lentila rămâne aproape transparentă, pentru că parbrizul oprește razele UV care o închid. Pentru condus, alegeți Xtractive.');
         cap.textContent = {
             casa: t('În casă: lentila este aproape transparentă.'),
-            masina: xtractive
-                ? t('În mașină: Xtractive se închide și în spatele parbrizului, deci vă ajută și la volan. Cât de mult depinde de lumină și de temperatură.')
-                : t('În mașină: Helio rămâne aproape transparent, pentru că parbrizul oprește razele UV care îl închid. Pentru condus, alegeți Xtractive.'),
+            masina: inCar,
             afara: t('Afară, la soare: lentila se închide{shade}. Viteza reală depinde de lumina UV și de temperatură.', { shade }),
         }[scene];
     };
     root.addEventListener('click', (e) => { const b = e.target.closest('[data-scene]'); if (b) { root.dataset.touched = '1'; scene = b.dataset.scene; render(); } });
-    fieldset?.addEventListener('change', () => { if (scene === 'casa') scene = 'afara'; render(); });
-    // La prima afișare: o scurtă trecere casă → afară → (mașină) → casă.
+    // Schimbarea variantei sau a culorii: desenul trece „afară”, unde diferența se vede.
+    form?.addEventListener('change', (e) => {
+        if (!e.target.closest('[data-option-for], [data-exclusive="fotocromatic"]') && !(!group && e.target.dataset.treatment === root.dataset.treatmentRef)) return;
+        if (scene === 'casa' && e.target.checked) scene = 'afara';
+        render();
+    });
+    // La prima afișare: o scurtă trecere casă → afară → mașină → casă.
     if (!reduce) {
         const io = new IntersectionObserver((entries) => {
             if (!entries[0].isIntersecting) return;

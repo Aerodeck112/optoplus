@@ -92,7 +92,7 @@ class ConfigurationValidatorTest extends TestCase
 
     public function test_photochromic_is_blocked_for_reading_glasses_by_editable_rule(): void
     {
-        $in = $this->input(['usage' => 'aproape', 'treatments' => [['treatment_id' => $this->treatmentId('fotocromatic'), 'option' => 'gri_85']]]);
+        $in = $this->input(['usage' => 'aproape', 'treatments' => [['treatment_id' => $this->treatmentId('transitions'), 'option' => 'gri']]]);
         $r = $this->validate($in);
         $this->assertFalse($r->isValid());
         $this->assertStringContainsString('ochelarii de citit', $r->errors[0]['message']);
@@ -104,10 +104,10 @@ class ConfigurationValidatorTest extends TestCase
 
     public function test_photochromic_option_must_be_allowed_for_the_index(): void
     {
-        // 1,60: APF oferea doar 85%.
-        $r = $this->validate($this->input(['treatments' => [['treatment_id' => $this->treatmentId('fotocromatic'), 'option' => 'gri_65']]]));
+        // 1.0.16: Transitions doar în verde, gri, maro; culoarea e obligatorie.
+        $r = $this->validate($this->input(['treatments' => [['treatment_id' => $this->treatmentId('transitions'), 'option' => 'mov']]]));
         $this->assertTrue($r->hasError('treatment_option'));
-        $r = $this->validate($this->input(['treatments' => [['treatment_id' => $this->treatmentId('fotocromatic'), 'option' => null]]]));
+        $r = $this->validate($this->input(['treatments' => [['treatment_id' => $this->treatmentId('transitions'), 'option' => null]]]));
         $this->assertTrue($r->hasError('treatment_option'));
     }
 

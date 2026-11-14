@@ -3,6 +3,30 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.16] — 2026-11-14
+
+Se poate instala direct peste 1.0.0 – 1.0.15.
+
+- **Lentilele fotocromatice, într-un singur card la pasul „Tratamente”:** „Lentile fotocromatice — +250 lei”, cu
+  variantele lui; clientul alege una (sau niciuna), apoi culoarea. O singură ilustrație (în casă / în mașină /
+  afară) urmează varianta și culoarea alese.
+  - **Transitions** („Pentru fiecare zi”): se închide până la 80%; verde, gri, maro; indicii 1,50, 1,60, 1,74.
+  - **Xtractive** („Și pentru condus”): se închide și în mașină; verde, gri, maro; indicii 1,50, 1,60, 1,67.
+  - **PhotoFast** („Culori la modă”): albastru sau mov; doar indicele 1,60.
+  - **Heliomatic** („Varianta simplă”, fostul Helio): se închide 50–60%; doar indicele 1,56 — apare la clienți
+    după ce se adaugă lentile 1,56 în panou.
+  - Dacă o variantă nu există pentru lentila aleasă, cardul spune cu ce indice se poate alege (ex. „PhotoFast:
+    se poate alege cu lentilele cu indicele 1,60”), cu legătură înapoi la lentile.
+- **Ramele fără contur (prindere prin găurire):** nu se mai blochează fotocromaticele; se blochează lentilele cu
+  indicele 1,50 și 1,56 (apar indisponibile la pasul „Lentile”, cu explicația). 1,60, 1,67 și 1,74 se pot alege,
+  cu orice tratament.
+- Bannerul din prima pagină despre fotocromatice are textul nou (dacă pagina nu a fost editată din panou; altfel
+  noul text rămâne ciornă, de publicat de echipă).
+- Toate textele noi au traducere în engleză și maghiară; s-au tradus și mesajele de compatibilitate (ex. „ochelari
+  de citit”, „rame pe fir”), care rămăseseră în română pe /en/ și /hu/.
+- Nimic nu se șterge: culorile și rândurile vechi Helio rămân în istoric (comenzile vechi le afișează corect), dar
+  sunt inactive. Prețurile și textele modificate deja din panou nu se suprascriu.
+
 ## [1.0.15] — 2026-11-09
 
 Se poate instala direct peste 1.0.0 – 1.0.14.

@@ -89,6 +89,7 @@ class ConfiguratorController extends Controller
         }
         if ($step === 4 && $data['offering']) {
             $data['blockedTreatments'] = $this->blockedTreatments($cfg, $input, $data['offering']);
+            $data['photoElsewhere'] = $this->photoElsewhere($data['offering']);
         }
         if ($step === 2 && $cfg->prescription) {
             Audit::log('prescription.viewed', $cfg->prescription, ['context' => 'configurator'], $cfg->prescription->customer_id);
@@ -144,6 +145,29 @@ class ConfiguratorController extends Controller
         }
 
         return $blocked;
+    }
+
+    /**
+     * Variantele fotocromatice care nu există pentru lentila aleasă, dar există pentru același tip de lentilă cu alt
+     * indice (ex. PhotoFast doar la 1,60): le arătăm sub card, ca clientul să știe că poate schimba lentila.
+     *
+     * @return list<array{name: string, indices: string}>
+     */
+    private function photoElsewhere($offering): array
+    {
+        $here = $offering->treatments->filter(fn ($ot) => $ot->status !== 'inactiv')->pluck('treatment_id')->all();
+        $rows = \App\Modules\Lenses\Models\LensOfferingTreatment::query()
+            ->whereNotIn('treatment_id', $here ?: [0])->where('status', '!=', 'inactiv')
+            ->whereHas('treatment', fn ($q) => $q->where('is_active', true)->where('kind', 'like', 'fotocromatic%'))
+            ->whereHas('offering', fn ($q) => $q->where('lens_product_id', $offering->lens_product_id)->where('status', '!=', 'inactiv'))
+            ->with('treatment', 'offering.material')->get();
+
+        return $rows->groupBy('treatment_id')->map(fn ($g) => [
+            'sort' => $g->first()->treatment->sort,
+            'name' => $g->first()->treatment->name,
+            'indices' => $g->map(fn ($r) => $r->offering->material?->refractive_index)->filter()->unique()->sort()
+                ->map(fn ($i) => number_format($i / 1000, 2, ',', ''))->implode(', '),
+        ])->sortBy('sort')->map(fn ($r) => ['name' => $r['name'], 'indices' => $r['indices']])->values()->all();
     }
 
     /** Recalcul fără salvare (JavaScript): prețul și mesajele pentru alegerile din formular. */
