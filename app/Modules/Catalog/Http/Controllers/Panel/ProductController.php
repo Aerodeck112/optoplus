@@ -47,7 +47,7 @@ class ProductController extends Controller
 
         return view('catalog::panel.product', [
             'product' => $product, 'brands' => Brand::orderBy('name')->pluck('name', 'id'),
-            'categories' => Category::orderBy('path')->pluck('path', 'id'),
+            'categories' => Category::orderBy('path')->pluck('name', 'id'),
             'attributes' => ProductEditorController::attributes(),
         ]);
     }

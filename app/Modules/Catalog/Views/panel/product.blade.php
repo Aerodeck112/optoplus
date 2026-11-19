@@ -78,25 +78,29 @@
                 @endcan
             </x-panou.panel>
             <x-panou.panel title="Poze">
-                @forelse ($product->images as $im)
-                    <div class="product-photo">
-                        @if($im->media)<img src="{{ $im->media->bestUrl(320) }}" alt="{{ $im->alt ?? $im->media->alt }}" width="112" height="90" style="object-fit:contain;border:1px solid var(--line);border-radius:6px;background:#fff">@endif
-                        <div class="stack" style="gap:.3rem">
-                            @if ($loop->first)<x-panou.badge tone="ok">poza principală</x-panou.badge>@endif
+                @if ($product->images->isEmpty())<p class="muted">Produsul nu are încă poze.</p>@endif
+                <div class="product-photos">
+                @foreach ($product->images as $im)
+                    <figure class="product-photo">
+                        @if ($im->media)<img src="{{ $im->media->bestUrl(320) }}" alt="{{ $im->alt ?? $im->media->alt }}" loading="lazy">@else<span class="product-photo__missing small muted">poza nu este descărcată</span>@endif
+                        <figcaption>
+                            @if ($loop->first)<x-panou.badge tone="ok">principală</x-panou.badge>@endif
                             @can('catalog.edit')
-                            <div class="cluster" style="gap:.3rem">
-                                @unless ($loop->first)<form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}">@csrf<button class="btn btn--small" name="actiune" value="principala">Fă principală</button></form>
-                                <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}">@csrf<button class="btn btn--small" name="actiune" value="sus" aria-label="Mută mai sus">↑</button></form>@endunless
-                                @unless ($loop->last)<form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}">@csrf<button class="btn btn--small" name="actiune" value="jos" aria-label="Mută mai jos">↓</button></form>@endunless
-                                <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}" data-confirm="Scoateți această poză de la produs?">@csrf<button class="btn btn--small btn--danger" name="actiune" value="sterge">Scoate</button></form>
+                            <div class="product-photo__actions">
+                                @unless ($loop->first)<form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}">@csrf<button class="btn btn--small" name="actiune" value="principala" title="Fă poza principală">★</button></form>
+                                <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}">@csrf<button class="btn btn--small" name="actiune" value="sus" title="Mută mai în față" aria-label="Mută mai în față">←</button></form>@endunless
+                                @unless ($loop->last)<form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}">@csrf<button class="btn btn--small" name="actiune" value="jos" title="Mută mai în spate" aria-label="Mută mai în spate">→</button></form>@endunless
+                                <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}" data-confirm="Scoateți această poză de la produs?">@csrf<button class="btn btn--small btn--danger" name="actiune" value="sterge" title="Scoate poza" aria-label="Scoate poza">✕</button></form>
                             </div>
-                            <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}" class="cluster" style="gap:.3rem">@csrf<input type="hidden" name="actiune" value="alt"><input name="alt" value="{{ $im->alt }}" aria-label="Text alternativ" placeholder="Text alternativ (descrierea pozei)" style="min-width:12rem"><button class="btn btn--small">Salvează textul</button></form>
+                            <details class="small"><summary>Text alternativ</summary>
+                                <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}" class="stack" style="gap:.3rem">@csrf<input type="hidden" name="actiune" value="alt"><input name="alt" value="{{ $im->alt }}" aria-label="Text alternativ" placeholder="ex. Ramă neagră, văzută din față"><button class="btn btn--small">Salvează</button></form>
+                            </details>
                             @endcan
-                        </div>
-                    </div>
-                @empty
-                    <p class="muted">Produsul nu are încă poze.</p>
-                @endforelse
+                        </figcaption>
+                    </figure>
+                @endforeach
+                </div>
+                <p class="small muted">★ = poza principală (apare în catalog) · ← → = ordinea în galerie.</p>
                 @can('catalog.edit')
                 <form method="post" action="{{ route('panou.catalog.product.images', $product->id) }}" enctype="multipart/form-data" class="stack" style="margin-top:.75rem">@csrf
                     <div class="field"><label class="field__label" for="poze">Adaugă poze (JPG, PNG, WebP; max. 10 MB; mai multe deodată)</label><input id="poze" type="file" name="poze[]" accept="image/jpeg,image/png,image/webp" multiple required></div>

@@ -30,7 +30,7 @@ class ProductEditorController extends Controller
     {
         return view('catalog::panel.product-new', [
             'brands' => Brand::orderBy('name')->pluck('name', 'id'),
-            'categories' => Category::orderBy('path')->pluck('path', 'id'),
+            'categories' => Category::orderBy('path')->pluck('name', 'id'),
             'attributes' => self::attributes(),
             'defaultCategory' => Category::where('slug', 'rame')->value('id'),
             'canPrice' => $request->user()->can('catalog.prices'),
