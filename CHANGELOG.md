@@ -3,6 +3,18 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.19] — 2026-11-20
+
+Se poate instala direct peste 1.0.0 – 1.0.18.
+
+- **Corectură importantă — plata cu cardul:** la „Plasează comanda” cu plata cu cardul nu se întâmpla nimic, deși
+  datele BT erau corecte. Regulile de securitate ale paginii (Content-Security-Policy, „form-action”) permiteau
+  formularului să trimită doar către site; browserul (Chrome, Edge, Safari) bloca astfel, fără niciun mesaj,
+  trecerea către pagina de plată BT. Acum sunt permise paginile de plată BT iPay (test și producție, inclusiv
+  adresele din Setări → Plăți) și Stripe Checkout. Verificat într-un browser real: după „Plasează comanda”, clientul
+  ajunge pe pagina de plată BT.
+- Comenzile create la încercările blocate au rămas cu plata neîncepută; le puteți anula din Panou → Comenzi.
+
 ## [1.0.18] — 2026-11-20
 
 Se poate instala direct peste 1.0.0 – 1.0.17.

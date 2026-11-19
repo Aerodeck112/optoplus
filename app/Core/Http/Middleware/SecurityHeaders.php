@@ -39,7 +39,7 @@ class SecurityHeaders
             "connect-src 'self' {$connect}",
             "frame-src 'self' {$frames}",
             "frame-ancestors 'self'",
-            "form-action 'self'",
+            "form-action 'self' ".implode(' ', Csp::paymentFormTargets()),
             "base-uri 'self'",
             "object-src 'none'",
         ];
