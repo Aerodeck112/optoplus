@@ -37,6 +37,11 @@
                                     @foreach (($s['validation']['warnings'] ?? []) as $w)<span class="muted">⚠ {{ $w }}</span><br>@endforeach
                                     @if ($s['prescription']['customer_unsure'] ?? false)<x-panou.badge tone="warn">clientul nu înțelege rețeta</x-panou.badge>@endif
                                     @if ($s['prescription']['has_file'] ?? false)<x-panou.badge>rețetă încărcată</x-panou.badge>@endif
+                                    {{-- 1.0.18: rețeta (valori și fișier) se deschide în fișa de lucru, cu acces auditat. --}}
+                                    @php($rxJob = $order->productionJobs->where('order_item_id', $item->id)->sortByDesc('id')->first())
+                                    @if ($rxJob && $item->prescription_id)
+                                        <br>@if (auth()->user()->can('production.view') && auth()->user()->can('prescriptions.view'))<a class="btn btn--small" href="{{ route('panou.production.show', $rxJob->id) }}#reteta" style="margin-top:.35rem"><x-panou.icon name="file" />Vezi rețeta</a>@else<span class="small muted">Rețeta se vede în fișa de lucru {{ $rxJob->number }}, cu dreptul „Consultă rețetele”.</span>@endif
+                                    @endif
                                 @else
                                     {{ $item->sku }}
                                 @endif

@@ -17,7 +17,7 @@
             <tbody>@forelse ($leads as $l)<tr>
                 <td><a class="row-link" href="{{ route('panou.crm.lead', $l->id) }}">{{ $l->name ?? '—' }}</a><br><span class="small muted">{{ $l->phone }} {{ $l->email }}</span></td>
                 <td>{{ \App\Modules\Crm\Models\Lead::SOURCES[$l->source] ?? $l->source }}</td>
-                <td class="small">{{ \Illuminate\Support\Str::limit($l->summary, 90) }}</td>
+                <td class="small">@if($l->prescription_id)<x-panou.badge tone="info">cu rețetă</x-panou.badge> @endif{{ \Illuminate\Support\Str::limit($l->summary, 90) }}</td>
                 <td><x-panou.badge :tone="$l->status === 'noua' ? 'warn' : null">{{ \App\Modules\Crm\Models\Lead::STATUSES[$l->status] ?? $l->status }}</x-panou.badge></td>
                 <td>{{ $l->owner?->name ?? '—' }}</td>
                 <td>{{ $l->created_at->format('d.m.Y H:i') }}</td></tr>

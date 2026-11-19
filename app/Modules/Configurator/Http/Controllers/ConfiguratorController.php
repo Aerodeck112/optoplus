@@ -265,7 +265,7 @@ class ConfiguratorController extends Controller
         Lead::firstOrCreate(['configuration_id' => $cfg->id, 'source' => 'configurator'], [
             'name' => $data['nume'], 'phone' => $data['telefon'], 'email' => $data['email'] ?? null,
             'summary' => 'Clientul nu înțelege rețeta'.($p->files()->exists() ? ' (fișier încărcat)' : ''),
-            'customer_id' => $cfg->customer_id,
+            'customer_id' => $cfg->customer_id, 'prescription_id' => $p->id,
         ]);
 
         return redirect($cfg->stepUrl(2))->with('status', 'Am primit cererea. Un specialist vă contactează; configurația rămâne salvată.');

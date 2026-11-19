@@ -30,7 +30,7 @@
                 @endif
             </x-panou.panel>
 
-            <x-panou.panel title="Rețeta">
+            <x-panou.panel title="Rețeta" id="reteta">
                 @if (! $canRx)
                     <p class="muted">Nu aveți permisiunea de a vedea rețetele.</p>
                 @elseif (! $p)

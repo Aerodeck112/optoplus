@@ -15,6 +15,44 @@
                     <p class="small" style="margin-top:1rem"><strong>Configurația clientului:</strong> {{ $configuration->frameVariant?->displayName() ?? 'fără ramă' }} · {{ $configuration->offering ? $configuration->offering->product->name.' '.$configuration->offering->material->indexLabel() : 'lentilă nealeasă' }} · pasul {{ $configuration->step }}/5. Valorile rețetei sunt vizibile specialistului după plasarea comenzii, în fișa de lucru.</p>
                 @endif
             </x-panou.panel>
+            @if ($lead->prescription_id)
+            {{-- 1.0.18: rețeta trimisă de client odată cu cererea (formularul de ajutor sau configuratorul). --}}
+            <x-panou.panel title="Rețeta trimisă de client">
+                @if (! $canRx)
+                    <p class="muted">Clientul a trimis o rețetă, dar contul dumneavoastră nu are dreptul „Consultă rețetele și fișierele lor”. Un administrator îl poate acorda din Utilizatori → Editează → Drepturi.</p>
+                @elseif (! $lead->prescription)
+                    <p class="muted">Rețeta nu mai este disponibilă (a fost ștearsă la expirarea perioadei de păstrare).</p>
+                @else
+                    @php($p = $lead->prescription)
+                    @php($f = fn ($v, $sign = true) => \App\Modules\Configurator\Support\EyeRx::format($v, $sign))
+                    @php($mm = fn ($v) => $v === null ? '—' : number_format($v / 10, 1, ',', '').' mm')
+                    @php($hasValues = $p->eye('od') || $p->eye('os'))
+                    @if ($hasValues)
+                        <div class="table-wrap"><table class="table">
+                            <thead><tr><th></th><th>SPH</th><th>CYL</th><th>AX</th><th>ADD</th><th>DP</th></tr></thead>
+                            <tbody>
+                            @foreach (['od' => 'OD', 'os' => 'OS'] as $eye => $label)
+                                @php($e = $p->eye($eye))
+                                @php($m = (array) $p->measurements)
+                                <tr><th>{{ $label }}</th><td>{{ $e ? $f($e->sph) : '—' }}</td><td>{{ $e && $e->cyl ? $f($e->cyl) : '—' }}</td><td>{{ $e?->axis ?? '—' }}</td><td>{{ $e && $e->add ? $f($e->add, false) : '—' }}</td>
+                                    <td>{{ $p->pd_mode === 'monocular' ? $mm($m['pd_'.$eye] ?? null) : ($eye === 'od' ? $mm($m['pd'] ?? null) : '') }}</td></tr>
+                            @endforeach
+                            </tbody>
+                        </table></div>
+                    @else
+                        <p class="small muted">Clientul nu a completat valorile; a trimis doar fișierul.</p>
+                    @endif
+                    <div class="cluster" style="margin-top:.5rem">
+                        @forelse ($p->files as $file)
+                            <a class="btn btn--small" href="{{ route('panou.prescriptions.file', $file->uuid) }}" target="_blank" rel="noopener"><x-panou.icon name="file" />Deschide rețeta ({{ $file->mime === 'application/pdf' ? 'PDF' : 'imagine' }})</a>
+                        @empty
+                            <span class="small muted">Fără fișier încărcat.</span>
+                        @endforelse
+                    </div>
+                    <p class="small muted">@if($p->customer_unsure)Clientul a spus că nu înțelege rețeta. @endif Trimisă la {{ $p->created_at->format('d.m.Y H:i') }}@if($p->retention_until) · se păstrează până la {{ $p->retention_until->format('d.m.Y') }}@endif. Consultarea este înregistrată în jurnalul de audit.</p>
+                @endif
+            </x-panou.panel>
+            @endif
             <x-panou.panel title="Note">
                 @can('crm.manage')
                 <form method="post" action="{{ route('panou.crm.lead.note', $lead->id) }}" class="stack">@csrf

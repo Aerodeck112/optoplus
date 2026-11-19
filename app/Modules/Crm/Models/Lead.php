@@ -27,6 +27,12 @@ class Lead extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    /** Rețeta trimisă odată cu cererea (formularul de ajutor sau configuratorul). Se vede doar cu „prescriptions.view”. */
+    public function prescription(): BelongsTo
+    {
+        return $this->belongsTo(\App\Modules\Configurator\Models\Prescription::class);
+    }
+
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');

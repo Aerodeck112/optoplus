@@ -11,7 +11,7 @@ use App\Modules\Crm\Models\Task;
 use App\Modules\Orders\Models\Order;
 use Illuminate\Http\Request;
 
-/** Cererile primite (lead-uri) și sarcinile echipei. Fără valori de rețetă: rețeta se vede în producție. */
+/** Cererile primite (lead-uri) și sarcinile echipei. Rețeta trimisă cu o cerere se vede doar cu dreptul „prescriptions.view” (auditat). */
 class CrmController extends Controller
 {
     public function leads(Request $request)
@@ -32,15 +32,20 @@ class CrmController extends Controller
         return view('crm::panel.leads', ['leads' => $q->latest('id')->paginate(40)->withQueryString(), 'status' => $status, 'filters' => $request->only('sursa', 'q', 'ale_mele')]);
     }
 
-    public function lead(int $id)
+    public function lead(Request $request, int $id)
     {
-        $lead = Lead::with('owner', 'customer', 'notes', 'tasks.assignee')->findOrFail($id);
+        $lead = Lead::with('owner', 'customer', 'notes', 'tasks.assignee', 'prescription.files')->findOrFail($id);
+        // 1.0.18: rețeta trimisă cu cererea, doar pentru cine are dreptul; consultarea se auditează.
+        $canRx = $request->user()->can('prescriptions.view');
+        if ($canRx && $lead->prescription) {
+            Audit::log('prescription.viewed', $lead->prescription, ['context' => 'cerere_crm', 'cerere' => $lead->id], $lead->prescription->customer_id);
+        }
         $configuration = $lead->configuration_id ? Configuration::with('frameVariant.product', 'offering.product', 'offering.material')->find($lead->configuration_id) : null;
         $orders = $lead->customer_id ? Order::where('customer_id', $lead->customer_id)->latest('id')->limit(10)->get()
             : ($lead->email ? Order::where('email', $lead->email)->latest('id')->limit(10)->get() : collect());
 
         return view('crm::panel.lead', [
-            'lead' => $lead, 'configuration' => $configuration, 'orders' => $orders,
+            'lead' => $lead, 'configuration' => $configuration, 'orders' => $orders, 'canRx' => $canRx,
             'users' => User::where('is_active', true)->permission('crm.manage')->orderBy('name')->pluck('name', 'id'),
             'authors' => User::whereIn('id', $lead->notes->pluck('created_by')->filter())->pluck('name', 'id'),
         ]);

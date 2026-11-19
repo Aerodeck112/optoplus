@@ -3,6 +3,19 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.18] — 2026-11-20
+
+Se poate instala direct peste 1.0.0 – 1.0.17.
+
+- **Rețeta trimisă cu o cerere se vede acum în CRM:** când clientul trimite rețeta prin formularul „Ajutor la
+  alegerea lentilelor” (sau spune în configurator că nu înțelege rețeta), pagina cererii (Cereri primite → cererea)
+  are secțiunea „Rețeta trimisă de client”, cu valorile completate și butonul „Deschide rețeta” pentru fișier.
+  În lista cererilor apare eticheta „cu rețetă”. Cererile primite înainte de actualizare se leagă automat de rețeta lor.
+- Rețeta o vede doar cine are dreptul „Consultă rețetele și fișierele lor” (implicit: specialist optic și producție;
+  se poate acorda din Utilizatori → Editează → Drepturi). Ceilalți văd doar că există o rețetă. Fiecare deschidere
+  se înregistrează în jurnalul de audit.
+- Pe pagina comenzii, la ochelarii cu rețetă: butonul **„Vezi rețeta”**, care deschide fișa de lucru direct la rețetă.
+
 ## [1.0.17] — 2026-11-19
 
 Se poate instala direct peste 1.0.0 – 1.0.16.

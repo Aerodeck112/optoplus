@@ -109,7 +109,7 @@ class FormController extends Controller
             $lead = Lead::create([
                 'source' => 'ajutor_lentile', 'name' => $data['name'], 'email' => $data['email'], 'phone' => $data['phone'],
                 'summary' => 'Utilizare: '.(\App\Modules\Configurator\Support\ConfigurationInput::USAGES[$data['usage'] ?? 'nu_stiu'] ?? '—').($prescriptionId ? ' · rețetă încărcată (#'.$prescriptionId.')' : ''),
-                'customer_id' => $customerId,
+                'customer_id' => $customerId, 'prescription_id' => $prescriptionId,
             ]);
             if (! empty($data['message'])) {
                 $lead->notes()->create(['body' => mb_substr($data['message'], 0, 2000)]);
