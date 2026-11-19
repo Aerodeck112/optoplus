@@ -37,8 +37,22 @@ class OrderNotifier
         $locale = $order->locale ?: 'ro'; // emailul către client, în limba în care a comandat
         DB::afterCommit(function () use ($kind, $email, $orderId, $to, $locale) {
             self::safely(fn () => Notification::route('mail', $email)->notify((new OrderUpdate($orderId, $kind, $to))->locale($locale)), $orderId, $kind);
-            if ($kind === 'placed' && ($staff = $this->settings->get('notifications.orders_email'))) {
+            // Echipa (toate adresele din Setări → Contact): comandă nouă, plată primită, comandă anulată.
+            $staff = \App\Core\Notifications\StaffRecipients::emails();
+            if ($staff !== [] && $kind === 'placed') {
                 self::safely(fn () => Notification::route('mail', $staff)->notify(new NewOrderForStaff($orderId)), $orderId, 'staff');
+            } elseif ($staff !== [] && in_array($kind, ['paid', 'cancelled'], true)) {
+                self::safely(function () use ($orderId, $kind) {
+                    $order = \App\Modules\Orders\Models\Order::find($orderId);
+                    if ($order) {
+                        $amount = \App\Core\Support\Money::format($order->total, true, $order->currency);
+                        \App\Core\Notifications\StaffAlert::send(
+                            $kind === 'paid' ? "Plată primită: comanda {$order->number}" : "Comandă anulată: {$order->number}",
+                            [$kind === 'paid' ? "Comanda {$order->number} ({$amount}) a fost plătită ({$order->paymentMethodLabel()})." : "Comanda {$order->number} ({$amount}) a fost anulată."],
+                            url('/panou/comenzi/'.$order->uuid.'/'),
+                        );
+                    }
+                }, $orderId, 'staff-'.$kind);
             }
         });
     }

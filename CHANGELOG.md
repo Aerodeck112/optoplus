@@ -3,6 +3,39 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.17] — 2026-11-19
+
+Se poate instala direct peste 1.0.0 – 1.0.16.
+
+- **Siteul se deschide în limba și valuta țării vizitatorului** (la prima vizită): din Ungaria în maghiară, cu
+  prețuri în forinți; din alte țări în engleză, cu prețuri în euro; din România în română, în lei. Vizitatorul
+  poate schimba apoi limba din meniu. Roboții motoarelor de căutare nu sunt redirecționați. Țara se află din
+  adresa IP cu baza gratuită DB-IP (descărcată lunar pe server; IP-ul nu pleacă nicăieri) sau din Cloudflare,
+  dacă siteul trece prin el.
+- **Prețuri în euro și forinți**, calculate din lei la cursul de referință BNR (citit automat în fiecare zi
+  lucrătoare) — sau la un curs introdus manual, plus un adaos opțional. Fără curs, siteul rămâne în lei.
+  Totalurile, reducerile și livrarea se calculează direct în valuta clientului. Comanda păstrează valuta, cursul
+  folosit și echivalentul în lei (vizibile în panou). Panoul și portalul partenerilor rămân în lei.
+- **Livrare în afara României:** Ungaria 20 € (afișat în forinți), celelalte țări europene 25 €; România rămâne
+  22 lei. La finalizarea comenzii clientul alege țara; câmpurile adresei se adaptează (județ doar pentru România).
+  **Plata ramburs doar pentru livrările în România.** Tarifele și lista țărilor: Setări → Livrare și termene.
+- **Stripe** pentru plata cu cardul în euro și forinți (Setări → Plăți: cheia secretă și secretul webhookului,
+  cu pașii explicați și buton „Testează conexiunea Stripe”). Comenzile în lei se plătesc în continuare prin
+  **Banca Transilvania iPay** — utilizatorul și parola API de la BT se completează în aceeași pagină
+  (Setări plăți și livrare → Plăți), apoi „Testează conexiunea BT iPay” și bifa „Plata cu cardul este activă”.
+- **Notificări interne pe mai multe adrese** (implicit office@optoplus.ro și jeremias@optica-optofarm.ro):
+  comandă nouă, plată primită, comandă anulată și orice cerere de pe site (contact, parteneriat, ajutor la
+  lentile, verificare din configurator). Adresele se schimbă din Setări → Contact.
+- **Utilizatori:** buton „Editează” în listă; în fișa utilizatorului, pe lângă roluri, se pot bifa drepturi
+  suplimentare (grupate pe module). Un coleg poate acorda doar drepturi pe care le are și el; modificările se
+  auditează.
+- Setări → **Valute și țări**: cursul curent, „Citește acum cursul BNR”, cursul manual, adaosul, detectarea limbii
+  după țară (se poate opri) și „Descarcă acum baza de țări (DB-IP)”.
+- Traducerile noi (țări, livrare, mesaje) în engleză și maghiară; sumele în euro și forinți se traduc corect în
+  textele existente.
+- Corectură: formularele de pe site (contact, parteneriat, ajutor la lentile) dădeau „prea multe cereri” dacă
+  clientul tocmai trecuse prin configurator; limita de 6 trimiteri pe minut se numără acum separat.
+
 ## [1.0.16] — 2026-11-14
 
 Se poate instala direct peste 1.0.0 – 1.0.15.

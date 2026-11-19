@@ -13,6 +13,7 @@ use App\Modules\Pricing\Support\PricedComponent;
 use App\Modules\Pricing\Support\PriceLine;
 use App\Modules\Pricing\Support\PricingContext;
 use App\Modules\Pricing\Support\Quote;
+use App\Modules\Regions\Services\ExchangeRates;
 use App\Modules\Shipping\Services\ShippingCalculator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -27,12 +28,25 @@ use Illuminate\Support\Facades\DB;
  *  3. promoțiile la nivel de comandă, repartizate proporțional pe componente (pentru TVA corect);
  *  4. TVA pe fiecare componentă, după reduceri;
  *  5. livrarea, din regulile metodei alese, pe valoarea mărfii după reduceri.
+ *
+ * 1.0.17: calculul se face direct în valuta contextului (lei, euro, forinți). Prețurile din catalog, sumele fixe ale
+ * promoțiilor și pragurile sunt în lei și se convertesc la intrare (prețul unitar, la cursul zilei); restul calculului
+ * (reduceri procentuale, TVA, totaluri) rămâne identic, deci totalul afișat este exact suma liniilor.
  */
 class PriceEngine
 {
     public const VERSION = '1.0';
 
-    public function __construct(private VatRates $vat, private ShippingCalculator $shipping) {}
+    /** Valuta calculului în curs. */
+    private string $currency = 'RON';
+
+    public function __construct(private VatRates $vat, private ShippingCalculator $shipping, private ExchangeRates $rates) {}
+
+    /** O sumă din catalog (lei) în valuta calculului curent. */
+    private function fromRon(int $bani): int
+    {
+        return $this->rates->fromRon($bani, $this->currency);
+    }
 
     public function quoteConfiguration(ConfigurationInput $input, PricingContext $ctx, int $quantity = 1): Quote
     {
@@ -43,6 +57,8 @@ class PriceEngine
     public function quote(array $lines, PricingContext $ctx): Quote
     {
         $quote = new Quote($ctx->basisIncludesVat(), self::VERSION);
+        $this->currency = $ctx->currency;
+        $quote->currency = $ctx->currency;
 
         foreach ($lines as $line) {
             $quote->lines[$line->key] = $this->priceLine($line, $ctx);
@@ -188,7 +204,7 @@ class PriceEngine
     {
         $list = $ctx->priceList;
         if ($list === null) {
-            return [$b2cGross, 'b2c'];
+            return [$this->fromRon($b2cGross), 'b2c'];
         }
         $item = PriceListItem::query()
             ->where('price_list_id', $list->id)->where('item_type', $type)->where('item_id', $id)
@@ -262,7 +278,7 @@ class PriceEngine
             if ($p->requires_coupon && ! isset($couponPromotions[$p->id])) {
                 return false;
             }
-            if ($p->min_order_total !== null && $quote->subtotal < $p->min_order_total) {
+            if ($p->min_order_total !== null && $quote->subtotal < $this->fromRon((int) $p->min_order_total)) {
                 return false;
             }
             // Codul primit de beneficiar ține loc de declarație (dovada se verifică la comandă).
@@ -308,8 +324,8 @@ class PriceEngine
         $d = match ($p->type) {
             // „din prețul inițial”: reducerile cumulate se adună (25% + 10% = 35%), ca în modulul WordPress
             'percent' => Money::percent($p->percent_of_original && $original !== null ? $original : $remaining, (int) $p->value),
-            'fixed_amount' => (int) $p->value * $quantity,
-            'fixed_price' => $remaining - (int) $p->value * $quantity,
+            'fixed_amount' => $this->fromRon((int) $p->value) * $quantity,
+            'fixed_price' => $remaining - $this->fromRon((int) $p->value) * $quantity,
             default => 0,
         };
 
@@ -346,7 +362,7 @@ class PriceEngine
             if ($base <= 0 || $exclusiveApplied || (! $p->stackable && $quote->orderDiscounts !== [])) {
                 continue;
             }
-            $amount = $p->type === 'percent' ? Money::percent($base, (int) $p->value) : min((int) $p->value, $base);
+            $amount = $p->type === 'percent' ? Money::percent($base, (int) $p->value) : min($this->fromRon((int) $p->value), $base);
             if ($amount <= 0) {
                 continue;
             }
@@ -408,7 +424,7 @@ class PriceEngine
         if (! $ctx->shippingMethodCode) {
             return;
         }
-        $s = $this->shipping->quote($ctx->shippingMethodCode, $goodsGross, null, $ctx->channel);
+        $s = $this->shipping->quote($ctx->shippingMethodCode, $goodsGross, null, $ctx->channel, $ctx->shippingCountry, $ctx->currency);
         if ($s === null) {
             $quote->errors[] = 'Metoda de livrare aleasă nu este disponibilă pentru această comandă.';
 

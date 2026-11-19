@@ -2,7 +2,7 @@
 @extends('layouts.site')
 @section('title', 'Coșul meu')
 @section('robots', 'noindex, nofollow')
-@php($fmt = fn ($v) => \App\Core\Support\Money::format($v))
+@php($fmt = fn ($v) => \App\Core\Support\Money::format($v, true, $quote->currency))
 @section('content')
 <div class="wrap page-pad">
     <h1>Coșul meu</h1>

@@ -48,7 +48,7 @@ class LensShowcase
     /** Prețul unei oferte fără tratamente, prin motorul de preț (promoțiile pe lentile incluse). */
     public function offeringPrice(LensOffering $o): int
     {
-        return $this->prices->quoteConfiguration(new ConfigurationInput(entry: 'fara_rama', offeringId: $o->id), new PricingContext)->totalGross;
+        return $this->prices->quoteConfiguration(new ConfigurationInput(entry: 'fara_rama', offeringId: $o->id), PricingContext::b2c())->totalGross;
     }
 
     /** @return Collection<int, Product> lentilele publicate, cu ofertele vandabile */

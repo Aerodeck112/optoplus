@@ -28,7 +28,10 @@ class PageCache
 
         // Versiunea aplicației face parte din cheie: după o actualizare (CSS/JS noi, cu alte nume de fișiere),
         // paginile păstrate de versiunea veche nu mai sunt servite.
-        return sha1($this->generation().'|'.config('optoplus.version').'|'.$path.'|'.http_build_query($query));
+        // 1.0.17: aceeași pagină are prețuri diferite în lei, euro și forinți.
+        $currency = app(\App\Modules\Regions\Services\Regions::class)->currency();
+
+        return sha1($this->generation().'|'.config('optoplus.version').'|'.$path.'|'.$currency.'|'.http_build_query($query));
     }
 
     public function get(string $key): ?string

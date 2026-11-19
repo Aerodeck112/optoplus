@@ -36,20 +36,20 @@ class OrderUpdate extends Notification implements ShouldQueue
         switch ($this->kind) {
             case 'placed':
                 $mail->subject("Am primit comanda {$order->number}")
-                    ->line("Vă mulțumim! Am primit comanda {$order->number}, în valoare de ".Money::format($order->total).'.');
+                    ->line("Vă mulțumim! Am primit comanda {$order->number}, în valoare de ".Money::format($order->total, true, $order->currency).'.');
                 foreach ($order->items as $item) {
-                    $mail->line("• {$item->quantity} × {$item->name} — ".Money::format($item->line_total));
+                    $mail->line("• {$item->quantity} × {$item->name} — ".Money::format($item->line_total, true, $order->currency));
                 }
                 if ($order->requiresProduction()) {
                     $mail->line('Lentilele se produc în laboratorul nostru după comandă. Un specialist optic verifică rețeta înainte de producție și vă contactează dacă e nevoie de o clarificare.');
                 }
                 if ($order->payment_method === 'transfer_bancar' && ($bank = app(PaymentMethods::class)->bankDetails())) {
-                    $mail->line("Plata prin transfer: {$bank['beneficiary']}, IBAN {$bank['iban']}".($bank['bank'] ? ", {$bank['bank']}" : '').", suma ".Money::format($order->balanceDue()).", cu mențiunea „Comanda {$order->number}”.");
+                    $mail->line("Plata prin transfer: {$bank['beneficiary']}, IBAN {$bank['iban']}".($bank['bank'] ? ", {$bank['bank']}" : '').", suma ".Money::format($order->balanceDue(), true, $order->currency).", cu mențiunea „Comanda {$order->number}”.");
                 }
                 break;
             case 'paid':
                 $mail->subject("Plata pentru comanda {$order->number} a fost confirmată")
-                    ->line('Am primit plata de '.Money::format($order->paid_total).'. Vă anunțăm pe email la fiecare etapă importantă.');
+                    ->line('Am primit plata de '.Money::format($order->paid_total, true, $order->currency).'. Vă anunțăm pe email la fiecare etapă importantă.');
                 break;
             case 'production':
                 $stage = ProductionStage::where('code', $this->detail)->first();

@@ -12,7 +12,7 @@
             <td>{{ $o->items_count ?? $o->items()->count() }}</td>
             <td>{{ $o->commercial_status === 'anulata' ? 'Anulată' : (\App\Modules\Production\Models\ProductionStage::where('code', $o->production_status)->value('customer_label') ?? '—') }}</td>
             <td>{{ $o->paymentLabel() }}</td>
-            <td class="num">{{ \App\Core\Support\Money::format($o->total) }}</td>
+            <td class="num">{{ \App\Core\Support\Money::format($o->total, true, $o->currency) }}</td>
         </tr>
     @endforeach
     </tbody>

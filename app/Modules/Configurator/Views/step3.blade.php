@@ -25,7 +25,7 @@
                                 <input type="radio" name="oferta" value="{{ $o->id }}" @checked(old('oferta', $cfg->lens_offering_id) == $o->id) @disabled(! $opt['available']) required data-calc data-family="{{ $g['family']->code }}" data-index="{{ $o->material->refractive_index }}">
                                 <span class="choice__mark"></span>
                                 <span class="choice__body">
-                                    <span class="choice__title"><span>Indice {{ $o->material->indexLabel() }}</span><span>{{ \App\Core\Support\Money::format($opt['price']) }}</span></span>
+                                    <span class="choice__title"><span>Indice {{ $o->material->indexLabel() }}</span><span>{{ \App\Core\Support\Money::format($opt['price'], true, app(\App\Modules\Regions\Services\Regions::class)->currency()) }}</span></span>
                                     <span class="choice__text">{{ $o->material->customer_description }} · {{ $o->product->sale_unit === 'pair' ? 'preț pe pereche' : 'preț pe bucată' }}</span>
                                     @if (! $opt['available'])<span class="choice__reason" id="na-{{ $g['product']->id }}">{{ $opt['reason'] }}</span>@endif
                                     @foreach ($opt['warnings'] as $w)<span class="choice__text"><x-site.icon name="info" :size="16" /> {{ $w }}</span>@endforeach

@@ -1,5 +1,6 @@
 {{-- Acțiunile rapide pentru un cont: retrimiterea invitației / a linkului de parolă și ștergerea sau dezactivarea. --}}
 <div class="row-actions__inner">
+    <a class="btn btn--small" href="{{ route('panou.users.edit', $u) }}">Editează</a>
     <form method="post" action="{{ route('panou.users.send-reset', $u) }}">@csrf<button class="btn btn--small" type="submit" title="{{ $u->last_login_at ? 'Trimite pe email un link pentru setarea unei parole noi' : 'Trimite din nou emailul pentru setarea parolei' }}">{{ $u->last_login_at ? 'Resetare parolă' : 'Retrimite invitația' }}</button></form>
     @unless ($u->is(auth()->user()))
         @if (! $u->last_login_at)

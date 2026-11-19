@@ -13,13 +13,13 @@
                     @default {{ $c->quantity }} buc.
                 @endswitch
             </small></dt>
-            <dd>{{ \App\Core\Support\Money::format($c->amount()) }}</dd>
+            <dd>{{ \App\Core\Support\Money::format($c->amount(), true, $quote->currency) }}</dd>
             @foreach ($c->discounts as $d)
-                <dt class="discount"><small>{{ $d['label'] }}</small></dt><dd class="discount">−{{ \App\Core\Support\Money::format($d['amount']) }}</dd>
+                <dt class="discount"><small>{{ $d['label'] }}</small></dt><dd class="discount">−{{ \App\Core\Support\Money::format($d['amount'], true, $quote->currency) }}</dd>
             @endforeach
         @endforeach
     </dl>
-    <div class="summary__total"><span>Total</span><span data-total-inline>{{ \App\Core\Support\Money::format($quote->totalGross) }}</span></div>
+    <div class="summary__total"><span>Total</span><span data-total-inline>{{ \App\Core\Support\Money::format($quote->totalGross, true, $quote->currency) }}</span></div>
     <p class="summary__note">{{ \App\Core\Support\Tax::note() }} Transportul se calculează în coș, după alegerea livrării.</p>
 @endif
 @if ($validation->requiresReview())

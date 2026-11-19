@@ -22,6 +22,31 @@ class ModuleServiceProvider extends BaseProvider
         return 'CRM';
     }
 
+    public function boot(): void
+    {
+        parent::boot();
+        // 1.0.17: orice cerere nouă venită de pe site (contact, parteneriat, ajutor la lentile, configurator, asistent)
+        // ajunge și pe emailurile interne. Cererile adăugate de echipă în panou nu trimit anunț.
+        Lead::created(function (Lead $lead): void {
+            if (in_array($lead->source, ['manual', 'telefon'], true) || Auth::guard('web')->check()) {
+                return;
+            }
+            $id = $lead->id;
+            \Illuminate\Support\Facades\DB::afterCommit(function () use ($id): void {
+                $lead = Lead::find($id);
+                if (! $lead) {
+                    return;
+                }
+                $source = Lead::SOURCES[$lead->source] ?? $lead->source;
+                \App\Core\Notifications\StaffAlert::send("Cerere nouă: {$source}", array_values(array_filter([
+                    "{$source} de la {$lead->name}.",
+                    $lead->phone ? "Telefon: {$lead->phone}" : null,
+                    $lead->email ? "Email: {$lead->email}" : null,
+                ])), url('/panou/crm/cereri/'.$lead->id));
+            });
+        });
+    }
+
     public function permissions(): array
     {
         return [

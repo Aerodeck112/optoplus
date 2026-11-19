@@ -23,6 +23,26 @@
                         </div>
                     </fieldset>
                     <x-panou.field name="is_active" type="checkbox" label="Cont activ" :value="$user->is_active" full />
+                    {{-- 1.0.17: drepturi suplimentare, pe lângă cele din roluri. --}}
+                    <fieldset class="field--full perm-grid">
+                        <legend>Drepturi</legend>
+                        <p class="small muted">Bifele gri vin din rolurile alese (se schimbă din roluri). Bifați în plus doar ce trebuie să mai poată face această persoană. Puteți acorda doar drepturi pe care le aveți și dumneavoastră.</p>
+                        @php($checked = old('permissions', $direct))
+                        @foreach ($permissions as $module => $perms)
+                            <details class="perm-group" @if(array_intersect(array_keys($perms), array_merge($checked, $fromRoles))) open @endif>
+                                <summary><strong>{{ $module }}</strong> <span class="small muted">({{ count(array_intersect(array_keys($perms), array_merge($checked, $fromRoles))) }} din {{ count($perms) }})</span></summary>
+                                <div class="grid grid--2" style="gap:.35rem .75rem; margin:.5rem 0 .75rem">
+                                    @foreach ($perms as $name => $label)
+                                        @php($viaRole = in_array($name, $fromRoles, true))
+                                        <label class="check small" @if($viaRole) title="Acordat prin rol" @endif>
+                                            <input type="checkbox" name="permissions[]" value="{{ $name }}" @checked($viaRole || in_array($name, $checked, true)) @disabled($viaRole)>
+                                            <span>{{ $label }}@if($viaRole) <span class="muted">(din rol)</span>@endif</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </details>
+                        @endforeach
+                    </fieldset>
                 </div>
                 <div class="form-actions">
                     <button class="btn btn--primary" type="submit">{{ $user->exists ? 'Salvează modificările' : 'Creează contul' }}</button>

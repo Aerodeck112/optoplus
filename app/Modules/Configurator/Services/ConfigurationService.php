@@ -102,7 +102,7 @@ class ConfigurationService
     public function context(): PricingContext
     {
         // Prețurile partenerilor B2B se calculează în portalul B2B, cu lista lor; configuratorul public este B2C.
-        return new PricingContext(customerId: Auth::guard('client')->id());
+        return PricingContext::b2c(['customerId' => Auth::guard('client')->id()]);
     }
 
     private function channel(?Customer $customer): string

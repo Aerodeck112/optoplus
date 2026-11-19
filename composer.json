@@ -11,6 +11,7 @@
         "ezyang/htmlpurifier": "^4.19",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
+        "maxmind-db/reader": "^1.12",
         "pragmarx/google2fa": "^9.1",
         "spatie/laravel-permission": "^8.3"
     },

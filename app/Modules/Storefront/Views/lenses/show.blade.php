@@ -62,7 +62,7 @@
                 <section class="box">
                     <h2>Tratamente disponibile</h2>
                     @foreach ($treatments as $t)
-                        <details class="faq"><summary>{{ $t['treatment']->name }} · +{{ \App\Core\Support\Money::format($t['price_min']) }}<x-site.icon name="chevron-down" /></summary>
+                        <details class="faq"><summary>{{ $t['treatment']->name }} · +{{ \App\Core\Support\Money::display($t['price_min']) }}<x-site.icon name="chevron-down" /></summary>
                             <div><p><strong>Ce face:</strong> {{ $t['treatment']->benefits }}</p><p><strong>Limite:</strong> {{ $t['treatment']->limits }}</p>
                             @if ($t['treatment']->brand_note)<p class="small muted">{{ $t['treatment']->brand_note }}</p>@endif
                             @if ($t['treatment']->datasheet)<p><a href="{{ $t['treatment']->datasheet->url() }}">Fișa tehnică (PDF)</a></p>@endif</div>

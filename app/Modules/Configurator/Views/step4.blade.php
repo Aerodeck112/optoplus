@@ -22,7 +22,7 @@
                     <label class="check" style="flex: 1">
                         <input type="checkbox" name="tratamente[]" value="{{ $t->id }}" @checked(! $why && $chosen->has($t->id)) @disabled($why) data-calc data-treatment="{{ $t->id }}" @if($t->requires_option) data-needs-option @endif>
                         <span class="choice__body">
-                            <span class="choice__title"><span>{{ $t->name }}</span><span class="tx-price">@if($ot->is_included) inclus @else +{{ \App\Core\Support\Money::format($ot->price) }} @endif @unless($why)<span class="tx-state" aria-hidden="true"><span class="tx-state__off">Adaugă</span><span class="tx-state__on">✓ Adăugat</span></span>@endunless</span></span>
+                            <span class="choice__title"><span>{{ $t->name }}</span><span class="tx-price">@if($ot->is_included) inclus @else +{{ \App\Core\Support\Money::display($ot->price) }} @endif @unless($why)<span class="tx-state" aria-hidden="true"><span class="tx-state__off">Adaugă</span><span class="tx-state__on">✓ Adăugat</span></span>@endunless</span></span>
                             <span class="choice__text"><strong>Ce face:</strong> {{ $t->benefits }}</span>
                             <span class="choice__text"><strong>Limite:</strong> {{ $t->limits }}</span>
                             @if ($why)<span class="choice__blocked"><strong>Nu este disponibil pentru alegerea ta:</strong> {{ $why }}</span>@endif
@@ -42,7 +42,7 @@
                 @php($maxDark = ['transitions' => 80, 'fotocromatic' => 60])
                 <div class="choice photo-group @if($allBlocked) choice--blocked @endif" data-photo-group>
                     <div class="photo-group__head">
-                        <span class="choice__title"><span>Lentile fotocromatice</span><span class="tx-price">@if ($prices->count() === 1) +{{ \App\Core\Support\Money::format($prices[0]) }} @else de la +{{ \App\Core\Support\Money::format($prices->min()) }} @endif</span></span>
+                        <span class="choice__title"><span>Lentile fotocromatice</span><span class="tx-price">@if ($prices->count() === 1) +{{ \App\Core\Support\Money::display($prices[0]) }} @else de la +{{ \App\Core\Support\Money::display($prices->min()) }} @endif</span></span>
                         <span class="choice__text">Se închid la culoare afară, la soare, și redevin aproape transparente în interior: o singură pereche pentru interior și exterior.</span>
                         @if ($allBlocked)
                             <span class="choice__blocked"><strong>Nu este disponibil pentru alegerea ta:</strong> {{ $blocked[$photo[0]->treatment_id] }}</span>
@@ -59,7 +59,7 @@
                                     <input type="checkbox" name="tratamente[]" value="{{ $t->id }}" @checked(! $why && $chosen->has($t->id)) @disabled($why) data-calc data-treatment="{{ $t->id }}" @if($t->requires_option) data-needs-option @endif data-exclusive="fotocromatic" data-photo-variant="{{ $t->kind === 'fotocromatic_condus' ? 'xtractive' : 'helio' }}" @isset($maxDark[$t->code]) data-photo-max="{{ $maxDark[$t->code] }}" @endisset>
                                     <span class="choice__body">
                                         @isset($tagline[$t->code])<span class="photo-variant__tag">{{ $tagline[$t->code] }}</span>@endisset
-                                        <span class="choice__title"><span>{{ trim(preg_replace(['/^Fotocromatic\s+/u', '/\s*\(și pentru condus\)$/u'], '', $t->name)) ?: $t->name }}</span><span class="tx-price">@if ($prices->count() > 1)@if($ot->is_included) inclus @else +{{ \App\Core\Support\Money::format($ot->price) }} @endif @endif @unless($why)<span class="tx-state" aria-hidden="true"><span class="tx-state__off">Alege</span><span class="tx-state__on">✓ Ales</span></span>@endunless</span></span>
+                                        <span class="choice__title"><span>{{ trim(preg_replace(['/^Fotocromatic\s+/u', '/\s*\(și pentru condus\)$/u'], '', $t->name)) ?: $t->name }}</span><span class="tx-price">@if ($prices->count() > 1)@if($ot->is_included) inclus @else +{{ \App\Core\Support\Money::display($ot->price) }} @endif @endif @unless($why)<span class="tx-state" aria-hidden="true"><span class="tx-state__off">Alege</span><span class="tx-state__on">✓ Ales</span></span>@endunless</span></span>
                                         <span class="choice__text">{{ $t->benefits }}</span>
                                         @if ($why && ! $allBlocked)<span class="choice__blocked"><strong>Nu este disponibil pentru alegerea ta:</strong> {{ $why }}</span>@endif
                                     </span>

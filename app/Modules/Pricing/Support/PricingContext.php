@@ -9,10 +9,14 @@ use DateTimeInterface;
 /**
  * Contextul unui calcul de preț: canal, lista de preț a partenerului, clientul (pentru limitele de utilizare),
  * cuponul, metoda de livrare și categoria de beneficiar declarată (verificată ulterior de vânzări).
+ *
+ * 1.0.17: valuta calculului (RON, EUR, HUF) și țara de livrare. Listele de preț B2B sunt mereu în lei.
  */
 final class PricingContext
 {
     public readonly DateTimeInterface $now;
+
+    public readonly string $currency;
 
     public function __construct(
         public readonly string $channel = 'b2c',
@@ -23,12 +27,18 @@ final class PricingContext
         public readonly ?string $shippingMethodCode = null,
         public readonly ?string $declaredBeneficiary = null,
         ?DateTimeInterface $now = null,
+        string $currency = 'RON',
+        public readonly ?string $shippingCountry = null,
     ) {
         $this->now = $now ?? new DateTimeImmutable;
+        $this->currency = $priceList !== null || $channel !== 'b2c' ? 'RON' : strtoupper($currency);
     }
 
+    /** Context B2C în valuta vizitatorului (lei, euro sau forinți, după limba siteului). */
     public static function b2c(array $overrides = []): self
     {
+        $overrides += ['currency' => app(\App\Modules\Regions\Services\Regions::class)->currency()];
+
         return new self(...$overrides);
     }
 
@@ -56,7 +66,7 @@ final class PricingContext
             'channel' => $this->channel, 'priceList' => $this->priceList, 'customerId' => $this->customerId,
             'organizationId' => $this->organizationId, 'couponCode' => $this->couponCode,
             'shippingMethodCode' => $this->shippingMethodCode, 'declaredBeneficiary' => $this->declaredBeneficiary,
-            'now' => $this->now,
+            'now' => $this->now, 'currency' => $this->currency, 'shippingCountry' => $this->shippingCountry,
         ];
 
         return new self(...array_merge($data, $changes));

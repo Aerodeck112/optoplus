@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Aplică setările care au și o reprezentare în date: metoda „Livrare prin curier” și tarifele ei
- * (un tarif fix în România și, opțional, gratuitate de la un prag).
+ * (un tarif fix în România și, opțional, gratuitate de la un prag), plus livrarea în Ungaria și în alte țări.
  */
 class ApplySettings
 {
@@ -35,5 +35,7 @@ class ApplySettings
                 }
             }
         });
+        // Ungaria și celelalte țări (tarife în euro, fără ramburs).
+        \App\Modules\Shipping\Support\InternationalShipping::apply();
     }
 }

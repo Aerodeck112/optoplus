@@ -45,6 +45,9 @@ final class Quote
 
     public int $totalGross = 0;
 
+    /** Valuta tuturor sumelor din acest calcul (RON, EUR, HUF). */
+    public string $currency = 'RON';
+
     public function __construct(public readonly bool $basisIncludesVat, public readonly string $version) {}
 
     /** @return list<PricedComponent> */
@@ -113,6 +116,7 @@ final class Quote
     {
         return [
             'version' => $this->version,
+            'currency' => $this->currency,
             'basis_includes_vat' => $this->basisIncludesVat,
             'lines' => array_map(fn ($l) => [
                 'key' => $l['key'], 'kind' => $l['kind'], 'label' => $l['label'], 'quantity' => $l['quantity'],

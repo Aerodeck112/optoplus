@@ -27,7 +27,7 @@ class NewOrderForStaff extends Notification implements ShouldQueue
 
         return (new MailMessage)
             ->subject("Comandă nouă {$order->number}")
-            ->line("Comanda {$order->number}: ".Money::format($order->total).", plată: {$order->paymentMethodLabel()}.")
+            ->line("Comanda {$order->number}: ".Money::format($order->total, true, $order->currency).", plată: {$order->paymentMethodLabel()}.")
             ->line($order->requiresProduction() ? 'Conține lentile: necesită verificarea rețetei de către un specialist.' : 'Fără producție.')
             ->action('Deschide în panou', url('/panou/comenzi/'.$order->uuid.'/'));
     }

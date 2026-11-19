@@ -41,7 +41,11 @@ Citește întâi: `docs/ARHITECTURA.md`, `docs/SCHEMA-BD.md`, `docs/STATUS.md`, 
   `Views/` (namespace = cheia modulului), `Models/`, `Services/`, `Http/Controllers/`, `Policies/`, `Console/`.
 - Modulul declară `permissions()`, `roleGrants()`, `navigation()`, `dashboardWidgets()`, `schedule()`.
   După permisiuni noi: `php artisan optoplus:sync-permissions` și `php artisan optoplus:permissions-matrix`.
-- Bani: întregi în bani (`App\Core\Support\Money`), RON. Procente în puncte de bază.
+- Bani: întregi în subunități (`App\Core\Support\Money`); catalogul e în RON. Procente în puncte de bază.
+  Valute (1.0.17): siteul în maghiară afișează HUF, cel în engleză EUR, calculate din lei la cursul BNR
+  (`Regions\Services\ExchangeRates`); `PriceEngine` calculează direct în valuta din `PricingContext`.
+  Nu formata o sumă fără monedă: `Money::format($suma, true, $quote->currency / $order->currency)`, iar prețurile
+  brute din catalog (lei) cu `Money::display()`. Panoul și B2B rămân în lei.
 - Migrări în `database/migrations/`, prefix de dată pe modul (ordinea contează): `2026_01_01` core ·
   `2026_01_05` customers · `2026_02_*` cms · `2026_03_*` catalog · `2026_04_*` lenses · `2026_05_*` pricing ·
   `2026_06_*` configurator · `2026_07_*` notifications, shop, orders, payments, shipping, invoicing ·

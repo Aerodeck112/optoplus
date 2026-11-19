@@ -2,7 +2,7 @@
 @extends('layouts.site')
 @section('title', 'Finalizează comanda')
 @section('robots', 'noindex, nofollow')
-@php($fmt = fn ($v) => \App\Core\Support\Money::format($v))
+@php($fmt = fn ($v) => \App\Core\Support\Money::format($v, true, $quote->currency))
 @php($v = fn ($k, $d = null) => old($k, $d))
 @section('content')
 <div class="wrap page-pad">
@@ -34,6 +34,15 @@
 
             <section class="box form" aria-labelledby="facturare">
                 <h2 id="facturare">Date de facturare</h2>
+                {{-- 1.0.17: țara schimbă livrarea, metodele de plată (ramburs doar în România) și prețurile. --}}
+                <div class="field field--country">
+                    <label for="tara">Țara de livrare</label>
+                    <select id="tara" name="tara" autocomplete="country" data-recalc>
+                        @foreach ($countries as $code => $name)<option value="{{ $code }}" @selected($country === $code)>{{ $name }}</option>@endforeach
+                    </select>
+                    @if ($country !== 'RO')<span class="hint">Plata ramburs este disponibilă doar pentru livrările în România.</span>@endif
+                    @if ($country === 'RO' && $quote->currency !== 'RON')<span class="hint">Pentru plata în lei sau ramburs, comandați din <a href="/comanda/" data-no-localize lang="ro">versiunea în română a siteului</a>.</span>@endif
+                </div>
                 <fieldset class="choices choices--inline">
                     <legend class="sr-only">Tip client</legend>
                     <label class="check"><input type="radio" name="tip" value="pf" @checked($v('tip', 'pf') === 'pf')><span>Persoană fizică</span></label>
@@ -48,8 +57,13 @@
                 <div class="field"><label for="adresa">Adresa (stradă, număr, bloc, apartament)</label><input id="adresa" name="adresa" autocomplete="street-address" required value="{{ $v('adresa', $address?->line1) }}"></div>
                 <div class="grid-2">
                     <div class="field"><label for="localitate">Localitatea</label><input id="localitate" name="localitate" autocomplete="address-level2" required value="{{ $v('localitate', $address?->city) }}"></div>
-                    <div class="field"><label for="judet">Județul</label><input id="judet" name="judet" autocomplete="address-level1" required value="{{ $v('judet', $address?->county) }}"></div>
-                    <div class="field"><label for="cod_postal">Cod poștal <span class="hint">(opțional)</span></label><input id="cod_postal" name="cod_postal" autocomplete="postal-code" inputmode="numeric" value="{{ $v('cod_postal', $address?->postal_code) }}"></div>
+                    @if ($country === 'RO')
+                        <div class="field"><label for="judet">Județul</label><input id="judet" name="judet" autocomplete="address-level1" required value="{{ $v('judet', $address?->county) }}"></div>
+                        <div class="field"><label for="cod_postal">Cod poștal <span class="hint">(opțional)</span></label><input id="cod_postal" name="cod_postal" autocomplete="postal-code" inputmode="numeric" value="{{ $v('cod_postal', $address?->postal_code) }}"></div>
+                    @else
+                        <div class="field"><label for="judet">Regiunea / statul <span class="hint">(opțional)</span></label><input id="judet" name="judet" autocomplete="address-level1" value="{{ $v('judet') }}"></div>
+                        <div class="field"><label for="cod_postal">Cod poștal</label><input id="cod_postal" name="cod_postal" autocomplete="postal-code" required value="{{ $v('cod_postal') }}"></div>
+                    @endif
                 </div>
                 <label class="check"><input type="checkbox" name="alta_livrare" value="1" @checked($v('alta_livrare'))><span>Livrez la altă adresă</span></label>
                 <div class="form" data-show-if="alta_livrare=1">
@@ -57,7 +71,7 @@
                     <div class="field"><label for="livrare_adresa">Adresa de livrare</label><input id="livrare_adresa" name="livrare_adresa" value="{{ $v('livrare_adresa') }}"></div>
                     <div class="grid-2">
                         <div class="field"><label for="livrare_localitate">Localitatea</label><input id="livrare_localitate" name="livrare_localitate" value="{{ $v('livrare_localitate') }}"></div>
-                        <div class="field"><label for="livrare_judet">Județul</label><input id="livrare_judet" name="livrare_judet" value="{{ $v('livrare_judet') }}"></div>
+                        <div class="field"><label for="livrare_judet">{{ $country === 'RO' ? 'Județul' : 'Regiunea / statul' }}</label><input id="livrare_judet" name="livrare_judet" value="{{ $v('livrare_judet') }}"></div>
                         <div class="field"><label for="livrare_cod_postal">Cod poștal</label><input id="livrare_cod_postal" name="livrare_cod_postal" value="{{ $v('livrare_cod_postal') }}"></div>
                     </div>
                 </div>
@@ -66,7 +80,7 @@
             <section class="box form" aria-labelledby="livrare-titlu">
                 <h2 id="livrare-titlu">Livrare</h2>
                 @if ($shippingMethods->isEmpty())
-                    <p>Nicio metodă de livrare nu este activă momentan.</p>
+                    <p>Nicio metodă de livrare nu este activă momentan pentru țara aleasă.</p>
                 @else
                     <fieldset class="choices choice-grid">
                         <legend class="sr-only">Metoda de livrare</legend>

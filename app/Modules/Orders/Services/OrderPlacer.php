@@ -75,7 +75,7 @@ class OrderPlacer
             if ($ctx->organizationId && (! $organization || ! $organization->isApproved() || $cart->organization_id !== $organization->id)) {
                 throw ValidationException::withMessages(['cos' => 'Contul de partener nu este activ.']);
             }
-            if (! array_key_exists($data['payment_method'], $this->paymentMethods->available($quote->shipping, $ctx->channel, $organization))) {
+            if (! array_key_exists($data['payment_method'], $this->paymentMethods->available($quote->shipping, $ctx->channel, $organization, $quote->currency))) {
                 throw ValidationException::withMessages(['plata' => 'Metoda de plată nu este disponibilă pentru această comandă.']);
             }
             if ($data['payment_method'] === 'termen' && $organization->credit_limit !== null) {
@@ -88,6 +88,9 @@ class OrderPlacer
             }
 
             $hasProduction = $items->contains(fn ($i) => $i->kind === 'configuration');
+            // 1.0.17: comanda e în valuta calculului (lei, euro, forinți); păstrăm cursul și echivalentul în lei.
+            $rates = app(\App\Modules\Regions\Services\ExchangeRates::class);
+            $currency = $quote->currency;
             [$daysMin, $daysMax] = $this->productionDays($items);
             $order = Order::create([
                 'number' => $this->numbers->next(), 'uuid' => (string) Str::uuid(), 'channel' => $ctx->channel,
@@ -98,6 +101,10 @@ class OrderPlacer
                 'subtotal' => $quote->subtotal, 'discount_total' => $quote->discountTotal,
                 'shipping_total' => (int) ($quote->shipping['gross'] ?? 0), 'vat_total' => $quote->vatTotal,
                 'total' => $quote->totalGross, 'prices_include_vat' => $quote->basisIncludesVat,
+                'currency' => $currency, 'rate_scaled' => $currency === 'RON' ? null : $rates->rate($currency),
+                'rate_note' => $currency === 'RON' ? null : mb_substr((string) $rates->describe($currency), 0, 120),
+                'total_ron' => $rates->toRon($quote->totalGross, $currency),
+                'shipping_country' => $data['shipping_country'] ?? (($data['shipping'] ?? $data['billing'])['country'] ?? 'RO'),
                 'billing_address' => $data['billing'], 'shipping_address' => $data['shipping'] ?? null,
                 'coupon_code' => mb_substr(implode(',', array_keys(array_filter($quote->coupons, fn ($st) => $st === 'valid'))), 0, 60) ?: null,
                 'customer_note' => $data['note'] ?? null, 'idempotency_key' => $idempotencyKey,
@@ -158,7 +165,7 @@ class OrderPlacer
             }
             $cart->items()->delete();
             $cart->update(['coupon_code' => null]);
-            Audit::log('order.placed', $order, ['total' => $order->total, 'items' => $items->count()], $order->customer_id);
+            Audit::log('order.placed', $order, ['total' => $order->total, 'moneda' => $order->currency, 'items' => $items->count()], $order->customer_id);
 
             return $order;
         });

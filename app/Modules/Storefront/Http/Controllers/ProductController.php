@@ -27,7 +27,7 @@ class ProductController extends Controller
             return redirect($product->url(), 301);
         }
 
-        $ctx = new PricingContext;
+        $ctx = PricingContext::b2c();
         $variants = $product->variants->map(fn ($v) => [
             'model' => $v,
             'price' => $prices->displayPrice($v, $ctx),

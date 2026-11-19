@@ -94,6 +94,9 @@ class BtIpayGateway implements PaymentGateway
         if (! $this->isConfigured()) {
             return new StartResult(false, error: $this->unavailableReason());
         }
+        if (strtoupper((string) ($payment->currency ?: 'RON')) !== 'RON') {
+            return new StartResult(false, error: 'BT iPay primește doar plăți în lei; pentru euro și forinți se folosește Stripe.');
+        }
         $billing = (array) $order->billing_address;
         $phone = preg_replace('/\D+/', '', (string) $order->phone);
         $bundle = [

@@ -1,6 +1,6 @@
 @extends('layouts.panou')
 @section('title', 'Comenzi')
-@php($fmt = fn ($v) => \App\Core\Support\Money::format($v))
+@php($fmt = fn ($v, $c = 'RON') => \App\Core\Support\Money::format($v, true, $c))
 @php($O = \App\Modules\Orders\Models\Order::class)
 @section('content')
     <x-panou.page-head title="Comenzi" sub="Trei stări separate: comercială, plată, producție.">
@@ -32,7 +32,7 @@
                     <td><x-panou.badge :tone="['noua' => 'warn', 'confirmata' => 'info', 'finalizata' => 'ok', 'anulata' => 'danger'][$o->commercial_status] ?? null">{{ $o->commercialLabel() }}</x-panou.badge></td>
                     <td><x-panou.badge :tone="['platita' => 'ok', 'esuata' => 'danger', 'in_asteptare' => 'warn'][$o->payment_status] ?? null">{{ $o->paymentLabel() }}</x-panou.badge><br><span class="small muted">{{ $o->paymentMethodLabel() }}</span></td>
                     <td>{{ $o->production_status === 'nu_se_aplica' ? '—' : $o->production_status }}</td>
-                    <td class="num">{{ $fmt($o->total) }}</td>
+                    <td class="num">{{ $fmt($o->total, $o->currency) }}@if($o->currency !== 'RON' && $o->total_ron)<br><span class="small muted">≈ {{ $fmt($o->total_ron) }}</span>@endif</td>
                 </tr>
             @endforeach
             </tbody>

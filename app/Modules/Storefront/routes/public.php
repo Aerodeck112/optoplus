@@ -20,7 +20,8 @@ Route::middleware(CachePublicPages::class)->group(function () {
     Route::get('lentile/{slug}', [LensController::class, 'show'])->where('slug', '[a-z0-9-]+')->name('lens');
 });
 Route::get('cautare', SearchController::class)->name('search');
-Route::middleware('throttle:6,1')->group(function () {
+// Prefixul „formular”: limita se numără separat de celelalte cereri (configurator, coș), nu împreună cu ele.
+Route::middleware('throttle:6,1,formular')->group(function () {
     Route::post('formular/contact', [FormController::class, 'contact'])->name('form.contact');
     Route::post('formular/parteneriat', [FormController::class, 'partner'])->name('form.partner');
     Route::post('formular/ajutor', [FormController::class, 'help'])->name('form.help');

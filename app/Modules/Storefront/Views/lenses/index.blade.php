@@ -31,7 +31,7 @@
                         <strong class="lens-offer__name">{{ $p->name }}</strong>
                         <span class="lens-offer__text">{{ $p->lens->customer_summary }}</span>
                         <span class="lens-offer__meta">Indici: {{ $p->lens->offerings->map(fn ($o) => $o->material->indexLabel())->implode(' · ') }}</span>
-                        <span class="lens-offer__foot"><span class="lens-offer__price">de la {{ \App\Core\Support\Money::format($prices[$p->id]) }} <small>/ {{ $p->sale_unit === 'pair' ? 'pereche' : 'bucată' }}</small></span><span class="lens-offer__go">Detalii<x-site.icon name="chevron-right" :size="18" /></span></span>
+                        <span class="lens-offer__foot"><span class="lens-offer__price">de la {{ \App\Core\Support\Money::format($prices[$p->id], true, app(\App\Modules\Regions\Services\Regions::class)->currency()) }} <small>/ {{ $p->sale_unit === 'pair' ? 'pereche' : 'bucată' }}</small></span><span class="lens-offer__go">Detalii<x-site.icon name="chevron-right" :size="18" /></span></span>
                     </a>
                 @endforeach
             </div>

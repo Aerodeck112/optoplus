@@ -37,6 +37,8 @@ class LocalizeSite
         if ($request->is('panou', 'panou/*', 'webhook/*')) {
             return redirect($path.($query !== null ? '?'.$query : ''));
         }
+        // 1.0.17: maghiară → prețuri în forinți, engleză → în euro (dacă există curs; altfel rămân în lei).
+        app(\App\Modules\Regions\Services\Regions::class)->forLocale($locale);
         $this->dictionary->context = $path;
         $this->translator->hosts = [$request->getSchemeAndHttpHost()];
         $this->dictionary->collect = (bool) config('optoplus.i18n.collect', false) && $request->isMethod('GET')

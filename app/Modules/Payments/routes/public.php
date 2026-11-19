@@ -10,6 +10,7 @@ Route::post('webhook/plati/{provider}', WebhookController::class)
 
 // BT iPay poate trimite notificarea (callback) prin GET; ambele declanșează doar o interogare la BT.
 Route::get('webhook/plati/{provider}', WebhookController::class)->middleware('throttle:120,1');
+Route::get('plati/stripe/revenire', \App\Modules\Payments\Http\Controllers\StripeReturnController::class)->middleware('throttle:30,1')->name('payments.stripe.return');
 Route::get('plati/btipay/revenire', \App\Modules\Payments\Http\Controllers\BtReturnController::class)->middleware('throttle:30,1')->name('payments.btipay.return');
 
 Route::get('plati/simulare/{reference}', [SimulationController::class, 'show'])->name('payments.simulation');

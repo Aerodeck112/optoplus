@@ -5,21 +5,41 @@ namespace App\Core\Support;
 use InvalidArgumentException;
 
 /**
- * Sume în bani (întregi, 1 leu = 100 bani), moneda RON. Nicio sumă nu circulă ca float prin aplicație.
+ * Sume în subunități întregi (1 leu = 100 bani; la fel cenți pentru EUR și „fillér” pentru HUF). Moneda de bază a
+ * catalogului este RON; EUR și HUF apar doar ca valută de afișare / de comandă (vezi modulul Regions).
+ * Nicio sumă nu circulă ca float prin aplicație.
  */
 final class Money
 {
-    /** „1.234,50 lei” (separatorul de mii „.”, zecimale „,”, ca pe siteul actual). */
-    public static function format(?int $bani, bool $withCurrency = true): string
+    /**
+     * „1.234,50 lei” (RON, ca pe siteul actual), „€1,234.50” (EUR), „12.990 Ft” (HUF, fără zecimale).
+     * Fără monedă: doar numărul, în formatul monedei.
+     */
+    public static function format(?int $amount, bool $withCurrency = true, ?string $currency = null): string
+    {
+        if ($amount === null) {
+            return '—';
+        }
+        $sign = $amount < 0 ? '−' : '';
+        $abs = abs($amount);
+
+        return match (strtoupper($currency ?? 'RON')) {
+            'EUR' => $sign.($withCurrency ? '€' : '').number_format(intdiv($abs, 100), 0, '.', ',').'.'.str_pad((string) ($abs % 100), 2, '0', STR_PAD_LEFT),
+            'HUF' => $sign.number_format((int) round($abs / 100), 0, ',', '.').($withCurrency ? ' Ft' : ''),
+            default => $sign.number_format(intdiv($abs, 100), 0, ',', '.').','.str_pad((string) ($abs % 100), 2, '0', STR_PAD_LEFT).($withCurrency ? ' lei' : ''),
+        };
+    }
+
+    /** Un preț din catalog (în lei) afișat în valuta vizitatorului, convertit ca în motorul de preț. */
+    public static function display(?int $bani): string
     {
         if ($bani === null) {
             return '—';
         }
-        $sign = $bani < 0 ? '−' : '';
-        $abs = abs($bani);
-        $text = number_format(intdiv($abs, 100), 0, ',', '.').','.str_pad((string) ($abs % 100), 2, '0', STR_PAD_LEFT);
+        $regions = app(\App\Modules\Regions\Services\Regions::class);
+        $currency = $regions->currency();
 
-        return $sign.$text.($withCurrency ? ' lei' : '');
+        return self::format($regions->rates()->fromRon($bani, $currency), true, $currency);
     }
 
     /** Acceptă „1234,5”, „1.234,50”, „1234.50”, „99” și returnează bani. */

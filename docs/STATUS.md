@@ -45,6 +45,11 @@ Legendă: ✅ da · ⚠️ parțial / cu condiții · ❌ nu · 🔒 blocat de a
 | Coduri de reducere LENTILE25 / STUDENT10 (protocol MAPN), dovadă la comandă | ✅ 1.0.14 | ✅ | ❌ | — | refăcute după modulul WordPress primit de la client (v1.2.0); STUDENT10 a expirat la 31.10.2026 (se prelungește din panou) |
 | Siteul în engleză și maghiară (/en/, /hu/), panou Traduceri | ✅ 1.0.15 | ✅ | ❌ | — | ⚠️ traduceri automate, de verificat; maghiara se completează cu exportul TranslatePress (comanda optoplus:i18n:import-translatepress); textele juridice rămân în română |
 | Lentile fotocromatice: Transitions, Xtractive, PhotoFast, Heliomatic (un singur card, pe indici) + găurire fără 1,50 / 1,56 | ✅ 1.0.16 | ✅ desktop + mobil | ❌ | — | ⚠️ Heliomatic doar pe 1,56: lentile 1,56 nu există încă în configurator (prețuri și intervale de primit), culorile Heliomatic neconfirmate; rândurile noi sunt „neconfirmat” (250 lei) |
+| Limbă și valută după țară (HU → maghiară + forinți, alte țări → engleză + euro), curs BNR | ✅ 1.0.17 | ✅ | ❌ | ✅ curs BNR real citit de pe curs.bnr.ro; DB-IP descărcat | ⚠️ textele juridice nu menționează încă plata în valută și livrarea în străinătate (de completat de Optoplus) |
+| Livrare Ungaria 20 € / alte țări 25 €, fără ramburs în afara României | ✅ 1.0.17 | ✅ | ❌ | — | lista țărilor: implicit Europa (UE, SEE, CH, UK, MD), editabilă |
+| Plată card Stripe (EUR, HUF) | ✅ 1.0.17 | ✅ cu răspunsuri Stripe simulate | ❌ | 🔒 netestat cu un cont Stripe real | cheile și webhookul se completează în Setări → Plăți |
+| Notificări interne pe mai multe adrese | ✅ 1.0.17 | ✅ | ❌ | 🔒 SMTP | comandă nouă, plată, anulare, cereri de pe site |
+| Utilizatori: editare, drepturi suplimentare | ✅ 1.0.17 | ✅ | ❌ | — | |
 | Texte juridice | ⚠️ ciorne | ✅ | ❌ | — | de verificat și publicat de Optoplus (Site → Pagini → Juridice) |
 | Emailuri comenzi | ✅ | ✅ | ❌ | 🔒 | serverul SMTP se configurează în `shared/.env` la instalare |
 | Asistent AI | ❌ | ❌ | ❌ | — | urmează |

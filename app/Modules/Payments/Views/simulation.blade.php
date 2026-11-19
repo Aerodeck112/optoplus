@@ -6,7 +6,7 @@
     <div class="box">
         <p class="tag tag--warn">Mediu de test — nu se încasează bani</p>
         <h1>Simulator de plată</h1>
-        <p>Comanda {{ $payment->order->number }} · {{ \App\Core\Support\Money::format($payment->amount) }}</p>
+        <p>Comanda {{ $payment->order->number }} · {{ \App\Core\Support\Money::format($payment->amount, true, $payment->currency) }}</p>
         <p class="small muted">Butoanele trimit o notificare semnată, ca un procesator real. Revenirea pe pagina comenzii nu marchează plata.</p>
         <form method="post" class="form">
             @csrf

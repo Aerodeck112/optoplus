@@ -32,11 +32,11 @@ class PaymentService
             return $existing;
         }
         $provider = match ($order->payment_method) {
-            'card' => $this->methods->gateway()?->code(),
+            'card' => $this->methods->gatewayFor((string) ($order->currency ?: 'RON'))?->code() ?? $this->methods->gateway()?->code(),
             default => 'manual',
         };
         $payment = $order->payments()->create([
-            'method' => $order->payment_method, 'provider' => $provider, 'amount' => $order->balanceDue(),
+            'method' => $order->payment_method, 'provider' => $provider, 'amount' => $order->balanceDue(), 'currency' => $order->currency ?: 'RON',
             'status' => 'initiata', 'idempotency_key' => hash('sha256', $order->uuid.'|'.Str::uuid()),
         ]);
         if ($order->payment_method !== 'card') {
@@ -207,7 +207,7 @@ class PaymentService
                 $payment->update(['status' => 'rambursata']);
             }
             $order->update(['refunded_total' => $order->refunded_total + $refund->amount]);
-            $this->status->payment($order, $order->refunded_total >= $order->paid_total ? 'rambursata' : 'partial_rambursata', 'Rambursare: '.\App\Core\Support\Money::format($refund->amount), 'manual:'.$user->id);
+            $this->status->payment($order, $order->refunded_total >= $order->paid_total ? 'rambursata' : 'partial_rambursata', 'Rambursare: '.\App\Core\Support\Money::format($refund->amount, true, $order->currency), 'manual:'.$user->id);
             Audit::log('payment.refunded', $refund, ['amount' => $refund->amount], $order->customer_id, $user->id);
         });
     }

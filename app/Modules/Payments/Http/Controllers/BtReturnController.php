@@ -20,6 +20,6 @@ class BtReturnController extends Controller
         $payment = Payment::where('provider', 'btipay')->where('provider_reference', $orderId)->with('order')->firstOrFail();
         $payments->reconcile($payment);
 
-        return redirect('/comanda/'.$payment->order->uuid.'/');
+        return redirect(\App\Modules\I18n\Support\Locales::path((string) ($payment->order->locale ?: 'ro'), '/comanda/'.$payment->order->uuid.'/'));
     }
 }

@@ -15,7 +15,7 @@
                     <td>{{ $o->created_at->format('d.m.Y') }}</td>
                     <td>{{ $o->items->sum('quantity') }}</td>
                     <td>{{ $o->commercial_status === 'anulata' ? 'Anulată' : ($o->requiresProduction() ? (\App\Modules\Production\Models\ProductionStage::where('code', $o->production_status)->value('customer_label') ?? $o->commercialLabel()) : $o->commercialLabel()) }}<br><small class="muted">{{ $o->paymentLabel() }}</small></td>
-                    <td class="num">{{ \App\Core\Support\Money::format($o->total) }}</td>
+                    <td class="num">{{ \App\Core\Support\Money::format($o->total, true, $o->currency) }}</td>
                 </tr>
             @endforeach
             </tbody>

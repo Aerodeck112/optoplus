@@ -32,6 +32,17 @@ class Dictionary
             return null;
         }
         $target = $this->find($locale, $normalized, 0);
+        if ($target === null && preg_match('/€\{\d+\}|\{\d+\} Ft\b/u', $normalized)) {
+            // 1.0.17: aceleași texte cu sume în euro („€{0}”) sau forinți („{0} Ft”) folosesc traducerea formei cu
+            // lei („{0} lei”), apoi suma își recapătă moneda.
+            $asLei = preg_replace(['/€\{(\d+)\}/u', '/\{(\d+)\} Ft\b/u'], ['{$1} lei', '{$1} lei'], $normalized);
+            $found = $this->find($locale, (string) $asLei, 0);
+            if ($found !== null) {
+                $euro = str_contains($normalized, '€');
+                $target = preg_replace_callback('/\{(\d+)\} ?(?:lei|RON|lej)\b|(?:RON|lei|lej) ?\{(\d+)\}/u',
+                    fn ($m) => $euro ? '€{'.($m[1] !== '' ? $m[1] : $m[2]).'}' : '{'.($m[1] !== '' ? $m[1] : $m[2]).'} Ft', $found);
+            }
+        }
         if ($target === null) {
             if ($this->collect && count($this->missing) < 2000) {
                 $this->missing[Locales::hash($normalized)] ??= ['source' => $normalized, 'context' => $this->context];

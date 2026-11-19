@@ -1,6 +1,6 @@
 @extends('layouts.panou')
 @section('title', 'Comanda '.$order->number)
-@php($fmt = fn ($v) => \App\Core\Support\Money::format($v))
+@php($fmt = fn ($v) => \App\Core\Support\Money::format($v, true, $order->currency))
 @section('content')
     <x-panou.page-head :title="'Comanda '.$order->number" :crumbs="['Comenzi' => route('panou.orders.index'), $order->number => null]"
         :sub="$order->created_at->format('d.m.Y H:i').' · '.strtoupper($order->channel).($order->organization ? ' · '.$order->organization->name : '')">
@@ -50,6 +50,7 @@
                         <tr><td colspan="3" class="text-right">Livrare ({{ $order->shipping_method_code ?? '—' }})</td><td class="num">{{ $fmt($order->shipping_total) }}</td></tr>
                         @if ((int) $order->vat_total > 0)<tr><td colspan="3" class="text-right">din care TVA</td><td class="num">{{ $fmt($order->vat_total) }}</td></tr>@endif
                         <tr><td colspan="3" class="text-right"><strong>Total</strong></td><td class="num"><strong>{{ $fmt($order->total) }}</strong></td></tr>
+                        @if ($order->currency !== 'RON')<tr><td colspan="3" class="text-right small muted">Echivalent în lei{{ $order->rate_note ? ' — '.$order->rate_note : '' }}</td><td class="num small muted">{{ $order->total_ron !== null ? \App\Core\Support\Money::format($order->total_ron) : '—' }}</td></tr>@endif
                     </tfoot>
                 </table></div>
                 <x-slot:footer><span class="small muted">Prețuri calculate de motorul de preț {{ $order->pricing_version }}@if($order->coupon_code) · cupon {{ $order->coupon_code }}@endif. Valorile rețetei sunt în fișa de lucru (acces auditat).</span></x-slot:footer>

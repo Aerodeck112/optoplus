@@ -9,7 +9,7 @@
                     @include('storefront::partials.family-diagram', ['code' => $f['code']])
                     <h3>{{ $f['name'] }}</h3>
                     <p>{{ $f['description'] }}</p>
-                    @if ($f['from'])<p class="family__price">pereche, de la {{ \App\Core\Support\Money::format($f['from']) }}</p>@endif
+                    @if ($f['from'])<p class="family__price">pereche, de la {{ \App\Core\Support\Money::format($f['from'], true, app(\App\Modules\Regions\Services\Regions::class)->currency()) }}</p>@endif
                     <a class="family__link" href="{{ $f['url'] }}">Vezi lentilele {{ mb_strtolower($f['name']) }}</a>
                 </article>
             @endforeach

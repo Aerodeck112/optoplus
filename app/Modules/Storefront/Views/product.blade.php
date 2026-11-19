@@ -40,7 +40,7 @@
                 @if ($price !== null)<x-site.price :amount="$price" /><small>prețul ramei, fără lentile</small>@endif
             </div>
             @if ($withLenses)
-                <p class="split-note"><x-site.icon name="lens" /><span>Cu lentile produse în laboratorul nostru: de la <strong>{{ \App\Core\Support\Money::format($withLenses) }}</strong> (rama + o pereche de lentile monofocale). Prețul final îl vedeți la fiecare pas al configurării.</span></p>
+                <p class="split-note"><x-site.icon name="lens" /><span>Cu lentile produse în laboratorul nostru: de la <strong>{{ \App\Core\Support\Money::format($withLenses, true, app(\App\Modules\Regions\Services\Regions::class)->currency()) }}</strong> (rama + o pereche de lentile monofocale). Prețul final îl vedeți la fiecare pas al configurării.</span></p>
             @endif
             <div class="buy__box">
                 <form method="post" action="/configurator/start/" class="form" id="buy-form">
@@ -118,7 +118,7 @@
     'image' => $product->images->filter(fn ($i) => $i->media)->map(fn ($i) => url($i->media->bestUrl(1200)))->values()->all(),
     'description' => \App\Core\Support\Html::plain($product->short_description ?: $product->description, 500) ?: null,
     'sku' => ($default && ! $default['model']->sku_generated) ? $default['model']->sku : null,
-    'offers' => $variants->map(fn ($v) => ['@type' => 'Offer', 'price' => number_format($v['price'] / 100, 2, '.', ''), 'priceCurrency' => 'RON', 'sku' => $v['model']->sku_generated ? null : $v['model']->sku, 'url' => url($product->url()),
+    'offers' => $variants->map(fn ($v) => ['@type' => 'Offer', 'price' => number_format($v['price'] / 100, 2, '.', ''), 'priceCurrency' => app(\App\Modules\Regions\Services\Regions::class)->currency(), 'sku' => $v['model']->sku_generated ? null : $v['model']->sku, 'url' => url($product->url()),
         'availability' => match ($product->availability_mode) { 'stoc_propriu' => 'https://schema.org/InStock', 'furnizor', 'la_comanda' => 'https://schema.org/BackOrder', 'indisponibil' => 'https://schema.org/OutOfStock', default => null }])->all()])
 @push('jsonld')
 <script type="application/ld+json" nonce="{{ app('csp-nonce') }}">{!! json_encode(array_filter($ld, fn ($v) => $v !== null && $v !== []), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>

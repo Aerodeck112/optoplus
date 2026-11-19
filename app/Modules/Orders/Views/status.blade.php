@@ -2,7 +2,7 @@
 @extends('layouts.site')
 @section('title', 'Comanda '.$order->number)
 @section('robots', 'noindex, nofollow')
-@php($fmt = fn ($v) => \App\Core\Support\Money::format($v))
+@php($fmt = fn ($v) => \App\Core\Support\Money::format($v, true, $order->currency))
 @section('content')
 <div class="wrap page-pad" @if($analytics) data-module="analytics" data-purchase='@json($analytics)' @endif>
     <h1>Comanda {{ $order->number }}</h1>

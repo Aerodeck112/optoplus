@@ -32,7 +32,7 @@
         </aside>
     </div>
     <div class="total-bar" aria-hidden="true">
-        <div><small>Total estimat</small><strong data-total>{{ \App\Core\Support\Money::format($quote->totalGross) }}</strong></div>
+        <div><small>Total estimat</small><strong data-total>{{ \App\Core\Support\Money::format($quote->totalGross, true, $quote->currency) }}</strong></div>
         <a class="btn btn--light btn--small" href="#rezumat-titlu">Vezi detaliile</a>
     </div>
 </div>

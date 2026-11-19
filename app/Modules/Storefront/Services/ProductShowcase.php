@@ -27,7 +27,7 @@ class ProductShowcase
     /** @param  iterable<Product>  $products */
     public function cards(iterable $products, ?PricingContext $ctx = null): Collection
     {
-        $ctx ??= new PricingContext;
+        $ctx ??= PricingContext::b2c();
 
         return collect($products)->map(function (Product $p) use ($ctx) {
             $variant = $p->defaultVariant();

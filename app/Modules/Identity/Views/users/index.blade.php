@@ -1,7 +1,7 @@
 @extends('layouts.panou')
 @section('title', 'Utilizatori')
 @section('content')
-    <x-panou.page-head title="Utilizatori" sub="Conturi individuale. Rolurile determină ce poate vedea și face fiecare persoană.">
+    <x-panou.page-head title="Utilizatori" sub="Conturi individuale. Rolurile și drepturile suplimentare determină ce poate vedea și face fiecare persoană. Apăsați „Editează” pentru a le schimba.">
         <x-slot:actions>
             <a class="btn btn--primary" href="{{ route('panou.users.create') }}"><x-panou.icon name="plus" />Cont nou</a>
         </x-slot:actions>

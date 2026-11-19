@@ -33,7 +33,7 @@ class UserController extends Controller
 
     public function create(): View
     {
-        return view('identity::users.form', ['user' => new User(['is_active' => true]), 'roles' => $this->roles()]);
+        return view('identity::users.form', ['user' => new User(['is_active' => true]), 'roles' => $this->roles(), 'permissions' => $this->permissionGroups(), 'fromRoles' => [], 'direct' => []]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -49,7 +49,9 @@ class UserController extends Controller
             ]);
             $this->assertCanAssign($data['roles'] ?? []);
             $user->syncRoles($data['roles'] ?? []);
-            Audit::log('users.created', $user, ['roluri' => $data['roles'] ?? []]);
+            $direct = $this->directPermissions($data['permissions'] ?? [], $user);
+            $user->syncPermissions($direct);
+            Audit::log('users.created', $user, ['roluri' => $data['roles'] ?? [], 'drepturi_suplimentare' => $direct]);
 
             return $user;
         });
@@ -70,7 +72,11 @@ class UserController extends Controller
 
     public function edit(User $user): View
     {
-        return view('identity::users.form', ['user' => $user, 'roles' => $this->roles()]);
+        return view('identity::users.form', [
+            'user' => $user, 'roles' => $this->roles(), 'permissions' => $this->permissionGroups(),
+            'fromRoles' => $user->getPermissionsViaRoles()->pluck('name')->all(),
+            'direct' => $user->getDirectPermissions()->pluck('name')->all(),
+        ]);
     }
 
     public function update(Request $request, User $user): RedirectResponse
@@ -81,14 +87,16 @@ class UserController extends Controller
         }
 
         DB::transaction(function () use ($data, $user) {
-            $before = ['roluri' => $user->getRoleNames()->all(), 'activ' => $user->is_active];
+            $before = ['roluri' => $user->getRoleNames()->all(), 'activ' => $user->is_active, 'drepturi_suplimentare' => $user->getDirectPermissions()->pluck('name')->all()];
             $user->update(['name' => $data['name'], 'email' => Str::lower($data['email']), 'is_active' => $data['is_active'] ?? false]);
             $this->assertCanAssign($data['roles'] ?? []);
             $user->syncRoles($data['roles'] ?? []);
+            $direct = $this->directPermissions($data['permissions'] ?? [], $user);
+            $user->syncPermissions($direct);
             if (! $user->is_active) {
                 DB::table('sessions')->where('user_id', $user->id)->delete();
             }
-            Audit::log('users.updated', $user, ['inainte' => $before, 'dupa' => ['roluri' => $data['roles'] ?? [], 'activ' => $user->is_active]]);
+            Audit::log('users.updated', $user, ['inainte' => $before, 'dupa' => ['roluri' => $data['roles'] ?? [], 'activ' => $user->is_active, 'drepturi_suplimentare' => $direct]]);
         });
 
         return redirect()->route('panou.users.index')->with('status', 'Contul a fost actualizat.');
@@ -191,6 +199,8 @@ class UserController extends Controller
             'is_active' => ['sometimes', 'boolean'],
             'roles' => ['array'],
             'roles.*' => ['string', Rule::exists('roles', 'name')],
+            'permissions' => ['array'],
+            'permissions.*' => ['string', Rule::exists('permissions', 'name')],
         ]);
     }
 
@@ -200,6 +210,50 @@ class UserController extends Controller
         if (in_array(Roles::ADMIN_TEHNIC, $roles, true) && ! auth()->user()->hasRole(Roles::ADMIN_TEHNIC)) {
             abort(403, 'Nu puteți acorda rolul de administrator tehnic.');
         }
+    }
+
+    /**
+     * Drepturile suplimentare (pe lângă cele din roluri). Un coleg poate acorda doar drepturi pe care le are el
+     * însuși (administratorul tehnic: orice), ca nimeni să nu-și poată extinde accesul prin alt cont. Drepturile
+     * deja acordate altcuiva și pe care cel care editează nu le are rămân neschimbate.
+     *
+     * @return list<string>
+     */
+    private function directPermissions(array $requested, User $user): array
+    {
+        $actor = auth()->user();
+        $known = array_keys(app(\App\Core\Modules\ModuleRegistry::class)->permissions());
+        $requested = array_values(array_intersect(array_unique($requested), $known));
+        $current = $user->exists ? $user->getDirectPermissions()->pluck('name')->all() : [];
+        $viaRoles = $user->exists ? $user->getPermissionsViaRoles()->pluck('name')->all() : [];
+        if ($actor->hasRole(Roles::ADMIN_TEHNIC)) {
+            return array_values(array_diff($requested, $viaRoles));
+        }
+        $out = [];
+        foreach (array_unique(array_merge($requested, $current)) as $perm) {
+            $wanted = in_array($perm, $requested, true);
+            $had = in_array($perm, $current, true);
+            if ($wanted !== $had && ! $actor->can($perm)) {
+                abort(403, 'Puteți acorda sau retrage doar drepturi pe care le aveți și dumneavoastră.');
+            }
+            if ($wanted) {
+                $out[] = $perm;
+            }
+        }
+
+        return array_values(array_diff($out, $viaRoles));
+    }
+
+    /** @return array<string, array<string, string>> modul => [permisiune => descriere] */
+    private function permissionGroups(): array
+    {
+        $out = [];
+        foreach (app(\App\Core\Modules\ModuleRegistry::class)->permissions() as $name => $p) {
+            $out[$p['module']][$name] = $p['label'];
+        }
+        ksort($out);
+
+        return $out;
     }
 
     private function roles()

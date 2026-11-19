@@ -27,6 +27,9 @@ class SettingsController extends Controller
             'sections' => $sections, 'section' => $section, 'def' => $sections[$section],
             'values' => $settings->all(), 'settings' => $settings,
             'btStatus' => $section === 'plati' ? app(BtIpayGateway::class)->unavailableReason() : null,
+            'stripeStatus' => $section === 'plati' ? app(\App\Modules\Payments\Gateways\StripeGateway::class)->unavailableReason() : null,
+            'stripeMode' => $section === 'plati' ? app(\App\Modules\Payments\Gateways\StripeGateway::class)->mode() : null,
+            'rates' => $section === 'valute' ? app(\App\Modules\Regions\Services\ExchangeRates::class) : null,
             'mailStatus' => $section === 'email' ? MailSettings::status($settings->all()) : null,
         ]);
     }
@@ -59,6 +62,9 @@ class SettingsController extends Controller
                 'percent' => $input === null || $input === '' ? null : (is_numeric(str_replace(',', '.', $input)) && (float) str_replace(',', '.', $input) >= 0 && (float) str_replace(',', '.', $input) <= 100
                     ? (int) round((float) str_replace(',', '.', $input) * 100) : ($errors[$key] = "{$label}: procent între 0 și 100.")),
                 'email' => $input === null || $input === '' ? null : (filter_var($input, FILTER_VALIDATE_EMAIL) ? mb_strtolower($input) : ($errors[$key] = "{$label}: email invalid.")),
+                'emails' => $input === null || trim((string) $input) === '' ? null : (count(preg_split('/[\s,;]+/', trim((string) $input), -1, PREG_SPLIT_NO_EMPTY)) === count(\App\Core\Notifications\StaffRecipients::parse((string) $input))
+                    ? implode(', ', \App\Core\Notifications\StaffRecipients::parse((string) $input)) : ($errors[$key] = "{$label}: una dintre adrese nu este validă.")),
+                'rate' => $input === null || trim((string) $input) === '' ? null : (\App\Modules\Regions\Services\ExchangeRates::parseRate((string) $input) !== null ? str_replace('.', ',', trim((string) $input)) : ($errors[$key] = "{$label}: curs invalid (ex. 4,9750).")),
                 'url' => $input === null || $input === '' ? null : (preg_match('#^https://[a-z0-9.-]+(:\d+)?/?$#i', $input) ? rtrim($input, '/') : ($errors[$key] = "{$label}: adresă https:// fără cale.")),
                 'select' => array_key_exists((string) $input, $f[3] ?? []) ? (string) $input : array_key_first($f[3] ?? []),
                 default => $input === null ? null : mb_substr(trim(strip_tags((string) $input)), 0, $type === 'textarea' ? 2000 : 255),
@@ -87,6 +93,10 @@ class SettingsController extends Controller
         if ($changed) {
             Audit::log('settings.updated', null, ['sectiune' => $section, 'chei' => $changed]);
             $apply->apply();
+            if ($section === 'valute') {
+                app(\App\Modules\Regions\Services\ExchangeRates::class)->forget();
+                app(\App\Modules\Storefront\Services\PageCache::class)->flush();
+            }
             if ($section === 'email') {
                 MailSettings::refresh();
             }
@@ -102,6 +112,33 @@ class SettingsController extends Controller
     public function testBt(BtIpayGateway $gateway)
     {
         $result = $gateway->testConnection();
+
+        return back()->with($result['ok'] ? 'status' : 'warning', $result['message']);
+    }
+
+    public function testStripe(\App\Modules\Payments\Gateways\StripeGateway $gateway)
+    {
+        $result = $gateway->testConnection();
+
+        return back()->with($result['ok'] ? 'status' : 'warning', $result['message']);
+    }
+
+    /** Citește acum cursul BNR (altfel se citește automat, din cron, în zilele lucrătoare). */
+    public function fetchRates(\App\Modules\Regions\Services\ExchangeRates $rates)
+    {
+        $result = $rates->fetchBnr();
+        if ($result['ok']) {
+            app(\App\Modules\Storefront\Services\PageCache::class)->flush();
+            Audit::log('settings.rates_fetched', null, ['data' => $result['date']]);
+        }
+
+        return back()->with($result['ok'] ? 'status' : 'warning', $result['message']);
+    }
+
+    /** Descarcă acum baza DB-IP (țara după IP); altfel se descarcă automat, lunar. */
+    public function updateGeo()
+    {
+        $result = \App\Modules\Regions\Services\GeoCountry::download();
 
         return back()->with($result['ok'] ? 'status' : 'warning', $result['message']);
     }

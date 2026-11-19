@@ -194,7 +194,7 @@ class ConfiguratorController extends Controller
 
         return response()->json([
             'summary' => view('configurator::partials.summary', ['quote' => $quote, 'cfg' => $cfg, 'validation' => $result])->render(),
-            'total' => \App\Core\Support\Money::format($quote->totalGross),
+            'total' => \App\Core\Support\Money::format($quote->totalGross, true, $quote->currency),
             'errors' => array_column(array_filter($result->errors, fn ($e) => (str_starts_with($e['code'], 'treatment') && $e['code'] !== 'treatment_option') || str_starts_with($e['code'], 'rule_')), 'message'),
             'warnings' => array_column($result->warnings, 'message'),
         ])->header('Cache-Control', 'no-store, private');

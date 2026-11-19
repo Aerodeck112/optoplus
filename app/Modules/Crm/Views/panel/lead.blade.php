@@ -26,7 +26,7 @@
             </x-panou.panel>
             @if ($orders->isNotEmpty())
             <x-panou.panel title="Comenzi ale aceluiași client" :flush="true">
-                <table class="table"><tbody>@foreach ($orders as $o)<tr><td>@can('orders.view')<a href="{{ route('panou.orders.show', $o->uuid) }}">{{ $o->number }}</a>@else{{ $o->number }}@endcan</td><td>{{ $o->created_at->format('d.m.Y') }}</td><td>{{ $o->commercialLabel() }}</td><td class="num">{{ \App\Core\Support\Money::format($o->total) }}</td></tr>@endforeach</tbody></table>
+                <table class="table"><tbody>@foreach ($orders as $o)<tr><td>@can('orders.view')<a href="{{ route('panou.orders.show', $o->uuid) }}">{{ $o->number }}</a>@else{{ $o->number }}@endcan</td><td>{{ $o->created_at->format('d.m.Y') }}</td><td>{{ $o->commercialLabel() }}</td><td class="num">{{ \App\Core\Support\Money::format($o->total, true, $o->currency) }}</td></tr>@endforeach</tbody></table>
             </x-panou.panel>
             @endif
         </div>

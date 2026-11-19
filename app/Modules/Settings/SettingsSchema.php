@@ -5,7 +5,8 @@ namespace App\Modules\Settings;
 /**
  * Tabul „Setări” din panou: secțiunile, câmpurile și permisiunea fiecărei secțiuni. Valorile se păstrează în
  * tabela `settings`; câmpurile de tip „secret” sunt criptate și nu se mai afișează după salvare.
- * Tipuri: text, email, tel, url, textarea, number, money (lei → bani), percent (% → puncte de bază), bool, secret, select.
+ * Tipuri: text, email, emails (mai multe adrese), tel, url, textarea, number, money (lei/euro → subunități),
+ * percent (% → puncte de bază), rate (curs de schimb, text), bool, secret, select.
  */
 final class SettingsSchema
 {
@@ -43,7 +44,7 @@ final class SettingsSchema
                     'contact.hours' => ['Program', 'text'],
                     'contact.phone_b2b' => ['Telefon parteneri (B2B)', 'tel'],
                     'contact.email_b2b' => ['Email parteneri (B2B)', 'email'],
-                    'notifications.orders_email' => ['Email intern pentru comenzi noi', 'email'],
+                    'notifications.orders_email' => ['Emailuri interne pentru notificări: comenzi noi, plăți, anulări, cereri de pe site (mai multe adrese, separate prin virgulă)', 'emails'],
                 ],
             ],
             'tva' => [
@@ -59,9 +60,9 @@ final class SettingsSchema
             ],
             'plati' => [
                 'label' => 'Plăți', 'permission' => 'payments.settings', 'reauth' => true,
-                'intro' => 'O metodă apare la finalizarea comenzii doar dacă este activă și are toate datele completate.',
+                'intro' => 'O metodă apare la finalizarea comenzii doar dacă este activă și are toate datele completate. Comenzile în lei se plătesc cu cardul prin Banca Transilvania (iPay); cele în euro și forinți (clienții din străinătate) prin Stripe. Ramburs și transfer bancar: doar pentru comenzile în lei, livrate în România.',
                 'groups' => [
-                    'Card online — Banca Transilvania iPay' => [
+                    'Card online pentru comenzile în lei — Banca Transilvania iPay' => [
                         'payments.card_enabled' => ['Plata cu cardul este activă', 'bool'],
                         'payments.btipay.environment' => ['Mediul', 'select', null, ['test' => 'Test (sandbox)', 'productie' => 'Producție']],
                         'payments.btipay.username' => ['Utilizator API (de la BT)', 'text'],
@@ -69,6 +70,12 @@ final class SettingsSchema
                         'payments.btipay.base_url_test' => ['Adresa serverului de test', 'url'],
                         'payments.btipay.base_url_production' => ['Adresa serverului de producție', 'url'],
                         'payments.btipay.force_3ds' => ['Cere autentificare 3-D Secure', 'bool'],
+                    ],
+                    'Card online pentru comenzile în euro și forinți — Stripe' => [
+                        'payments.stripe.enabled' => ['Plata prin Stripe este activă', 'bool'],
+                        'payments.stripe.secret_key' => ['Cheia secretă (Secret key: sk_live_… sau, pentru teste, sk_test_…)', 'secret'],
+                        'payments.stripe.webhook_secret' => ['Secretul de semnare al webhookului (Signing secret: whsec_…)', 'secret'],
+                        'payments.stripe.currencies' => ['Valutele plătite prin Stripe (ex. EUR, HUF)', 'text'],
                     ],
                     'Transfer bancar' => [
                         'payments.bank_transfer_enabled' => ['Transferul bancar este activ', 'bool'],
@@ -98,14 +105,44 @@ final class SettingsSchema
             ],
             'livrare' => [
                 'label' => 'Livrare și termene', 'permission' => 'shipping.manage',
-                'fields' => [
-                    'shipping.courier_enabled' => ['Livrarea prin curier este activă', 'bool'],
-                    'shipping.courier_price' => ['Cost livrare în România (lei, cu TVA)', 'money', 'required'],
-                    'shipping.free_from' => ['Livrare gratuită de la (lei; gol = niciodată)', 'money'],
-                    'shipping.transit_min' => ['Transport: minim zile lucrătoare', 'number'],
-                    'shipping.transit_max' => ['Transport: maxim zile lucrătoare', 'number'],
-                    'orders.production_days_min' => ['Execuție lentile: minim zile lucrătoare', 'number', 'required'],
-                    'orders.production_days_max' => ['Execuție lentile: maxim zile lucrătoare', 'number', 'required'],
+                'intro' => 'Plata ramburs există doar pentru livrările în România. Tarifele pentru Ungaria și celelalte țări sunt în euro; clienților din Ungaria li se afișează în forinți, la cursul zilei.',
+                'groups' => [
+                    'România' => [
+                        'shipping.courier_enabled' => ['Livrarea prin curier este activă', 'bool'],
+                        'shipping.courier_price' => ['Cost livrare în România (lei, cu TVA)', 'money', 'required'],
+                        'shipping.free_from' => ['Livrare gratuită de la (lei; gol = niciodată)', 'money'],
+                        'shipping.transit_min' => ['Transport: minim zile lucrătoare', 'number'],
+                        'shipping.transit_max' => ['Transport: maxim zile lucrătoare', 'number'],
+                    ],
+                    'Ungaria și alte țări' => [
+                        'shipping.hu_enabled' => ['Livrăm în Ungaria', 'bool'],
+                        'shipping.hu_price' => ['Cost livrare în Ungaria (euro, cu TVA)', 'money'],
+                        'shipping.intl_enabled' => ['Livrăm în alte țări', 'bool'],
+                        'shipping.intl_price' => ['Cost livrare în celelalte țări (euro, cu TVA)', 'money'],
+                        'shipping.intl_countries' => ['Țările (coduri ISO separate prin virgulă, ex. AT, DE, FR; gol = toate țările europene)', 'textarea'],
+                        'shipping.intl_transit_min' => ['Transport internațional: minim zile lucrătoare', 'number'],
+                        'shipping.intl_transit_max' => ['Transport internațional: maxim zile lucrătoare', 'number'],
+                    ],
+                    'Termene de execuție' => [
+                        'orders.production_days_min' => ['Execuție lentile: minim zile lucrătoare', 'number', 'required'],
+                        'orders.production_days_max' => ['Execuție lentile: maxim zile lucrătoare', 'number', 'required'],
+                    ],
+                ],
+            ],
+            'valute' => [
+                'label' => 'Valute și țări', 'permission' => 'pricing.manage',
+                'intro' => 'Prețurile se păstrează în lei. Pe siteul în maghiară se afișează în forinți, pe cel în engleză în euro, calculate din lei la cursul de referință BNR (citit automat în fiecare zi lucrătoare) sau la cursul introdus aici. Fără curs, siteul rămâne în lei. La prima vizită, siteul se deschide în limba țării vizitatorului (Ungaria → maghiară, alte țări → engleză, România → română); vizitatorul poate schimba apoi limba.',
+                'groups' => [
+                    'Valute' => [
+                        'currency.enabled' => ['Afișează prețurile în euro (engleză) și forinți (maghiară)', 'bool'],
+                        'currency.source' => ['Cursul folosit', 'select', null, ['bnr' => 'Cursul BNR (automat, zilnic)', 'manual' => 'Cursul introdus manual mai jos']],
+                        'currency.manual_eur' => ['Curs manual: 1 EUR = … lei (ex. 4,9750)', 'rate'],
+                        'currency.manual_huf' => ['Curs manual: 100 HUF = … lei (ex. 1,2850)', 'rate'],
+                        'currency.markup_bp' => ['Adaos la conversie (%, ex. 2 pentru comisioanele de schimb; 0 = fără)', 'percent'],
+                    ],
+                    'Limba după țara vizitatorului' => [
+                        'regions.auto_detect' => ['La prima vizită, deschide siteul în limba țării vizitatorului', 'bool'],
+                    ],
                 ],
             ],
         ];
