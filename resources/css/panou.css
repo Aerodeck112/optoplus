@@ -1192,3 +1192,7 @@ body.auth {
 .row-actions__inner form { margin: 0; }
 .row-actions__inner .btn { width: 100%; justify-content: center; white-space: nowrap; }
 .table td.cell-email { word-break: break-all; }
+
+/* 1.0.20 — pozele produsului în panou */
+.product-photo { display: flex; gap: .75rem; align-items: flex-start; padding: .5rem 0; border-bottom: 1px solid var(--line); }
+.product-photo:last-of-type { border-bottom: 0; }

@@ -5,6 +5,7 @@
     <x-panou.page-head :title="$product->name" :crumbs="['Produse' => route('panou.catalog.products'), $product->name => null]" :sub="$product->url()">
         <x-slot:actions>
             <a class="btn" href="{{ $product->url() }}" target="_blank" rel="noopener">Vezi pe site</a>
+            @can('catalog.edit')<form method="post" action="{{ route('panou.catalog.product.duplicate', $product->id) }}" data-confirm="Creați o copie (ciornă) a acestui produs, cu aceleași date și poze?">@csrf<button class="btn" type="submit">Copiază rama</button></form>@endcan
             @can('catalog.publish')
                 <form method="post" action="{{ route('panou.catalog.product.status', $product->id) }}" class="cluster">@csrf
                     @if ($product->status !== 'published')<button class="btn btn--primary" name="stare" value="published">Publică</button>@endif
@@ -35,6 +36,8 @@
                         <x-panou.field name="inaltime" type="number" label="Înălțime lentilă (mm)" :value="$spec?->lens_height_mm" />
                         <x-panou.field name="tip_rama" type="select" label="Tip ramă" :options="['full' => 'Ramă întreagă', 'semi_nylon' => 'Semi-ramă cu fir (nylon)', 'rimless_screw' => 'Fără contur (montaj prin găurire, șuruburi/capse)']" :value="$spec?->rim_type" placeholder="necunoscut" hint="Folosit de regulile de compatibilitate (ex. la montajul prin găurire nu se pot folosi lentile fotocromatice)." />
                     @endif
+                    <div class="field field--full"><hr class="sep"><span class="field__label">Filtrele de pe site</span></div>
+                    @include('catalog::panel.partials.attributes', ['attributes' => $attributes, 'selected' => array_map('intval', old('atribute', $product->attributeValues->pluck('id')->all()))])
                     <x-panou.field name="seo_titlu" label="Titlu SEO" :value="$product->seo_title" />
                     <x-panou.field name="seo_descriere" label="Descriere SEO" :value="$product->seo_description" />
                     <x-panou.field name="noindex" type="checkbox" label="Nu indexa (noindex)" :value="$product->noindex" />
@@ -61,10 +64,46 @@
                     @can('catalog.prices')<button class="btn btn--primary" type="submit">Salvează prețurile</button>@else<p class="small muted">Prețurile se modifică de cine are permisiunea „Prețuri”.</p>@endcan
                 </form>
                 <p class="small muted">Prețul afișat pe site vine din motorul de preț (preț + promoții active). Prețul barat apare doar cu o promoție datată.</p>
+                @can('catalog.edit')
+                <details class="perm-group" @if($errors->hasAny(['nume', 'sku', 'pret'])) open @endif>
+                    <summary><strong>Adaugă variantă</strong> <span class="small muted">(altă culoare a aceleiași rame)</span></summary>
+                    <form method="post" action="{{ route('panou.catalog.product.variant.add', $product->id) }}" class="stack" style="margin-top:.5rem">@csrf
+                        <x-panou.field name="nume" label="Culoarea / varianta (ex. Havana)" required />
+                        <x-panou.field name="sku" label="Cod produs (SKU)" hint="Gol = se generează automat." />
+                        @can('catalog.prices')<x-panou.field name="pret" label="Preț cu TVA (lei)" required :value="$product->variants->first() ? number_format($product->variants->first()->price / 100, 2, ',', '') : ''" />@else<p class="small muted">Prețul îl completează cine are dreptul „Prețuri”.</p>@endcan
+                        <x-panou.field name="stoc" type="number" label="Stoc" hint="Gol = negestionat." />
+                        <button class="btn" type="submit">Adaugă varianta</button>
+                    </form>
+                </details>
+                @endcan
             </x-panou.panel>
-            <x-panou.panel title="Imagini">
-                <div class="cluster">@foreach ($product->images as $im)@if($im->media)<img src="{{ $im->media->bestUrl(320) }}" alt="{{ $im->media->alt }}" width="96" height="80" style="object-fit:contain;border:1px solid var(--line);border-radius:6px">@endif @endforeach</div>
-                <p class="small muted">{{ $product->images->count() }} imagini · biblioteca media: „Site → Media”.</p>
+            <x-panou.panel title="Poze">
+                @forelse ($product->images as $im)
+                    <div class="product-photo">
+                        @if($im->media)<img src="{{ $im->media->bestUrl(320) }}" alt="{{ $im->alt ?? $im->media->alt }}" width="112" height="90" style="object-fit:contain;border:1px solid var(--line);border-radius:6px;background:#fff">@endif
+                        <div class="stack" style="gap:.3rem">
+                            @if ($loop->first)<x-panou.badge tone="ok">poza principală</x-panou.badge>@endif
+                            @can('catalog.edit')
+                            <div class="cluster" style="gap:.3rem">
+                                @unless ($loop->first)<form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}">@csrf<button class="btn btn--small" name="actiune" value="principala">Fă principală</button></form>
+                                <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}">@csrf<button class="btn btn--small" name="actiune" value="sus" aria-label="Mută mai sus">↑</button></form>@endunless
+                                @unless ($loop->last)<form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}">@csrf<button class="btn btn--small" name="actiune" value="jos" aria-label="Mută mai jos">↓</button></form>@endunless
+                                <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}" data-confirm="Scoateți această poză de la produs?">@csrf<button class="btn btn--small btn--danger" name="actiune" value="sterge">Scoate</button></form>
+                            </div>
+                            <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}" class="cluster" style="gap:.3rem">@csrf<input type="hidden" name="actiune" value="alt"><input name="alt" value="{{ $im->alt }}" aria-label="Text alternativ" placeholder="Text alternativ (descrierea pozei)" style="min-width:12rem"><button class="btn btn--small">Salvează textul</button></form>
+                            @endcan
+                        </div>
+                    </div>
+                @empty
+                    <p class="muted">Produsul nu are încă poze.</p>
+                @endforelse
+                @can('catalog.edit')
+                <form method="post" action="{{ route('panou.catalog.product.images', $product->id) }}" enctype="multipart/form-data" class="stack" style="margin-top:.75rem">@csrf
+                    <div class="field"><label class="field__label" for="poze">Adaugă poze (JPG, PNG, WebP; max. 10 MB; mai multe deodată)</label><input id="poze" type="file" name="poze[]" accept="image/jpeg,image/png,image/webp" multiple required></div>
+                    @error('poze')<p class="field__error">{{ $message }}</p>@enderror @error('poze.*')<p class="field__error">{{ $message }}</p>@enderror
+                    <button class="btn" type="submit">Încarcă pozele</button>
+                </form>
+                @endcan
             </x-panou.panel>
         </div>
     </div>

@@ -43,11 +43,12 @@ class ProductController extends Controller
 
     public function edit(int $id)
     {
-        $product = Product::with('variants', 'frameSpec', 'images.media', 'categories', 'brand')->findOrFail($id);
+        $product = Product::with(['variants', 'frameSpec', 'images' => fn ($q) => $q->orderBy('sort')->orderBy('id'), 'images.media', 'categories', 'brand', 'attributeValues'])->findOrFail($id);
 
         return view('catalog::panel.product', [
             'product' => $product, 'brands' => Brand::orderBy('name')->pluck('name', 'id'),
             'categories' => Category::orderBy('path')->pluck('path', 'id'),
+            'attributes' => ProductEditorController::attributes(),
         ]);
     }
 
@@ -63,8 +64,14 @@ class ProductController extends Controller
             'cu_lentile' => ['nullable', 'boolean'], 'seo_titlu' => ['nullable', 'string', 'max:255'], 'seo_descriere' => ['nullable', 'string', 'max:320'], 'noindex' => ['nullable', 'boolean'],
             'latime' => ['nullable', 'integer', 'min:30', 'max:80'], 'punte' => ['nullable', 'integer', 'min:10', 'max:30'], 'brat' => ['nullable', 'integer', 'min:100', 'max:160'],
             'inaltime' => ['nullable', 'integer', 'min:15', 'max:70'], 'tip_rama' => ['nullable', 'in:full,semi_nylon,rimless_screw'],
+            'atribute' => ['array'], 'atribute.*' => ['integer', 'exists:attribute_values,id'], 'atribute_trimise' => ['nullable', 'boolean'],
         ]);
         DB::transaction(function () use ($product, $data, $request) {
+            // 1.0.20: filtrele de pe site (gen, material, formă…); valorile păstrate își păstrează sursa (import / descriere)
+            if ($request->boolean('atribute_trimise')) {
+                $existing = $product->attributeValues()->pluck('product_attribute_values.source', 'attribute_values.id');
+                $product->attributeValues()->sync(collect($data['atribute'] ?? [])->mapWithKeys(fn ($id) => [(int) $id => ['source' => $existing[(int) $id] ?? 'panou']])->all());
+            }
             $product->update([
                 'name' => $data['nume'], 'brand_id' => $data['marca'] ?? null,
                 'short_description' => Html::rich((string) ($data['scurta'] ?? '')), 'description' => Html::rich((string) ($data['descriere'] ?? '')),

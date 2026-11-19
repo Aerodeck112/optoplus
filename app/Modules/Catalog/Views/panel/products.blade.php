@@ -1,7 +1,9 @@
 @extends('layouts.panou')
 @section('title', 'Produse')
 @section('content')
-    <x-panou.page-head title="Produse" sub="Rame și accesorii. Lentilele produse în laborator se administrează în „Lentile”." />
+    <x-panou.page-head title="Produse" sub="Rame și accesorii. Lentilele produse în laborator se administrează în „Lentile”.">
+        <x-slot:actions>@can('catalog.edit')<a class="btn btn--primary" href="{{ route('panou.catalog.product.create') }}"><x-panou.icon name="plus" />Ramă nouă</a>@endcan</x-slot:actions>
+    </x-panou.page-head>
     <x-panou.panel :flush="true">
         <form class="filters" method="get" role="search">
             <x-panou.field name="q" type="search" label="Nume sau SKU" :value="$filters['q'] ?? ''" />

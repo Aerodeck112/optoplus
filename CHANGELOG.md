@@ -3,6 +3,24 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.20] — 2026-11-20
+
+Se poate instala direct peste 1.0.0 – 1.0.19.
+
+- **Rame noi din panou:** Catalog → Produse → **„Ramă nouă”**. Un formular cu numele, marca, categoria,
+  disponibilitatea, dimensiunile (lățime lentilă, punte, braț, înălțime), tipul ramei, descrierea, filtrele de pe
+  site (pentru cine, material, construcție, tip, formă), prima variantă (culoare, cod, preț, stoc) și pozele (mai
+  multe deodată). Rama se salvează ca **ciornă** și apare pe site doar după „Publică”.
+- **„Copiază rama”** în pagina unei rame: o copie (ciornă) cu aceleași date, filtre, dimensiuni și poze — util
+  pentru modelele din aceeași serie; se schimbă doar ce diferă.
+- **„Adaugă variantă”**: altă culoare a aceleiași rame (nume, cod, preț, stoc).
+- **Pozele** se încarcă direct din pagina ramei: poza principală, ordinea (↑ ↓), textul alternativ și „Scoate”
+  (fișierul rămâne în biblioteca media). Siteul face automat variantele mici pentru telefon.
+- **Filtrele de pe site** se pot bifa și la ramele existente (secțiunea „Filtrele de pe site” din pagina ramei).
+- Prețurile se completează doar cu dreptul „Prețuri” (auditat); fără preț, rama nu se poate publica.
+- Numele și descrierea ramelor noi apar în Site → Traduceri (EN, HU) ca „lipsă”, gata de tradus; până la
+  traducere, pe /en/ și /hu/ se afișează în română.
+
 ## [1.0.19] — 2026-11-20
 
 Se poate instala direct peste 1.0.0 – 1.0.18.
