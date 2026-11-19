@@ -27,6 +27,8 @@ class SettingsController extends Controller
             'sections' => $sections, 'section' => $section, 'def' => $sections[$section],
             'values' => $settings->all(), 'settings' => $settings,
             'btStatus' => $section === 'plati' ? app(BtIpayGateway::class)->unavailableReason() : null,
+            'lastCardFailure' => $section === 'plati' ? \App\Modules\Payments\Models\Payment::where('method', 'card')->where('status', 'esuata')
+                ->whereNotNull('failure_reason')->latest('id')->first(['provider', 'failure_reason', 'created_at']) : null,
             'stripeStatus' => $section === 'plati' ? app(\App\Modules\Payments\Gateways\StripeGateway::class)->unavailableReason() : null,
             'stripeMode' => $section === 'plati' ? app(\App\Modules\Payments\Gateways\StripeGateway::class)->mode() : null,
             'rates' => $section === 'valute' ? app(\App\Modules\Regions\Services\ExchangeRates::class) : null,

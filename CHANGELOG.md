@@ -15,6 +15,11 @@ Se poate instala direct peste 1.0.0 – 1.0.17.
   se poate acorda din Utilizatori → Editează → Drepturi). Ceilalți văd doar că există o rețetă. Fiecare deschidere
   se înregistrează în jurnalul de audit.
 - Pe pagina comenzii, la ochelarii cu rețetă: butonul **„Vezi rețeta”**, care deschide fișa de lucru direct la rețetă.
+- **Plata cu cardul care nu pornește se vede acum clar.** Dacă BT (sau Stripe) refuză deschiderea paginii de plată
+  (de exemplu, datele de producție puse cu mediul „Test”), clientul vede „Plata nu a reușit” cu butonul de
+  reîncercare (înainte rămânea la „Așteptăm confirmarea plății”). Echipa primește pe email motivul exact dat de
+  procesator, iar în Setări → Plăți apare ultima eroare. „Testează conexiunea BT iPay” spune și mediul folosit și
+  ce înseamnă „Access denied”.
 
 ## [1.0.17] — 2026-11-19
 

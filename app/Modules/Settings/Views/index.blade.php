@@ -22,6 +22,12 @@
                     </ol>
                     <p class="small muted">Plata se confirmă numai după verificarea semnăturii Stripe și interogarea directă a plății la Stripe, niciodată din revenirea clientului pe site. Datele cardului nu trec prin site.</p>
                 @endif
+                @if ($section === 'plati' && str_contains($title, 'iPay') && $lastCardFailure && $lastCardFailure->provider === 'btipay')
+                    <div class="alert alert--warn">Ultima încercare de plată cu cardul ({{ $lastCardFailure->created_at->format('d.m.Y H:i') }}) nu a pornit: {{ $lastCardFailure->failure_reason }}</div>
+                @endif
+                @if ($section === 'plati' && str_contains($title, 'Stripe') && $lastCardFailure && $lastCardFailure->provider === 'stripe')
+                    <div class="alert alert--warn">Ultima încercare de plată prin Stripe ({{ $lastCardFailure->created_at->format('d.m.Y H:i') }}) nu a pornit: {{ $lastCardFailure->failure_reason }}</div>
+                @endif
                 @if ($section === 'plati' && str_contains($title, 'iPay'))
                     <p class="small muted">Completați „Utilizator API” și „Parola API” primite de la BT, alegeți mediul (Test pentru probe, Producție pentru plăți reale), salvați, apăsați „Testează conexiunea BT iPay”, apoi bifați „Plata cu cardul este activă”.</p>
                 @endif

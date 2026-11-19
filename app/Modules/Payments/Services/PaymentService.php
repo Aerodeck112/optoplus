@@ -49,18 +49,33 @@ class PaymentService
         }
         $gateway = $this->methods->gateway($provider);
         if (! $gateway || ! $gateway->isConfigured()) {
-            $payment->update(['status' => 'esuata', 'failure_reason' => 'Procesatorul nu este configurat.']);
-
-            return $payment;
+            return $this->startFailed($payment, $order, 'Procesatorul nu este configurat.');
         }
         $result = $gateway->start($payment, $order, url('/comanda/'.$order->uuid.'/'));
         if (! $result->ok) {
-            $payment->update(['status' => 'esuata', 'failure_reason' => mb_substr((string) $result->error, 0, 255)]);
-
-            return $payment;
+            return $this->startFailed($payment, $order, (string) $result->error);
         }
         $payment->update(['status' => 'in_asteptare', 'provider_reference' => $result->providerReference, 'redirect_url' => $result->redirectUrl]);
         $this->status->payment($order, 'in_asteptare', 'Plata cu cardul a fost inițiată.', 'sistem');
+
+        return $payment;
+    }
+
+    /**
+     * Pagina de plată nu a putut fi deschisă (ex. date BT greșite sau mediul test/producție inversat): clientul vede
+     * „Plata nu a reușit” cu butonul de reîncercare, iar echipa primește motivul dat de procesator (fără date secrete).
+     */
+    private function startFailed(Payment $payment, Order $order, string $reason): Payment
+    {
+        $reason = mb_substr($reason, 0, 255);
+        $payment->update(['status' => 'esuata', 'failure_reason' => $reason]);
+        $this->status->payment($order, 'esuata', 'Plata cu cardul nu a putut fi pornită.', 'sistem');
+        Audit::log('payment.start_failed', $payment, ['provider' => $payment->provider, 'motiv' => $reason], $order->customer_id);
+        \App\Core\Notifications\StaffAlert::send(
+            "Plata cu cardul nu a pornit: comanda {$order->number}",
+            ["Procesator: {$payment->provider}.", "Motiv: {$reason}", 'Verificați Setări plăți și livrare → Plăți (datele și mediul Test / Producție), apoi „Testează conexiunea”.'],
+            url('/panou/setari/plati'),
+        );
 
         return $payment;
     }

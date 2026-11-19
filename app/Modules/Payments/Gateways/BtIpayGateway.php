@@ -130,7 +130,13 @@ class BtIpayGateway implements PaymentGateway
         if (! $res || (int) ($res['errorCode'] ?? 0) !== 0 || empty($res['orderId']) || empty($res['formUrl'])) {
             Log::warning('BT iPay: înregistrarea comenzii a fost refuzată', ['order' => $order->number, 'errorCode' => $res['errorCode'] ?? null]);
 
-            return new StartResult(false, error: 'Plata cu cardul nu a putut fi inițiată'.(isset($res['errorMessage']) ? ': '.mb_substr((string) $res['errorMessage'], 0, 120) : '.'));
+            $env = $this->settings->get('payments.btipay.environment', 'test') === 'productie' ? 'Producție' : 'Test';
+            if ($res === null) {
+                return new StartResult(false, error: "BT iPay nu a răspuns (mediul {$env}). Verificați adresa serverului și conexiunea hostingului.");
+            }
+
+            return new StartResult(false, error: "BT iPay a refuzat plata (mediul {$env}, cod ".($res['errorCode'] ?? '—').')'.(isset($res['errorMessage']) ? ': '.mb_substr((string) $res['errorMessage'], 0, 120) : '.')
+                .((int) ($res['errorCode'] ?? 0) === 5 ? ' — utilizatorul sau parola API nu sunt acceptate în acest mediu (datele de test merg doar cu „Test”, cele de producție doar cu „Producție”).' : ''));
         }
         if (! str_starts_with((string) $res['formUrl'], 'https://')) {
             return new StartResult(false, error: 'Adresa paginii de plată primită nu este sigură.');
@@ -212,6 +218,7 @@ class BtIpayGateway implements PaymentGateway
 
         return in_array($code, [5, 6], true) && ! preg_match('/acces|access|password|parol|login|autentific/i', $msg)
             ? ['ok' => true, 'message' => 'Conexiunea la BT iPay funcționează (răspuns: '.$msg.').']
-            : ['ok' => false, 'message' => 'BT iPay a răspuns cu eroarea '.$code.': '.$msg];
+            : ['ok' => false, 'message' => 'BT iPay a răspuns cu eroarea '.$code.': '.$msg.' (mediul '.($this->settings->get('payments.btipay.environment', 'test') === 'productie' ? 'Producție' : 'Test').')'
+                .(preg_match('/acces|access/i', $msg) ? '. Utilizatorul sau parola API nu sunt acceptate în acest mediu: datele de test merg doar cu „Test”, cele de producție doar cu „Producție”. Verificați și că ați copiat parola fără spații.' : '')];
     }
 }
