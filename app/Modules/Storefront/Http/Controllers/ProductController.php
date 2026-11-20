@@ -17,7 +17,10 @@ class ProductController extends Controller
 {
     public function show(string $slug, PriceEngine $prices, LensShowcase $lenses, ProductShowcase $showcase, CatalogQuery $catalog)
     {
-        $product = Product::where('slug', $slug)->where('status', Product::STATUS_PUBLISHED)
+        // 1.0.21: colegii autentificați în panou (cu dreptul de a vedea catalogul) pot previzualiza și ciornele.
+        $staff = \Illuminate\Support\Facades\Auth::guard('web')->user();
+        $preview = $staff?->can('catalog.view') ?? false;
+        $product = Product::where('slug', $slug)->when(! $preview, fn ($q) => $q->where('status', Product::STATUS_PUBLISHED))
             ->with(['brand', 'variants' => fn ($v) => $v->where('is_active', true), 'images' => fn ($i) => $i->where('status', 'ready')->with('media'), 'frameSpec', 'attributeValues.attribute'])
             ->first();
         if (! $product) {
@@ -40,7 +43,8 @@ class ProductController extends Controller
             $withLenses = $prices->quoteConfiguration(new ConfigurationInput(entry: 'cu_rama', frameVariantId: $default['model']->id, offeringId: $cheapest->id), $ctx)->totalGross;
         }
 
-        return view('storefront::product', [
+        $response = response()->view('storefront::product', [
+            'staffEdit' => $preview ? route('panou.catalog.product', $product->id) : null,
             'product' => $product,
             'variants' => $variants,
             'default' => $default,
@@ -52,5 +56,15 @@ class ProductController extends Controller
             'similar' => $showcase->cards($catalog->similar($product)),
             'faqs' => FaqItem::where('is_published', true)->whereIn('topic', ['rame', 'livrare', 'reteta'])->orderBy('sort')->limit(6)->get(),
         ]);
+        if ($preview) {
+            // pagina văzută de un coleg (cu butonul de editare / ciornă) nu se păstrează în cache și nu se indexează
+            $response->headers->set('Cache-Control', 'no-store, private');
+            $response->headers->set('X-No-Page-Cache', '1');
+            if ($product->status !== Product::STATUS_PUBLISHED) {
+                $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
+            }
+        }
+
+        return $response;
     }
 }

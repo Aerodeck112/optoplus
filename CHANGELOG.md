@@ -3,6 +3,19 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.21] — 2026-11-20
+
+Se poate instala direct peste 1.0.0 – 1.0.20.
+
+- **Buton „Editează”** pe fiecare rând din Catalog → Produse (plus „Vezi pe site” / „Previzualizare”).
+- **„✎ Editează” pe fiecare ramă din lista de rame de pe site** (Ochelari și rame, căutare, carusele), doar pentru
+  colegii autentificați în panou.
+- **„✎ Editează produsul” direct pe pagina produsului de pe site**, în colțul din stânga jos, vizibil doar pentru
+  colegii autentificați în panou (clienții nu îl văd). Duce la pagina ramei din panou.
+- **Previzualizarea ciornelor:** colegii autentificați pot deschide pe site o ramă încă nepublicată, cu eticheta
+  „Ciornă — clienții nu o văd”; pentru clienți, ciorna rămâne invizibilă, iar pagina nu se indexează și nu intră
+  în cache.
+
 ## [1.0.20] — 2026-11-20
 
 Se poate instala direct peste 1.0.0 – 1.0.19.

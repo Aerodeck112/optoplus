@@ -6,6 +6,13 @@
 @if ($product->noindex)@section('robots', 'noindex, follow')@endif
 @section('content')
 @php($price = $default['price'] ?? null)
+@if (! empty($staffEdit))
+    {{-- 1.0.21: doar pentru colegii autentificați în panou; pagina nu intră în cache. --}}
+    <div class="staff-bar" role="region" aria-label="Instrumente pentru echipă" data-no-localize translate="no" lang="ro">
+        @if ($product->status !== 'published')<span class="staff-bar__state">{{ $product->status === 'draft' ? 'Ciornă — clienții nu o văd' : 'Retras — clienții nu îl văd' }}</span>@endif
+        <a class="staff-bar__btn" href="{{ $staffEdit }}" data-no-localize>✎ Editează produsul</a>
+    </div>
+@endif
 <div class="wrap">
     <x-site.breadcrumbs :items="array_filter(['Ochelari și rame' => '/rame/', $product->brand?->name => $product->brand?->url(), $product->name => null])" />
     <div class="product">

@@ -13,7 +13,7 @@
             <button class="btn" type="submit">Filtrează</button>
         </form>
         <div class="table-wrap"><table class="table">
-            <thead><tr><th></th><th>Produs</th><th>Marcă</th><th>Stare</th><th>Variante</th><th class="num">Preț</th><th>Stoc</th></tr></thead>
+            <thead><tr><th></th><th>Produs</th><th>Marcă</th><th>Stare</th><th>Variante</th><th class="num">Preț</th><th>Stoc</th><th><span class="sr-only">Acțiuni</span></th></tr></thead>
             <tbody>@foreach ($products as $p)
                 @php($img = $p->images->first()?->media)
                 <tr>
@@ -24,6 +24,10 @@
                     <td>{{ $p->variants->count() }}</td>
                     <td class="num">{{ \App\Core\Support\Money::format($p->variants->min('price')) }}</td>
                     <td>{{ $p->variants->every(fn ($v) => $v->stock_qty === null) ? 'negestionat' : $p->variants->sum('stock_qty') }}</td>
+                    <td class="row-actions"><div class="row-actions__inner">
+                        <a class="btn btn--small" href="{{ route('panou.catalog.product', $p->id) }}">Editează</a>
+                        <a class="btn btn--small btn--ghost" href="{{ $p->url() }}" target="_blank" rel="noopener">{{ $p->status === 'published' ? 'Vezi pe site' : 'Previzualizare' }}</a>
+                    </div></td>
                 </tr>
             @endforeach</tbody>
         </table></div>

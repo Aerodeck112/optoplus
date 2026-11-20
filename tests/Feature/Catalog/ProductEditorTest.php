@@ -58,8 +58,8 @@ class ProductEditorTest extends TestCase
         $this->assertSame(0, $images[0]->sort);
         $this->assertTrue(\App\Core\Audit\AuditLog::where('action', 'catalog.product_created')->exists());
 
-        // ciorna nu apare pe site; după „Publică”, da
-        $this->get('/produs/'.$product->slug.'/')->assertNotFound();
+        // ciorna: colegul o previzualizează (clienții nu o văd — vezi testul cu butoanele); după „Publică”, apare pentru toți
+        $this->get('/produs/'.$product->slug.'/')->assertOk()->assertSee('Ciornă — clienții nu o văd');
         $this->post('/panou/catalog/produse/'.$product->id.'/stare', ['stare' => 'published'])->assertRedirect();
         $this->get('/produs/'.$product->slug.'/')->assertOk()->assertSee('Ramă Fictivă Test 5201')->assertSee('499,90');
     }
@@ -106,5 +106,26 @@ class ProductEditorTest extends TestCase
         $this->actingAsRole(Roles::SPECIALIST_OPTIC);
         $this->get('/panou/catalog/produse/nou')->assertForbidden();
         $this->post('/panou/catalog/produse', ['tip' => 'frame', 'nume' => 'X'])->assertForbidden();
+    }
+
+    public function test_edit_buttons_in_the_list_and_on_the_site_for_staff_only(): void
+    {
+        $frame = $this->frame(30000);
+        $product = $frame->product;
+        $draft = Product::create(['type' => 'frame', 'name' => 'Ramă Fictivă Ciornă', 'slug' => 'rama-fictiva-ciorna', 'status' => Product::STATUS_DRAFT,
+            'sale_unit' => 'piece', 'availability_mode' => 'la_comanda', 'configurable_with_lenses' => true]);
+
+        // vizitator: fără bară, ciorna nu există
+        $this->get('/produs/'.$product->slug.'/')->assertOk()->assertDontSee('Editează produsul');
+        $this->get('/produs/'.$draft->slug.'/')->assertNotFound();
+
+        $this->get('/rame/')->assertOk()->assertDontSee('card__edit', false);
+
+        $this->actingAsRole(Roles::MANAGER);
+        $this->get('/panou/catalog/produse')->assertOk()->assertSee('Editează')->assertSee('Previzualizare');
+        $this->get('/rame/')->assertOk()->assertSee('card__edit', false)->assertSee(route('panou.catalog.product', $product->id), false);
+        $this->get('/produs/'.$product->slug.'/')->assertOk()->assertSee('Editează produsul')
+            ->assertSee(route('panou.catalog.product', $product->id), false)->assertHeader('Cache-Control', 'no-store, private');
+        $this->get('/produs/'.$draft->slug.'/')->assertOk()->assertSee('Ciornă — clienții nu o văd')->assertHeader('X-Robots-Tag', 'noindex, nofollow');
     }
 }
