@@ -3,6 +3,36 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.22] — 2026-11-21
+
+Se poate instala direct peste 1.0.0 – 1.0.21. Verificarea cerințelor legale pentru magazinul online
+(raportul complet: `docs/CONFORMITATE-LEGALA.md`).
+
+- **Retragere online din contract** (OUG 34/2014 art. 11¹, introdus prin OUG 18/2026, obligatoriu din 19.06.2026):
+  butonul **„Retrageți-vă din contract aici”** (în subsol, pe pagina comenzii și în emailul de confirmare), pasul
+  **„Confirmați retragerea”** și confirmarea de primire trimisă imediat pe email, cu conținutul declarației, data
+  și ora. Fără cont. Declarațiile apar în panou la **Comenzi → Retrageri din contract** (stare, notă, audit) și ca
+  notă pe comandă; echipa primește alertă pe adresele de notificare.
+- **Formularul tip de retragere** (anexa 1 B), cu datele firmei, de tipărit: /formular-retragere/.
+- **Garanția legală de conformitate**: notificarea armonizată a UE (Regulamentul (UE) 2025/1960, obligatorie din
+  27.09.2026) pe /garantie-legala/, în română, engleză și maghiară, la finalizarea comenzii și pe pagina produsului.
+- **Finalizarea comenzii**: caseta „Înainte să comandați” (dreptul de retragere, excepția produselor personalizate,
+  retragerea online, garanția legală), iar butonul se numește **„Comandă cu obligație de plată”** (OUG 34/2014
+  art. 8 alin. (2)).
+- **Subsolul**: SOL (platforma europeană ODR, închisă la 20.07.2025) a fost scos; rămân SAL (ANPC) și depunerea
+  online a reclamațiilor SAL; linkuri noi: retragere, formular, garanția legală.
+- **Fără redirecționare automată după țară** (Regulamentul (UE) 2018/302 privind geo-blocking-ul): vizitatorul din
+  Ungaria sau din altă țară vede o întrebare („Vedeți siteul în maghiară, cu prețuri în forinți?”) și alege; nu mai
+  este mutat singur.
+- **Date despre producător pe produs** (Regulamentul (UE) 2023/988 – GPSR, art. 19): la Catalog → Mărci se
+  completează producătorul, adresa, contactul și persoana responsabilă în UE; apar pe pagina produsului.
+- **Videoclipurile YouTube** nu mai contactează Google până nu sunt pornite (imaginea de previzualizare vine de pe
+  siteul nostru); pornirea automată doar după ce vizitatorul a pornit o dată un videoclip.
+- **Textele juridice** (termeni, retur, livrare UE, confidențialitate, cookie-uri): ciorne noi, actualizate pentru
+  plata în euro/forinți, Stripe, livrarea în străinătate, retragerea online și garanția legală. **Nu se publică
+  singure**: le verificați și le publicați din Site → Pagini → Juridice. Ciornele scrise deja de echipă nu sunt atinse.
+- Traduceri EN/HU pentru toate textele noi.
+
 ## [1.0.21] — 2026-11-20
 
 Se poate instala direct peste 1.0.0 – 1.0.20.

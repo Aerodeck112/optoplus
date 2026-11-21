@@ -39,7 +39,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // /en/… și /hu/…: limba din adresă (vezi LocalizeSite); rulează după CanonicalHost și TrailingSlash.
         $middleware->prepend(\App\Modules\I18n\Http\Middleware\LocalizeSite::class);
-        // Prima vizită: limba și valuta după țara vizitatorului (vezi DetectRegion); rulează înaintea LocalizeSite.
+        // Prima vizită: propune limba și valuta țării vizitatorului (vezi DetectRegion); rulează înaintea LocalizeSite.
         $middleware->prepend(\App\Modules\Regions\Http\Middleware\DetectRegion::class);
         // optoplus.ro ↔ www.optoplus.ro: o singură adresă (vezi CanonicalHost), înainte de orice altă procesare.
         $middleware->prepend(\App\Core\Http\Middleware\CanonicalHost::class);
@@ -59,7 +59,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
             default => route('login'),
         });
         $middleware->redirectUsersTo(fn (Request $request) => $request->is('cont', 'cont/*') ? '/cont/' : route('panou.dashboard'));
-        $middleware->encryptCookies(except: [\App\Modules\Regions\Http\Middleware\DetectRegion::COOKIE]);
+        $middleware->encryptCookies(except: [\App\Modules\Regions\Http\Middleware\DetectRegion::COOKIE, \App\Modules\Regions\Http\Middleware\DetectRegion::SUGGESTION]);
         // În mentenanță (ex. în timpul unei actualizări) rămân accesibile doar autentificarea și tabul Actualizări.
         $middleware->preventRequestsDuringMaintenance(except: [
             'panou/actualizari', 'panou/actualizari/*', 'panou/autentificare', 'panou/autentificare/*',

@@ -65,6 +65,7 @@
             </dl>
             <div class="summary__total"><span>Total</span><span>{{ $fmt($order->total) }}</span></div>
             @if ($order->production_days_min)<p class="summary__note">Timp estimat de producție: {{ $order->production_days_min }}–{{ $order->production_days_max }} zile lucrătoare, plus transportul.</p>@endif
+            <p class="summary__note"><a class="btn-legal-withdraw" href="/retragere/?comanda={{ urlencode($order->number) }}">Retrageți-vă din contract aici</a> · <a href="/garantie-legala/">Garanția legală</a> · <a href="/termeni-si-conditii/">Termeni și condiții</a></p>
         </aside>
     </div>
 </div>

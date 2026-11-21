@@ -159,10 +159,16 @@
     <div class="wrap site-footer__legal">
         @if ($company = $site->companyLine())<p>{{ $company }}</p>@endif
         <p>© {{ date('Y') }} Optoplus. {{ \App\Core\Support\Tax::note() }}@if(\App\Core\Support\Tax::payer()) Excepție: prețurile afișate partenerilor ca „fără TVA”.@endif</p>
-        <p><a href="https://anpc.ro/ce-este-sal/" rel="noopener">ANPC — Soluționarea alternativă a litigiilor (SAL)</a> · <a href="https://ec.europa.eu/consumers/odr" rel="noopener">Soluționarea online a litigiilor (SOL)</a></p>
+        <div class="dispute-badges" aria-label="Soluționarea litigiilor">
+            <a class="dispute-badge" href="https://anpc.ro/ce-este-sal/" rel="noopener" target="_blank"><strong>SAL</strong><span>Soluționarea alternativă a litigiilor — ANPC</span></a>
+            <a class="dispute-badge" href="https://reclamatiisal.anpc.ro/" rel="noopener" target="_blank"><strong>ANPC</strong><span>Depune o cerere SAL online</span></a>
+        </div>
+        <p><a href="/retragere/">Retrageți-vă din contract aici</a> · <a href="/formular-retragere/">Formular tip de retragere</a> · <a href="/garantie-legala/">Garanția legală</a></p>
         <p class="site-footer__credit">Powered by <a href="https://vitim.ro" rel="noopener" target="_blank"><strong>VITIM</strong></a>@if (\App\Modules\Regions\Services\GeoCountry::installedAt()) <span translate="no">· <a href="https://db-ip.com" rel="noopener" target="_blank">IP Geolocation by DB-IP</a></span>@endif</p>
     </div>
 </footer>
 @stack('scripts')
+    {{-- 1.0.22: propunerea limbii țării vizitatorului (fără redirecționare automată; regulile UE cer acordul clientului). --}}
+    <div data-module="region-suggest" hidden></div>
 </body>
 </html>

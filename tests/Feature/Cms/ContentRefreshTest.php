@@ -44,7 +44,7 @@ class ContentRefreshTest extends TestCase
         $this->get('/productia-noastra/')->assertOk()
             ->assertSee('data-video-id="kB3VeYY-V50"', false)
             ->assertSee('data-autoplay', false)
-            ->assertSee('https://i.ytimg.com/vi/kB3VeYY-V50/maxresdefault.jpg', false)
+            ->assertSee('/video-poster/kB3VeYY-V50.jpg', false)->assertDontSee('i.ytimg.com', false)
             ->assertDontSee('<iframe', false);
 
         $types = collect(Page::where('path', '/')->firstOrFail()->publishedVersion->blocks)->pluck('type');

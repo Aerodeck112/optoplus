@@ -28,7 +28,7 @@ class BrandController extends ResourceController
 
     protected function description(): ?string
     {
-        return '„Marcă proprie” înseamnă că Optoplus vinde rama sub numele său; nu înseamnă că o produce.';
+        return '„Marcă proprie” înseamnă că Optoplus vinde rama sub numele său; nu înseamnă că o produce. Datele producătorului apar pe pagina fiecărei rame a mărcii (obligatoriu pentru vânzarea online, Regulamentul (UE) 2023/988): completați-le din documentele furnizorului.';
     }
 
     protected function fields(): array
@@ -38,6 +38,12 @@ class BrandController extends ResourceController
             Field::make('slug', 'Slug (URL /marci/<slug>/)')->rules('nullable|string|max:140|alpha_dash')->list(),
             Field::make('is_own_brand', 'Marcă proprie', 'checkbox')->list(),
             Field::make('description', 'Descriere', 'textarea')->rules('nullable|string|max:5000')->full(),
+            // 1.0.22 — Regulamentul (UE) 2023/988 (GPSR), art. 19: în oferta online apar producătorul (nume, adresă poștală
+            // și electronică) și, pentru producătorii din afara UE, persoana responsabilă din UE.
+            Field::make('manufacturer_name', 'Producător (denumirea completă, ex. firma care fabrică rama)')->rules('nullable|string|max:190'),
+            Field::make('manufacturer_address', 'Adresa poștală a producătorului')->rules('nullable|string|max:255'),
+            Field::make('manufacturer_contact', 'Contact electronic al producătorului (email sau site)')->rules('nullable|string|max:190'),
+            Field::make('eu_responsible', 'Persoana responsabilă din UE (doar pentru producătorii din afara UE: nume, adresă, contact)')->rules('nullable|string|max:255')->full(),
             Field::make('seo_title', 'Titlu SEO')->rules('nullable|string|max:255'),
             Field::make('seo_description', 'Descriere SEO')->rules('nullable|string|max:320'),
         ];

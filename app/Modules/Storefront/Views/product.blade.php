@@ -73,6 +73,12 @@
                     @if ($default)<dt>Cod produs</dt><dd>{{ $default['model']->sku_generated ? '—' : $default['model']->sku }}</dd>@endif
                     @foreach ($attrs as $a)<dt>{{ $a['label'] }}</dt><dd>{{ implode(', ', $a['values']) }}</dd>@endforeach
                     @if ($spec?->sizeNotation())<dt>Mărime</dt><dd>{{ $spec->sizeNotation() }}@if($spec->size_label) ({{ $spec->size_label }})@endif</dd>@endif
+                                    @if ($product->brand?->manufacturer_name)
+                        {{-- 1.0.22: GPSR (Regulamentul (UE) 2023/988, art. 19) — producătorul și, după caz, persoana responsabilă din UE --}}
+                        <dt>Producător</dt><dd translate="no">{{ $product->brand->manufacturer_name }}@if($product->brand->manufacturer_address), {{ $product->brand->manufacturer_address }}@endif @if($product->brand->manufacturer_contact)· {{ $product->brand->manufacturer_contact }}@endif</dd>
+                        @if ($product->brand->eu_responsible)<dt>Persoana responsabilă în UE</dt><dd translate="no">{{ $product->brand->eu_responsible }}</dd>@endif
+                    @endif
+                    <dt>Garanție</dt><dd>garanția legală de conformitate, cel puțin 2 ani · <a href="/garantie-legala/">detalii</a></dd>
                 </dl>
                 <p class="small muted" style="margin: 0"><x-site.icon name="truck" :size="18" /> Livrarea și costul ei se văd în coș, înainte de plată. Timpul de producție al lentilelor se adaugă celui de transport.</p>
             </div>

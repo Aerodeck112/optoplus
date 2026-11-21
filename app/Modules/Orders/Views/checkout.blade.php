@@ -134,8 +134,17 @@
                     <p class="small muted">Fotografie (JPG, PNG) sau PDF, cel mult 10 MB. Pe telefon poți face poza direct. Dovada o vede doar echipa Optoplus, pentru verificarea reducerii.</p>
                 </div>
             @endforeach
+            {{-- 1.0.22: informațiile cerute imediat înainte de comandă (OUG 34/2014 art. 6 alin. (1) și art. 8 alin. (2)). --}}
+            @php($legalLang = in_array(app()->getLocale(), ['ro', 'en', 'hu'], true) ? app()->getLocale() : 'ro')
+            <div class="pre-order">
+                <h3>Înainte să comandați</h3>
+                <p><strong>Dreptul de retragere:</strong> ramele cumpărate fără lentile și accesoriile se pot returna în 14 zile de la primire, fără să indicați motivul. Lentilele și ochelarii făcuți după rețeta și alegerile dumneavoastră sunt produse personalizate și nu fac obiectul dreptului de retragere.</p>
+                <p>Vă puteți retrage și online: <a href="/retragere/">Retrageți-vă din contract aici</a> · <a href="/formular-retragere/">formularul tip de retragere</a>.</p>
+                <p><strong>Garanția legală de conformitate:</strong> cel puțin 2 ani pentru toate produsele.</p>
+                <a class="pre-order__notice" href="/garantie-legala/" data-no-localize><img src="/legal/garantie-legala-{{ $legalLang }}.jpg" width="1100" height="{{ ['ro' => 1298, 'en' => 1554, 'hu' => 1550][$legalLang] }}" loading="lazy" alt="Notificarea armonizată privind garanția legală de conformitate" translate="no"></a>
+            </div>
             <label class="check" style="margin-top: 16px"><input type="checkbox" name="acord_termeni" value="1" required @checked($v('acord_termeni'))><span>Am citit și accept <a href="/termeni-si-conditii/" target="_blank" rel="noopener">termenii și condițiile</a> și <a href="/politica-de-confidentialitate/" target="_blank" rel="noopener">politica de confidențialitate</a>.</span></label>
-            <button class="btn btn--primary btn--block" type="submit" name="actiune" value="plaseaza" @disabled(! $paymentMethods || ! $quote->isValid() || $itemErrors) style="margin-top: 16px">Plasează comanda</button>
+            <button class="btn btn--primary btn--block" type="submit" name="actiune" value="plaseaza" @disabled(! $paymentMethods || ! $quote->isValid() || $itemErrors) style="margin-top: 16px">Comandă cu obligație de plată</button>
             <p class="summary__note">Lentilele se produc după comandă, în laboratorul nostru. Un specialist optic verifică rețeta înainte de producție și vă contactează dacă e nevoie de o clarificare.</p>
         </aside>
     </form>

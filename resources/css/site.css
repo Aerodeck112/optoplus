@@ -1321,3 +1321,27 @@ input:not([type]), input[type="text"], input[type="email"], input[type="tel"], i
 .card__edit { position: absolute; top: 8px; left: 8px; z-index: 2; display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border-radius: 999px; background: var(--bleumarin); color: #fff; font-size: .82rem; font-weight: 800; text-decoration: none; box-shadow: 0 4px 14px rgb(5 59 94 / .25); }
 .card__edit:hover { background: #0a4c78; }
 .card__edit:focus-visible { outline: 3px solid var(--gravura); outline-offset: 2px; }
+
+/* ===== 1.0.22 — conformitate: retragere online, garanția legală, informații înainte de comandă ===== */
+.legal-flow { max-width: 860px; }
+.legal-flow .lead { font-size: 1.08rem; }
+.legal-flow .notice, .legal-flow .box { margin: var(--s4) 0; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 8px 20px; margin: 0; }
+.kv dt { font-weight: 700; color: var(--bleumarin); }
+.kv dd { margin: 0; }
+.legal-notice { margin: var(--s4) 0; }
+.legal-notice img { width: 100%; max-width: 760px; height: auto; border: 1px solid var(--linie); border-radius: 12px; }
+.legal-model p { margin: 0 0 12px; }
+.legal-model__line { color: var(--grafit-2); }
+.pre-order { margin-top: 16px; padding: 14px; border: 1px solid var(--linie); border-radius: 14px; background: #f7fafc; font-size: .9rem; display: grid; gap: 8px; }
+.pre-order h3 { margin: 0; font-size: 1rem; color: var(--bleumarin); }
+.pre-order p { margin: 0; }
+.pre-order__notice img { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--linie); }
+.btn-legal-withdraw { font-weight: 700; }
+.dispute-badges { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0; }
+.dispute-badge { display: inline-flex; align-items: center; gap: 8px; width: 250px; min-height: 50px; padding: 6px 12px; border-radius: 8px; background: #fff; color: #003399; border: 2px solid #003399; font-size: .78rem; font-weight: 700; line-height: 1.2; text-decoration: none; }
+.dispute-badge strong { font-size: 1.15rem; letter-spacing: .02em; }
+.region-suggest { position: fixed; z-index: 70; left: 50%; bottom: 16px; transform: translateX(-50%); width: min(560px, calc(100% - 24px)); background: #fff; border: 1px solid var(--linie); border-radius: 18px; box-shadow: 0 10px 40px rgb(5 59 94 / .22); padding: 16px; display: grid; gap: 10px; }
+.region-suggest p { margin: 0; }
+.region-suggest__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+@media print { .site-header, .site-footer, .topbar, .legal-flow > p:last-child, .region-suggest, .staff-bar { display: none !important; } }

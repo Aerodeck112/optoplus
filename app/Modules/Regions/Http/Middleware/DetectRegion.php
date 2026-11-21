@@ -12,16 +12,20 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * La prima vizită, siteul se deschide în limba (și valuta) țării vizitatorului: din Ungaria în maghiară, cu
- * prețuri în forinți; din altă țară decât România în engleză, cu prețuri în euro; din România în română, în lei.
+ * La prima vizită, siteul PROPUNE limba (și valuta) țării vizitatorului: din Ungaria maghiara, cu prețuri în forinți;
+ * din altă țară decât România engleza, cu prețuri în euro; din România româna, în lei.
  *
- * Doar o dată: alegerea se ține minte într-un cookie tehnic („optoplus_regiune”, fără date personale), iar
- * comutatorul de limbă funcționează apoi normal. Roboții motoarelor de căutare nu sunt redirecționați (fiecare
- * limbă își păstrează adresele, cu hreflang). Panoul, plățile și webhookurile nu sunt atinse.
+ * 1.0.22: nu mai redirecționează singur. Regulamentul (UE) 2018/302 (geo-blocking), art. 3 alin. (2), interzice
+ * redirecționarea către altă versiune a interfeței pe criteriul locului de reședință fără consimțământul explicit al
+ * clientului. Middleware-ul doar notează propunerea într-un cookie scurt („optoplus_sugestie”), iar pagina afișează
+ * întrebarea; clientul alege. Doar o dată (cookie tehnic „optoplus_regiune”, fără date personale). Roboții, panoul,
+ * plățile și webhookurile nu sunt atinse.
  */
 class DetectRegion
 {
     public const COOKIE = 'optoplus_regiune';
+
+    public const SUGGESTION = 'optoplus_sugestie';
 
     private const BOTS = '/bot|crawl|spider|slurp|facebookexternalhit|bingpreview|mediapartners|lighthouse|headless|curl|wget|python|monitor|preview/i';
 
@@ -37,17 +41,12 @@ class DetectRegion
         $target = $detected ? Countries::localeFor($detected) : null;
         $cookie = Cookie::create(self::COOKIE, $target ?? $current, now()->addYear(), '/', null, $request->isSecure(), true, false, 'Lax');
 
-        if ($target !== null && $target !== $current) {
-            $query = $request->getQueryString();
-            $response = redirect(Locales::path($target, $path).($query !== null ? '?'.$query : ''), 302);
-            $response->headers->set('Vary', 'Cookie');
-            $response->headers->set('Cache-Control', 'no-store, private');
-            $response->headers->setCookie($cookie);
-
-            return $response;
-        }
         $response = $next($request);
         $response->headers->setCookie($cookie);
+        if ($target !== null && $target !== $current) {
+            // propunerea, citită de JavaScript (bannerul „Vedeți siteul în …?”); expiră repede
+            $response->headers->setCookie(Cookie::create(self::SUGGESTION, $target, now()->addHour(), '/', null, $request->isSecure(), false, false, 'Lax'));
+        }
 
         return $response;
     }

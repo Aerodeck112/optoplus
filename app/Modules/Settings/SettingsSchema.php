@@ -131,7 +131,7 @@ final class SettingsSchema
             ],
             'valute' => [
                 'label' => 'Valute și țări', 'permission' => 'pricing.manage',
-                'intro' => 'Prețurile se păstrează în lei. Pe siteul în maghiară se afișează în forinți, pe cel în engleză în euro, calculate din lei la cursul de referință BNR (citit automat în fiecare zi lucrătoare) sau la cursul introdus aici. Fără curs, siteul rămâne în lei. La prima vizită, siteul se deschide în limba țării vizitatorului (Ungaria → maghiară, alte țări → engleză, România → română); vizitatorul poate schimba apoi limba.',
+                'intro' => 'Prețurile se păstrează în lei. Pe siteul în maghiară se afișează în forinți, pe cel în engleză în euro, calculate din lei la cursul de referință BNR (citit automat în fiecare zi lucrătoare) sau la cursul introdus aici. Fără curs, siteul rămâne în lei. La prima vizită, siteul propune limba țării vizitatorului (Ungaria → maghiară, alte țări → engleză, România → română); vizitatorul alege, iar regulile UE (geo-blocking) nu permit mutarea lui automată fără acord.',
                 'groups' => [
                     'Valute' => [
                         'currency.enabled' => ['Afișează prețurile în euro (engleză) și forinți (maghiară)', 'bool'],
@@ -141,7 +141,7 @@ final class SettingsSchema
                         'currency.markup_bp' => ['Adaos la conversie (%, ex. 2 pentru comisioanele de schimb; 0 = fără)', 'percent'],
                     ],
                     'Limba după țara vizitatorului' => [
-                        'regions.auto_detect' => ['La prima vizită, deschide siteul în limba țării vizitatorului', 'bool'],
+                        'regions.auto_detect' => ['La prima vizită, propune limba țării vizitatorului (vizitatorul alege)', 'bool'],
                     ],
                 ],
             ],

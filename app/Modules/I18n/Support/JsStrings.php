@@ -34,6 +34,8 @@ final class JsStrings
         ' în nuanța aleasă',
         'Afară, la soare: lentila se închide{shade}. Viteza reală depinde de lumina UV și de temperatură.',
         'Ilustrație: lentilă în fața unui tabel optotip',
+        'Rămân pe această versiune',
+        'Alegeți limba siteului',
     ];
 
     /** @return array<string, string> doar textele care au traducere */

@@ -1,5 +1,6 @@
-// Video YouTube: iframe-ul se încarcă abia la apăsare (sau, cu pornire automată, când ajunge pe ecran),
-// de pe youtube-nocookie.com, ca pagina să rămână rapidă. Dacă playerul raportează o eroare (clip
+// Video YouTube: iframe-ul se încarcă abia la apăsare, de pe youtube-nocookie.com, ca pagina să rămână rapidă.
+// 1.0.22: „pornirea automată” funcționează doar după ce vizitatorul a pornit o dată un videoclip (acordul lui pentru
+// conținutul YouTube, ținut minte în browser): fără acord, nimic nu se încarcă de la Google (Legea 506/2004, GDPR). Dacă playerul raportează o eroare (clip
 // restricționat, indisponibil în regiune etc.), revenim la imaginea de previzualizare cu link spre YouTube,
 // în loc să lăsăm pe pagină ecranul negru „Video unavailable”.
 const YT_ORIGINS = ['https://www.youtube-nocookie.com', 'https://www.youtube.com'];
@@ -41,12 +42,19 @@ export default function video(fig) {
         poster.replaceWith(iframe);
     };
 
-    function onClick(e) { e.preventDefault(); load(false); }
+    const ACCEPTED = 'optoplus_video_ok';
+    function onClick(e) {
+        e.preventDefault();
+        try { localStorage.setItem(ACCEPTED, '1'); } catch { /* fără localStorage: doar pornirea la apăsare */ }
+        load(false);
+    }
+    let accepted = false;
+    try { accepted = localStorage.getItem(ACCEPTED) === '1'; } catch { accepted = false; }
 
     window.addEventListener('message', onMessage);
     poster.addEventListener('click', onClick);
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if ('autoplay' in fig.dataset && !reduce && 'IntersectionObserver' in window) {
+    if ('autoplay' in fig.dataset && accepted && !reduce && 'IntersectionObserver' in window) {
         const io = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) { io.disconnect(); load(true); }
         }, { threshold: 0.35 });

@@ -71,29 +71,32 @@ class RegionsCurrencyTest extends TestCase
         $this->assertNull($r->rate('HUF'), 'fără curs manual pentru forint → forintul nu se folosește');
     }
 
-    public function test_first_visit_opens_the_site_in_the_language_of_the_visitor_country_once(): void
+    public function test_first_visit_proposes_the_language_of_the_visitor_country_without_redirecting(): void
     {
+        // Regulamentul (UE) 2018/302, art. 3 alin. (2): fără redirecționare automată după țară; doar propunere (banner)
         $get = fn (string $url, array $headers = []) => $this->flushHeaders()->withHeaders($headers + ['User-Agent' => self::BROWSER, 'Accept' => 'text/html'])->get($url);
 
-        $get('/rame/', ['CF-IPCountry' => 'HU'])->assertRedirect('/hu/rame/')->assertCookie(DetectRegion::COOKIE, 'hu', false);
-        $get('/', ['CF-IPCountry' => 'DE'])->assertRedirect('/en/');
-        $get('/en/rame/', ['CF-IPCountry' => 'RO'])->assertRedirect('/rame/');
-        $get('/rame/', ['CF-IPCountry' => 'RO'])->assertOk()->assertCookie(DetectRegion::COOKIE, 'ro', false);
+        $get('/rame/', ['CF-IPCountry' => 'HU'])->assertOk()->assertCookie(DetectRegion::COOKIE, 'hu', false)->assertCookie(DetectRegion::SUGGESTION, 'hu', false)
+            ->assertSee('data-module="region-suggest"', false);
+        $get('/rame/', ['CF-IPCountry' => 'DE'])->assertOk()->assertCookie(DetectRegion::SUGGESTION, 'en', false);
+        $get('/en/rame/', ['CF-IPCountry' => 'RO'])->assertOk()->assertCookie(DetectRegion::SUGGESTION, 'ro', false);
+        $get('/rame/', ['CF-IPCountry' => 'RO'])->assertOk()->assertCookie(DetectRegion::COOKIE, 'ro', false)->assertCookieMissing(DetectRegion::SUGGESTION);
 
-        // a doua vizită (cookie), roboții și panoul: fără redirecționare
-        $this->flushHeaders()->withUnencryptedCookie(DetectRegion::COOKIE, 'ro')->withHeaders(['User-Agent' => self::BROWSER, 'Accept' => 'text/html', 'CF-IPCountry' => 'HU'])->get('/rame/')->assertOk();
+        // a doua vizită (cookie), roboții și panoul: nicio propunere
+        $this->flushHeaders()->withUnencryptedCookie(DetectRegion::COOKIE, 'ro')->withHeaders(['User-Agent' => self::BROWSER, 'Accept' => 'text/html', 'CF-IPCountry' => 'HU'])->get('/rame/')
+            ->assertOk()->assertCookieMissing(DetectRegion::SUGGESTION);
         $this->defaultCookies = [];
         $this->unencryptedCookies = [];
-        $get('/rame/', ['CF-IPCountry' => 'HU', 'User-Agent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'])->assertOk();
+        $get('/rame/', ['CF-IPCountry' => 'HU', 'User-Agent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'])->assertOk()->assertCookieMissing(DetectRegion::SUGGESTION);
         $this->assertNotSame('/hu/panou/autentificare', $get('/panou/autentificare', ['CF-IPCountry' => 'HU'])->headers->get('Location'));
 
-        // limba browserului: doar maghiara mută automat
-        $get('/rame/', ['Accept-Language' => 'hu-HU,hu;q=0.9'])->assertRedirect('/hu/rame/');
-        $get('/rame/', ['Accept-Language' => 'en-US,en;q=0.9'])->assertOk();
+        // limba browserului: doar maghiara e propusă
+        $get('/rame/', ['Accept-Language' => 'hu-HU,hu;q=0.9'])->assertOk()->assertCookie(DetectRegion::SUGGESTION, 'hu', false);
+        $get('/rame/', ['Accept-Language' => 'en-US,en;q=0.9'])->assertOk()->assertCookieMissing(DetectRegion::SUGGESTION);
 
         // dezactivat din Setări → Valute și țări
         app(Settings::class)->set('regions.auto_detect', false);
-        $get('/rame/', ['CF-IPCountry' => 'HU'])->assertOk();
+        $get('/rame/', ['CF-IPCountry' => 'HU'])->assertOk()->assertCookieMissing(DetectRegion::SUGGESTION);
     }
 
     public function test_prices_follow_the_language_currency_and_fall_back_to_lei_without_rate(): void

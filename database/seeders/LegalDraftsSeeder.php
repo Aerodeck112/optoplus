@@ -28,6 +28,8 @@ class LegalDraftsSeeder extends Seeder
             '{telefon}' => e($s->get('contact.phone_b2c') ?? '[telefon]'),
             '{email}' => e($s->get('contact.email_b2c') ?? '[email]'),
             '{cost_livrare}' => Money::format((int) ($s->get('shipping.courier_price') ?? 0)),
+            '{cost_hu}' => number_format(((int) ($s->get('shipping.hu_price') ?? 2000)) / 100, 2, ',', '.').' €',
+            '{cost_intl}' => number_format(((int) ($s->get('shipping.intl_price') ?? 2500)) / 100, 2, ',', '.').' €',
             '{termen_executie}' => ($s->get('orders.production_days_min') ?? 2).'–'.($s->get('orders.production_days_max') ?? 5),
             '{nota_tva}' => e(Tax::note()),
             '{retentie_reteta}' => (string) config('optoplus.retention.prescription_years', 3),

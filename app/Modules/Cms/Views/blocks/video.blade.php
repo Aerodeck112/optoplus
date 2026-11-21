@@ -1,5 +1,5 @@
-{{-- Video YouTube: imagine de previzualizare + buton; iframe-ul (youtube-nocookie) se încarcă la apăsare sau, cu
-     „pornire automată”, când blocul ajunge pe ecran, fără sunet și în buclă. Fără JavaScript: link spre YouTube. --}}
+{{-- Video YouTube: imagine de previzualizare (servită de pe siteul nostru) + buton; iframe-ul (youtube-nocookie) se încarcă
+     la apăsare; „pornirea automată” doar după ce vizitatorul a pornit o dată un videoclip. Fără JavaScript: link spre YouTube. --}}
 @php($id = \App\Modules\Cms\Services\BlockRegistry::youtubeId((string) ($d['youtube_url'] ?? '')))
 @if ($id)
 <section class="section section--video">
@@ -12,10 +12,10 @@
         @endif
         <figure class="video" data-module="video" data-video-id="{{ $id }}" @if(! empty($d['autoplay'])) data-autoplay @endif data-reveal>
             <a class="video__poster" href="https://www.youtube.com/watch?v={{ $id }}" target="_blank" rel="noopener" aria-label="Pornește videoclipul{{ ! empty($d['title']) ? ': '.$d['title'] : '' }}">
-                <img src="https://i.ytimg.com/vi/{{ $id }}/maxresdefault.jpg" alt="" loading="lazy" width="1280" height="720">
+                <img src="/video-poster/{{ $id }}.jpg" alt="" loading="lazy" width="1280" height="720">
                 <span class="video__play" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
             </a>
-            @if (! empty($d['caption']))<figcaption>{{ $d['caption'] }}</figcaption>@endif
+            <figcaption>@if (! empty($d['caption'])){{ $d['caption'] }} · @endif<span class="small muted">Videoclipul se încarcă de pe YouTube (Google) doar după ce îl porniți.</span></figcaption>
         </figure>
     </div>
 </section>

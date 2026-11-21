@@ -50,7 +50,10 @@ Legendă: ✅ da · ⚠️ parțial / cu condiții · ❌ nu · 🔒 blocat de a
 | Plată card Stripe (EUR, HUF) | ✅ 1.0.17 | ✅ cu răspunsuri Stripe simulate | ❌ | 🔒 netestat cu un cont Stripe real | cheile și webhookul se completează în Setări → Plăți |
 | Notificări interne pe mai multe adrese | ✅ 1.0.17 | ✅ | ❌ | 🔒 SMTP | comandă nouă, plată, anulare, cereri de pe site |
 | Utilizatori: editare, drepturi suplimentare | ✅ 1.0.17 | ✅ | ❌ | — | |
-| Texte juridice | ⚠️ ciorne | ✅ | ❌ | — | de verificat și publicat de Optoplus (Site → Pagini → Juridice) |
+| Retragere online din contract (buton, confirmare, email cu data și ora), formular tip, panou „Retrageri” | ✅ 1.0.22 | ✅ desktop + mobil | ❌ | 🔒 SMTP | OUG 18/2026, aplicabil din 19.06.2026 |
+| Garanția legală: notificarea armonizată UE (RO/EN/HU), caseta „Înainte să comandați”, butonul „Comandă cu obligație de plată” | ✅ 1.0.22 | ✅ | ❌ | — | Regulamentul (UE) 2025/1960, din 27.09.2026 |
+| Fără redirecționare după țară (doar propunere), SOL scos, date producător pe produs (GPSR) | ✅ 1.0.22 | ✅ | ❌ | — | ⚠️ datele producătorilor se completează la Catalog → Mărci; ⚠️ pictograma oficială SAL (ANPC) de primit |
+| Texte juridice | ⚠️ ciorne (actualizate 1.0.22) | ✅ | ❌ | — | de verificat și publicat de Optoplus (Site → Pagini → Juridice) |
 | Emailuri comenzi | ✅ | ✅ | ❌ | 🔒 | serverul SMTP se configurează în `shared/.env` la instalare |
 | Asistent AI | ❌ | ❌ | ❌ | — | urmează |
 | Pachet instalare cPanel + actualizare semnată | ✅ | ✅ pe cPanel simulat | ❌ | — | vezi `docs/INSTALARE-SI-RECUPERARE.md` |

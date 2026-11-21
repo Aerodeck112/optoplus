@@ -43,6 +43,11 @@ class OrderUpdate extends Notification implements ShouldQueue
                 if ($order->requiresProduction()) {
                     $mail->line('Lentilele se produc în laboratorul nostru după comandă. Un specialist optic verifică rețeta înainte de producție și vă contactează dacă e nevoie de o clarificare.');
                 }
+                // 1.0.22: confirmarea contractului pe suport durabil — termenii, dreptul de retragere (și funcția online),
+                // formularul tip și garanția legală.
+                $mail->line('Termenii și condițiile comenzii: '.url('/termeni-si-conditii/'))
+                    ->line('Dreptul de retragere: ramele fără lentile și accesoriile se pot returna în 14 zile de la primire, fără motiv; lentilele și ochelarii făcuți după rețetă sunt personalizați și nu fac obiectul dreptului de retragere. Vă puteți retrage online, aici: '.url('/retragere/?comanda='.urlencode($order->number)).' (formularul tip: '.url('/formular-retragere/').').')
+                    ->line('Garanția legală de conformitate, de cel puțin 2 ani: '.url('/garantie-legala/'));
                 if ($order->payment_method === 'transfer_bancar' && ($bank = app(PaymentMethods::class)->bankDetails())) {
                     $mail->line("Plata prin transfer: {$bank['beneficiary']}, IBAN {$bank['iban']}".($bank['bank'] ? ", {$bank['bank']}" : '').", suma ".Money::format($order->balanceDue(), true, $order->currency).", cu mențiunea „Comanda {$order->number}”.");
                 }
