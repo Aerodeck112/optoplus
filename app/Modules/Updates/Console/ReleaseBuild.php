@@ -129,8 +129,10 @@ class ReleaseBuild extends Command
             }
         }
         // Instantaneul siteului vechi e necesar doar la instalarea inițială (importul conținutului). Traducerile
-        // (database/content/i18n) se livrează însă și în actualizări: migrarea limbilor le încarcă.
-        if ($type === 'update' && str_starts_with($rel, 'database/content/') && ! str_starts_with($rel, 'database/content/i18n/')) {
+        // (database/content/i18n) și proiectele textelor juridice (database/content/legal, 1.0.22) se livrează însă și
+        // în actualizări: migrările le încarcă.
+        if ($type === 'update' && str_starts_with($rel, 'database/content/')
+            && ! str_starts_with($rel, 'database/content/i18n/') && ! str_starts_with($rel, 'database/content/legal/')) {
             return true;
         }
 
