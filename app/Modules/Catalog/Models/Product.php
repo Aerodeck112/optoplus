@@ -130,6 +130,30 @@ class Product extends Model
     }
 
     /** Prima variantă activă (prețul de pornire pentru produsele cu o singură variantă). */
+    /**
+     * Poza pentru o culoare (variantă): prima poză legată de ea; altfel prima poză comună tuturor culorilor; altfel prima
+     * poză. Fără variantă: prima poză comună (sau prima poză).
+     */
+    public function imageFor(?int $variantId): ?ProductImage
+    {
+        $images = $this->images;
+
+        return ($variantId ? $images->firstWhere('variant_id', $variantId) : null)
+            ?? $images->firstWhere('variant_id', null) ?? $images->first();
+    }
+
+    /**
+     * Pozele în ordinea galeriei pentru o culoare: întâi ale ei, apoi cele comune, apoi ale celorlalte culori.
+     *
+     * @return \Illuminate\Support\Collection<int, ProductImage>
+     */
+    public function galleryFor(?int $variantId)
+    {
+        $rank = fn (ProductImage $i) => $i->variant_id === null ? 1 : ((int) $i->variant_id === $variantId ? 0 : 2);
+
+        return $this->images->sortBy([fn ($a, $b) => [$rank($a), (int) $a->sort, $a->id] <=> [$rank($b), (int) $b->sort, $b->id]])->values();
+    }
+
     public function defaultVariant(): ?ProductVariant
     {
         return $this->variants->firstWhere('is_active', true) ?? $this->variants->first();

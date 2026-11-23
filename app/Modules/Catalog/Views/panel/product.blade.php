@@ -92,6 +92,16 @@
                                 @unless ($loop->last)<form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}">@csrf<button class="btn btn--small" name="actiune" value="jos" title="Mută mai în spate" aria-label="Mută mai în spate">→</button></form>@endunless
                                 <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}" data-confirm="Scoateți această poză de la produs?">@csrf<button class="btn btn--small btn--danger" name="actiune" value="sterge" title="Scoate poza" aria-label="Scoate poza">✕</button></form>
                             </div>
+                            @if ($product->variants->count() > 1)
+                                <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}" class="product-photo__color" data-autosubmit>@csrf<input type="hidden" name="actiune" value="culoare">
+                                    <label class="small" for="culoare-{{ $im->id }}">Culoarea</label>
+                                    <select id="culoare-{{ $im->id }}" name="varianta">
+                                        <option value="">Toate culorile</option>
+                                        @foreach ($product->variants as $pv)<option value="{{ $pv->id }}" @selected((int) $im->variant_id === $pv->id)>{{ $pv->name ?: $pv->sku }}</option>@endforeach
+                                    </select>
+                                    <noscript><button class="btn btn--small">Salvează</button></noscript>
+                                </form>
+                            @endif
                             <details class="small"><summary>Text alternativ</summary>
                                 <form method="post" action="{{ route('panou.catalog.product.image', [$product->id, $im->id]) }}" class="stack" style="gap:.3rem">@csrf<input type="hidden" name="actiune" value="alt"><input name="alt" value="{{ $im->alt }}" aria-label="Text alternativ" placeholder="ex. Ramă neagră, văzută din față"><button class="btn btn--small">Salvează</button></form>
                             </details>
@@ -100,10 +110,15 @@
                     </figure>
                 @endforeach
                 </div>
-                <p class="small muted">★ = poza principală (apare în catalog) · ← → = ordinea în galerie.</p>
+                <p class="small muted">★ = poza principală (apare în catalog) · ← → = ordinea în galerie.@if ($product->variants->count() > 1) · „Culoarea” = când clientul alege acea culoare, pe site apar doar pozele ei (prima devine imaginea mare); „Toate culorile” = pozele arătate la culorile care nu au poze proprii.@endif</p>
                 @can('catalog.edit')
                 <form method="post" action="{{ route('panou.catalog.product.images', $product->id) }}" enctype="multipart/form-data" class="stack" style="margin-top:.75rem">@csrf
                     <div class="field"><label class="field__label" for="poze">Adaugă poze (JPG, PNG, WebP; max. 10 MB; mai multe deodată)</label><input id="poze" type="file" name="poze[]" accept="image/jpeg,image/png,image/webp" multiple required></div>
+                    @if ($product->variants->count() > 1)
+                        <div class="field"><label class="field__label" for="poze-culoare">Pentru culoarea</label>
+                            <select id="poze-culoare" name="varianta"><option value="">Toate culorile</option>@foreach ($product->variants as $pv)<option value="{{ $pv->id }}">{{ $pv->name ?: $pv->sku }}</option>@endforeach</select>
+                        </div>
+                    @endif
                     @error('poze')<p class="field__error">{{ $message }}</p>@enderror @error('poze.*')<p class="field__error">{{ $message }}</p>@enderror
                     <button class="btn" type="submit">Încarcă pozele</button>
                 </form>

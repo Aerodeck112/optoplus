@@ -22,7 +22,7 @@
                 @php($cfg = $item->configuration)
                 @php($product = $item->kind === 'product' ? $item->variant?->product : $cfg?->frameVariant?->product)
                 <article class="line">
-                    <div class="line__img"><x-site.picture :media="$product?->images->first()?->media" :alt="$product?->name ?? 'Lentile'" sizes="120px" /></div>
+                    <div class="line__img"><x-site.picture :media="$product?->imageFor($item->kind === 'product' ? $item->variant_id : $cfg?->frame_variant_id)?->media" :alt="$product?->name ?? 'Lentile'" sizes="120px" /></div>
                     <div>
                         <h2 class="line__title h-reset">
                             @if ($item->kind === 'configuration')Ochelari configurați @if($cfg?->entry === 'fara_rama')(doar lentile)@endif @else{{ $line['label'] ?? $item->variant?->displayName() }}@endif

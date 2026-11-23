@@ -1345,3 +1345,8 @@ input:not([type]), input[type="text"], input[type="email"], input[type="tel"], i
 .region-suggest p { margin: 0; }
 .region-suggest__actions { display: flex; flex-wrap: wrap; gap: 8px; }
 @media print { .site-header, .site-footer, .topbar, .legal-flow > p:last-child, .region-suggest, .staff-bar { display: none !important; } }
+
+/* 1.0.23: culorile ramei cu poza lor; miniaturile altor culori se ascund */
+.gallery__thumbs button[hidden] { display: none; }
+.variants label.variants__photo { padding-left: 6px; }
+.variants__photo img { width: 44px; height: 30px; object-fit: contain; border-radius: 6px; background: var(--sticla, #f4f7fa); mix-blend-mode: multiply; }

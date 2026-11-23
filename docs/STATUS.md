@@ -32,7 +32,7 @@ Legendă: ✅ da · ⚠️ parțial / cu condiții · ❌ nu · 🔒 blocat de a
 | Plată ramburs | ✅ | ✅ | ❌ | — | activă implicit (confirmat) |
 | Plată transfer bancar | ✅ | ✅ | ❌ | — | se activează după completarea IBAN în Setări |
 | Plată card BT iPay | ✅ | ✅ cu răspunsuri BT simulate | ❌ | 🔒 netestat cu BT | adrese după biblioteca publică stev/btipay; de verificat cu documentația BT a comerciantului și în sandbox („Testează conexiunea”) |
-| Livrare curier 22 lei (România) | ✅ | ✅ | ❌ | — | fără integrare AWB automată: AWB-ul se introduce manual |
+| Livrare curier 26 lei (România; 22 lei până la 1.0.23) | ✅ | ✅ | ❌ | — | fără integrare AWB automată: AWB-ul se introduce manual |
 | Facturare | ⚠️ referință manuală | ✅ | ❌ | 🔒 | aplicația nu emite facturi; integrarea cu sistemul de facturare nu e configurată |
 | TVA 21% modificabil | ✅ | ✅ | ❌ | — | ⚠️ ANAF (01.11.2026): OFA SRL nu figurează înregistrată în scopuri de TVA → implicit „neplătitor” (cotă efectivă 0, același preț). Se schimbă din Setări → Firma |
 | Termen execuție 2–5 zile lucrătoare | ✅ | ✅ | ❌ | — | |
@@ -53,6 +53,7 @@ Legendă: ✅ da · ⚠️ parțial / cu condiții · ❌ nu · 🔒 blocat de a
 | Retragere online din contract (buton, confirmare, email cu data și ora), formular tip, panou „Retrageri” | ✅ 1.0.22 | ✅ desktop + mobil | ❌ | 🔒 SMTP | OUG 18/2026, aplicabil din 19.06.2026 |
 | Garanția legală: notificarea armonizată UE (RO/EN/HU), caseta „Înainte să comandați”, butonul „Comandă cu obligație de plată” | ✅ 1.0.22 | ✅ | ❌ | — | Regulamentul (UE) 2025/1960, din 27.09.2026 |
 | Fără redirecționare după țară (doar propunere), SOL scos, date producător pe produs (GPSR) | ✅ 1.0.22 | ✅ | ❌ | — | ⚠️ datele producătorilor se completează la Catalog → Mărci; ⚠️ pictograma oficială SAL (ANPC) de primit |
+| Poza ramei după culoarea aleasă (pagina produsului, coș, catalog) + legarea pozelor de culori în panou | ✅ 1.0.23 | ✅ | ❌ | — | la ramele importate, pozele fără culoare sunt arătate la culorile fără poze proprii |
 | Texte juridice | ⚠️ ciorne (actualizate 1.0.22) | ✅ | ❌ | — | de verificat și publicat de Optoplus (Site → Pagini → Juridice) |
 | Emailuri comenzi | ✅ | ✅ | ❌ | 🔒 | serverul SMTP se configurează în `shared/.env` la instalare |
 | Asistent AI | ❌ | ❌ | ❌ | — | urmează |

@@ -32,7 +32,7 @@ class ProductShowcase
         return collect($products)->map(function (Product $p) use ($ctx) {
             $variant = $p->defaultVariant();
             $price = $variant ? $this->prices->displayPrice($variant, $ctx) : null;
-            $image = $p->images->first();
+            $image = $p->imageFor($variant?->id);
 
             return [
                 'product' => $p,

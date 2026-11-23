@@ -28,7 +28,7 @@ class BusinessSettingsSeeder extends Seeder
             'tax.vat_lenses_bp' => 2100, 'tax.vat_frames_bp' => 2100, 'tax.vat_default_bp' => 2100, 'tax.vat_shipping_bp' => 2100,
             'tax.confirmed' => true,
             // Confirmat: livrare prin orice curier, 22 lei în România; termen de execuție 2–5 zile lucrătoare.
-            'shipping.courier_enabled' => true, 'shipping.courier_price' => 2200,
+            'shipping.courier_enabled' => true, 'shipping.courier_price' => 2600,
             'orders.production_days_min' => 2, 'orders.production_days_max' => 5,
             // Confirmat: numerar la livrare, card (BT iPay), transfer bancar. Cardul și transferul pornesc după
             // completarea credențialelor BT și a IBAN-ului în Setări → Plăți.

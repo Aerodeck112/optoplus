@@ -122,15 +122,17 @@ class ProductEditorController extends Controller
                 $spec->sources = ['panou' => 'copiată din „'.$source->name.'” de '.$request->user()->name.', '.now()->format('d.m.Y')];
                 $spec->save();
             }
+            $variantMap = [];
             foreach ($source->variants as $v) {
                 $nv = $v->replicate(['legacy_wc_id', 'gtin']);
                 $nv->product_id = $copy->id;
                 $nv->sku = self::uniqueSku($v->sku.'-C');
                 $nv->sku_generated = true;
                 $nv->save();
+                $variantMap[$v->id] = $nv->id;
             }
             foreach ($source->images as $im) {
-                ProductImage::create(['product_id' => $copy->id, 'variant_id' => null, 'media_id' => $im->media_id, 'source_url' => null,
+                ProductImage::create(['product_id' => $copy->id, 'variant_id' => $variantMap[$im->variant_id] ?? null, 'media_id' => $im->media_id, 'source_url' => null,
                     'status' => $im->status, 'alt' => $im->alt, 'sort' => $im->sort]);
             }
 
@@ -170,8 +172,8 @@ class ProductEditorController extends Controller
     public function uploadImages(Request $request, int $id, MediaLibrary $media)
     {
         $product = Product::findOrFail($id);
-        $request->validate(['poze' => ['required', 'array', 'max:20'], 'poze.*' => ['file', 'max:10240']], ['poze.required' => 'Alegeți cel puțin o poză.']);
-        $count = $this->attachUploads($request, $product, $media);
+        $request->validate(['poze' => ['required', 'array', 'max:20'], 'poze.*' => ['file', 'max:10240'], 'varianta' => ['nullable', 'integer']], ['poze.required' => 'Alegeți cel puțin o poză.']);
+        $count = $this->attachUploads($request, $product, $media, $this->variantOf($product, $request->input('varianta')));
         Audit::log('catalog.images_uploaded', $product, ['poze' => $count]);
 
         return back()->with('status', $count === 1 ? 'Poza a fost adăugată.' : "{$count} poze au fost adăugate.");
@@ -182,8 +184,9 @@ class ProductEditorController extends Controller
     {
         $product = Product::findOrFail($id);
         $image = ProductImage::where('product_id', $product->id)->findOrFail($imageId);
-        $data = $request->validate(['actiune' => ['required', 'in:principala,sus,jos,sterge,alt'], 'alt' => ['nullable', 'string', 'max:255']]);
-        DB::transaction(function () use ($product, $image, $data) {
+        $data = $request->validate(['actiune' => ['required', 'in:principala,sus,jos,sterge,alt,culoare'], 'alt' => ['nullable', 'string', 'max:255'], 'varianta' => ['nullable', 'integer']]);
+        $variantId = $data['actiune'] === 'culoare' ? $this->variantOf($product, $data['varianta'] ?? null) : null;
+        DB::transaction(function () use ($product, $image, $data, $variantId) {
             $images = ProductImage::where('product_id', $product->id)->orderBy('sort')->orderBy('id')->get()->values();
             $index = $images->search(fn ($i) => $i->id === $image->id);
             $order = $images->all();
@@ -196,6 +199,9 @@ class ProductEditorController extends Controller
             if ($data['actiune'] === 'sterge') {
                 $image->delete();
                 $order = array_values(array_filter($order, fn ($i) => $i->id !== $image->id));
+            }
+            if ($data['actiune'] === 'culoare') {
+                $image->update(['variant_id' => $variantId]);
             }
             if ($data['actiune'] === 'alt') {
                 $image->update(['alt' => $data['alt'] ?? null]);
@@ -210,10 +216,28 @@ class ProductEditorController extends Controller
         });
         Audit::log('catalog.image_'.$data['actiune'], $product, ['imagine' => $image->id]);
 
-        return back()->with('status', $data['actiune'] === 'sterge' ? 'Poza a fost scoasă de la produs.' : 'Pozele au fost actualizate.');
+        return back()->with('status', match ($data['actiune']) {
+            'sterge' => 'Poza a fost scoasă de la produs.',
+            'culoare' => $variantId ? 'Poza apare acum când clientul alege culoarea „'.($product->variants()->find($variantId)?->name ?: 'aleasă').'”.' : 'Poza apare acum la toate culorile.',
+            default => 'Pozele au fost actualizate.',
+        });
     }
 
-    private function attachUploads(Request $request, Product $product, MediaLibrary $media): int
+    /** Varianta (culoarea) aleasă pentru o poză; doar dintre variantele produsului. Gol = toate culorile. */
+    private function variantOf(Product $product, mixed $id): ?int
+    {
+        if ($id === null || $id === '') {
+            return null;
+        }
+        $variant = $product->variants()->whereKey((int) $id)->first();
+        if (! $variant) {
+            throw ValidationException::withMessages(['varianta' => 'Culoarea aleasă nu aparține acestui produs.']);
+        }
+
+        return $variant->id;
+    }
+
+    private function attachUploads(Request $request, Product $product, MediaLibrary $media, ?int $variantId = null): int
     {
         $files = (array) $request->file('poze', []);
         if ($files === []) {
@@ -225,7 +249,7 @@ class ProductEditorController extends Controller
         foreach ($files as $file) {
             $m = $media->upload($file, $product->name, 'catalog');
             $m->update(['uploaded_by' => $request->user()->id]);
-            ProductImage::create(['product_id' => $product->id, 'variant_id' => null, 'media_id' => $m->id, 'source_url' => null,
+            ProductImage::create(['product_id' => $product->id, 'variant_id' => $variantId, 'media_id' => $m->id, 'source_url' => null,
                 'status' => 'ready', 'alt' => $product->name, 'sort' => $hasImages || $count > 0 ? ++$sort : 0]);
             $count++;
         }

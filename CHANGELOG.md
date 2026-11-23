@@ -3,6 +3,20 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.23] — 2026-11-23
+
+Se poate instala direct peste 1.0.0 – 1.0.22.
+
+- **Livrarea prin curier în România costă 26 lei** (înainte 22 lei): tariful, banda de sus a siteului și textele
+  juridice generate automat. Dacă tariful fusese deja schimbat din Setări → Livrare, rămâne cel ales. Se poate
+  modifica oricând din Setări → Livrare. Ungaria (20 €) și celelalte țări (25 €) rămân neschimbate.
+- **Poza ramei după culoarea aleasă**: pe pagina produsului, la ramele cu mai multe culori, alegerea culorii schimbă
+  imaginea mare și miniaturile cu pozele acelei culori; fiecare culoare are în dreptul ei o mică poză. Coșul și
+  lista de rame arată tot poza culorii.
+- **În panou** (Catalog → Produse → rama → Poze): la fiecare poză se alege „Culoarea” (sau „Toate culorile”), iar la
+  încărcare „Pentru culoarea”. O culoare fără poze proprii arată pozele „Toate culorile”. „Copiază rama” păstrează
+  legăturile pozelor cu culorile.
+
 ## [1.0.22] — 2026-11-21
 
 Se poate instala direct peste 1.0.0 – 1.0.21. Verificarea cerințelor legale pentru magazinul online

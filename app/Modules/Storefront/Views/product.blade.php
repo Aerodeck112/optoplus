@@ -2,7 +2,7 @@
 @section('title', $product->seo_title ?: $product->name)
 @section('description', $product->seo_description ?: \App\Core\Support\Html::plain($product->short_description ?: ($product->brand?->name.' — ramă de ochelari de vedere'.($spec?->sizeNotation() ? ', mărime '.$spec->sizeNotation() : '').'. Comand-o simplă sau cu lentile produse în laboratorul Optoplus.'), 155))
 @section('og_type', 'product')
-@if ($img = $product->images->first()?->media)@section('og_image', url($img->bestUrl(1200)))@endif
+@if ($img = $product->imageFor($default['model']->id ?? null)?->media)@section('og_image', url($img->bestUrl(1200)))@endif
 @if ($product->noindex)@section('robots', 'noindex, follow')@endif
 @section('content')
 @php($price = $default['price'] ?? null)
@@ -17,21 +17,23 @@
     <x-site.breadcrumbs :items="array_filter(['Ochelari și rame' => '/rame/', $product->brand?->name => $product->brand?->url(), $product->name => null])" />
     <div class="product">
         <div class="product__media">
-            <div class="gallery" data-module="gallery">
-                @php($first = $product->images->first())
+            {{-- 1.0.23: la alegerea culorii se văd pozele ei (variantă); o culoare fără poze proprii arată pozele comune. --}}
+            @php($defaultId = $default['model']->id ?? null)
+            @php($gallery = $product->galleryFor($defaultId)->filter(fn ($i) => $i->media)->values())
+            @php($byColor = $variants->count() > 1 && $gallery->contains(fn ($i) => $i->variant_id !== null))
+            <div class="gallery" data-module="gallery" @if($byColor) data-by-color data-default-variant="{{ $defaultId }}" @endif>
+                @php($first = $gallery->first())
                 <div class="gallery__main" data-gallery-main>
                     <x-site.picture :media="$first?->media" :alt="$product->name" :eager="true" sizes="(min-width: 1000px) 640px, 100vw" />
                 </div>
-                @if ($product->images->count() > 1)
+                @if ($gallery->count() > 1)
                     <div class="gallery__thumbs" role="list" aria-label="Alte imagini">
-                        @foreach ($product->images as $i => $image)
-                            @if ($image->media)
-                                <button type="button" role="listitem" data-gallery-thumb aria-current="{{ $i === 0 ? 'true' : 'false' }}"
-                                        data-src="{{ $image->media->bestUrl(960) }}" data-srcset="{{ $image->media->srcset() }}" data-alt="{{ $product->name }} — imaginea {{ $i + 1 }}">
-                                    <img src="{{ $image->media->bestUrl(320) }}" alt="" width="76" height="64" loading="lazy">
-                                    <span class="sr-only">Arată imaginea {{ $i + 1 }}</span>
-                                </button>
-                            @endif
+                        @foreach ($gallery as $i => $image)
+                            <button type="button" role="listitem" data-gallery-thumb data-variant="{{ $image->variant_id }}" aria-current="{{ $i === 0 ? 'true' : 'false' }}"
+                                    data-src="{{ $image->media->bestUrl(960) }}" data-srcset="{{ $image->media->srcset() }}" data-alt="{{ $product->name }} — imaginea {{ $i + 1 }}">
+                                <img src="{{ $image->media->bestUrl(320) }}" alt="" width="76" height="64" loading="lazy">
+                                <span class="sr-only">Arată imaginea {{ $i + 1 }}</span>
+                            </button>
                         @endforeach
                     </div>
                 @endif
@@ -55,7 +57,8 @@
                         <fieldset class="variants">
                             <legend>Culoare</legend>
                             @foreach ($variants as $v)
-                                <label><input type="radio" name="varianta" value="{{ $v['model']->id }}" @checked($loop->first) required>{{ $v['model']->name ?: $v['model']->sku }} · <x-site.price :amount="$v['price']" /></label>
+                                @php($swatch = $byColor ? $product->imageFor($v['model']->id)?->media : null)
+                                <label @if($swatch) class="variants__photo" @endif><input type="radio" name="varianta" value="{{ $v['model']->id }}" @checked($loop->first) required>@if($swatch)<img src="{{ $swatch->bestUrl(320) }}" alt="" width="44" height="30" loading="lazy">@endif{{ $v['model']->name ?: $v['model']->sku }} · <x-site.price :amount="$v['price']" /></label>
                             @endforeach
                         </fieldset>
                     @else

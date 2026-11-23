@@ -29,7 +29,7 @@ Legendă: ✅ făcut în aplicație · 🟡 făcut, dar trebuie completat / publ
 
 ### Prețuri (Legea 363/2007, OG 21/1992, Ordinul ANPC 72/2022 privind reducerile)
 - ✅ Prețul final afișat, cu mențiunea TVA (neplătitor / plătitor, din Setări → Firma).
-- ✅ Costul livrării afișat înainte de comandă (RO 22 lei, HU 20 €, restul 25 €).
+- ✅ Costul livrării afișat înainte de comandă (RO 26 lei, HU 20 €, restul 25 €).
 - ✅ Prețurile în euro / forinți sunt calculate la cursul BNR, cu mențiune în termeni (ciornă).
 - 👤 **Dacă afișați reduceri** („preț vechi tăiat”): prețul de referință trebuie să fie cel mai mic preț din ultimele
   30 de zile (Directiva Omnibus, art. 6a din Directiva 98/6/CE, transpusă). Promoția Optofarm 210 → 99 lei trebuie

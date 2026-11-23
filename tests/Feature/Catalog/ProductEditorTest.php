@@ -89,6 +89,52 @@ class ProductEditorTest extends TestCase
         $this->assertSame(0, ProductVariant::whereIn('sku', $copy->variants()->pluck('sku'))->where('product_id', $product->id)->count(), 'coduri SKU noi');
     }
 
+    public function test_photos_linked_to_a_colour_are_shown_when_that_colour_is_chosen(): void
+    {
+        // 1.0.23: poza legată de o culoare apare pe site când clientul alege culoarea (și în coș)
+        $this->actingAsRole(Roles::MANAGER);
+        $black = $this->frame(30000);
+        $product = $black->product;
+        $black->update(['name' => 'Negru']);
+        $this->post('/panou/catalog/produse/'.$product->id.'/varianta-noua', ['nume' => 'Havana', 'pret' => '300'])->assertSessionHasNoErrors();
+        $havana = $product->variants()->reorder()->latest('id')->firstOrFail();
+
+        $this->post('/panou/catalog/produse/'.$product->id.'/poze', ['poze' => [UploadedFile::fake()->image('comun.jpg', 800, 600)]])->assertSessionHasNoErrors();
+        $this->post('/panou/catalog/produse/'.$product->id.'/poze', ['poze' => [UploadedFile::fake()->image('havana.jpg', 800, 600)], 'varianta' => $havana->id])->assertSessionHasNoErrors();
+        $this->post('/panou/catalog/produse/'.$product->id.'/poze', ['poze' => [UploadedFile::fake()->image('negru.jpg', 800, 600)]])->assertSessionHasNoErrors();
+        [$common, $havanaImg, $blackImg] = ProductImage::with('media')->where('product_id', $product->id)->orderBy('sort')->get()->all();
+        $this->assertSame($havana->id, $havanaImg->variant_id);
+
+        // legarea unei poze existente de o culoare, din pagina ramei
+        $this->get('/panou/catalog/produse/'.$product->id)->assertOk()->assertSee('Toate culorile')->assertSee('Pentru culoarea');
+        $this->post('/panou/catalog/produse/'.$product->id.'/poze/'.$blackImg->id, ['actiune' => 'culoare', 'varianta' => $black->id])->assertSessionHasNoErrors();
+        $this->assertSame($black->id, $blackImg->fresh()->variant_id);
+        $other = $this->frame(10000);
+        $this->post('/panou/catalog/produse/'.$product->id.'/poze/'.$blackImg->id, ['actiune' => 'culoare', 'varianta' => $other->id])->assertSessionHasErrors('varianta');
+
+        $product->refresh();
+        $this->assertSame($havanaImg->id, $product->imageFor($havana->id)->id);
+        $this->assertSame($blackImg->id, $product->imageFor($black->id)->id);
+        $this->assertSame([$blackImg->id, $common->id, $havanaImg->id], $product->galleryFor($black->id)->pluck('id')->all());
+
+        $html = $this->get($product->url())->assertOk()->assertSee('data-by-color', false)->getContent();
+        $this->assertStringContainsString('data-variant="'.$havana->id.'"', $html);
+        $this->assertStringContainsString('class="variants__photo"', $html);
+        // imaginea mare inițială este a primei culori (Negru)
+        preg_match('/data-gallery-main>\s*<img[^>]+src="([^"]+)"/', $html, $m);
+        $this->assertSame($blackImg->media->bestUrl(960), $m[1] ?? null);
+
+        // în coș: poza culorii alese
+        $this->post('/cos/adauga/', ['varianta' => $havana->id]);
+        $this->get('/cos/')->assertOk()->assertSee($havanaImg->media->bestUrl(960), false);
+
+        // copia păstrează legăturile pozelor cu culorile (pe variantele noi)
+        $this->post('/panou/catalog/produse/'.$product->id.'/copie')->assertRedirect();
+        $copy = Product::where('name', $product->name.' (copie)')->firstOrFail();
+        $copyHavana = $copy->variants()->where('name', 'Havana')->firstOrFail();
+        $this->assertSame(1, ProductImage::where('product_id', $copy->id)->where('variant_id', $copyHavana->id)->count());
+    }
+
     public function test_without_prices_right_the_new_frame_waits_for_a_price_and_cannot_be_published(): void
     {
         $this->actingAsRole(Roles::EDITOR_SITE);

@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  * folosi (nu presupunem gratuitate).
  *
  * 1.0.17: fiecare metodă are țările ei (România; Ungaria; celelalte țări), iar fiecare tarif are moneda lui
- * (ex. 22 lei în România, 20 € în Ungaria, 25 € în rest). Tariful se convertește în valuta comenzii la cursul zilei;
+ * (ex. 26 lei în România, 20 € în Ungaria, 25 € în rest). Tariful se convertește în valuta comenzii la cursul zilei;
  * pragurile de valoare se compară în moneda tarifului.
  */
 class ShippingCalculator

@@ -51,9 +51,29 @@ class SettingsAndBtIpayTest extends TestCase
     {
         $courier = ShippingMethod::where('code', 'curier')->with('rules')->first();
         $this->assertTrue($courier->is_active);
-        $this->assertSame(2200, $courier->rules->first()->price);
+        $this->assertSame(2600, $courier->rules->first()->price); // 1.0.23: 26 lei în România
         $this->assertSame('OFA SRL', app(Settings::class)->get('company.name'));
         $this->assertSame(2100, app(Settings::class)->get('tax.vat_lenses_bp'));
+    }
+
+    public function test_courier_price_migration_moves_22_to_26_lei_but_keeps_a_custom_price(): void
+    {
+        $migration = require database_path('migrations/2026_11_23_000100_courier_price_romania_26_lei.php');
+        $courier = ShippingMethod::where('code', 'curier')->firstOrFail();
+        $s = app(Settings::class);
+
+        $s->set('shipping.courier_price', 2200);
+        $courier->rules()->delete();
+        $courier->rules()->create(['min_subtotal' => 0, 'price' => 2200, 'channel' => 'all']);
+        $s->set('site.topbar_text', 'Lentile produse în laboratorul nostru. Livrare prin curier în toată România: 22,00 lei.');
+        $migration->up();
+        $this->assertSame(2600, (int) $s->get('shipping.courier_price'));
+        $this->assertSame(2600, (int) $courier->rules()->value('price'));
+        $this->assertStringContainsString('26,00 lei', (string) $s->get('site.topbar_text'));
+
+        $s->set('shipping.courier_price', 2500); // ales de echipă
+        $migration->up();
+        $this->assertSame(2500, (int) $s->get('shipping.courier_price'));
     }
 
     public function test_non_vat_payer_charges_same_price_without_vat(): void
@@ -71,7 +91,7 @@ class SettingsAndBtIpayTest extends TestCase
     public function test_cash_on_delivery_and_courier_are_offered_at_checkout(): void
     {
         $this->post('/cos/adauga/', ['varianta' => $this->frame(30000)->id]);
-        $this->get('/comanda/')->assertOk()->assertSee('22,00')->assertSee('Ramburs la curier')->assertDontSee('Card online')->assertDontSee('Transfer bancar');
+        $this->get('/comanda/')->assertOk()->assertSee('26,00')->assertSee('Ramburs la curier')->assertDontSee('Card online')->assertDontSee('Transfer bancar');
     }
 
     public function test_settings_save_requires_permission_reauth_and_hides_secret(): void

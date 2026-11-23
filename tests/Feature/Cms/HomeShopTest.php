@@ -45,7 +45,7 @@ class HomeShopTest extends TestCase
         $this->assertSame(1, substr_count($html, '<h1'), 'o singură h1: titlul primului banner');
         $this->assertStringContainsString('<h1 class="banner__title">', $html);
         $this->assertStringContainsString('<h2 class="hero__title">Lentilele le facem în laboratorul nostru</h2>', $html);
-        $this->assertStringContainsString('22,00', (string) app(Settings::class)->get('site.topbar_text'));
+        $this->assertStringContainsString('26,00', (string) app(Settings::class)->get('site.topbar_text'));
     }
 
     public function test_page_edited_by_a_person_is_not_overwritten(): void
