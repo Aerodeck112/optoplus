@@ -144,6 +144,42 @@ class ProductEditorController extends Controller
         return redirect()->route('panou.catalog.product', $copy->id)->with('status', 'Copia a fost creată ca ciornă. Schimbați numele, culorile, codurile și pozele, apoi apăsați „Publică”.');
     }
 
+    /**
+     * 1.0.24: ștergerea definitivă a unei rame. Doar pentru produsele care nu sunt publicate (ciornă sau retrase) și
+     * care nu apar în nicio comandă (comenzile păstrează legătura cu rama; acelea rămân „retrase”). Se șterg
+     * variantele, legăturile cu pozele, filtrele și dimensiunile; fișierele pozelor rămân în biblioteca media. Dacă
+     * rama a fost publicată vreodată, adresa ei veche duce (301) la lista de rame.
+     */
+    public function destroy(Request $request, int $id)
+    {
+        $product = Product::with('variants')->findOrFail($id);
+        abort_if($product->isLens(), 404);
+        if ($product->status === Product::STATUS_PUBLISHED) {
+            return back()->with('warning', 'Produsul este publicat. Apăsați întâi „Retrage” (sau „Trece în ciornă”), apoi îl puteți șterge.');
+        }
+        $ids = $product->variants->pluck('id');
+        $orders = DB::table('order_items')->where(fn ($q) => $q->whereIn('variant_id', $ids)
+            ->orWhereIn('configuration_id', DB::table('configurations')->whereIn('frame_variant_id', $ids)->select('id')))
+            ->distinct()->count('order_id');
+        if ($orders > 0) {
+            return back()->with('warning', "Produsul nu se poate șterge: apare în {$orders} ".($orders === 1 ? 'comandă' : 'comenzi').'. Rămâne „retras”: nu apare pe site și nu se mai poate cumpăra, dar comenzile își păstrează legătura cu el.');
+        }
+        $name = $product->name;
+        $skus = $product->variants->pluck('sku')->all();
+        DB::transaction(function () use ($product, $request) {
+            if ($product->published_at !== null) {
+                \App\Modules\Cms\Models\Redirect::firstOrCreate(['source_path' => \App\Modules\Cms\Models\Redirect::normalizePath($product->url())], [
+                    'target' => '/rame/', 'status_code' => 301, 'origin' => 'manual', 'is_active' => true,
+                    'note' => 'Produs șters: '.mb_substr($product->name, 0, 200), 'created_by' => $request->user()->id,
+                ]);
+            }
+            $product->delete(); // variantele, pozele (legăturile), filtrele, dimensiunile și indexul de căutare: în cascadă
+        });
+        Audit::log('catalog.product_deleted', null, ['produs' => $id, 'nume' => $name, 'sku' => $skus]);
+
+        return redirect()->route('panou.catalog.products')->with('status', "Produsul „{$name}” a fost șters definitiv.");
+    }
+
     /** O variantă (culoare) nouă. Prețul doar cu dreptul „Prețuri”. */
     public function addVariant(Request $request, int $id)
     {

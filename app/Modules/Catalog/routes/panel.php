@@ -11,6 +11,8 @@ Route::prefix('catalog')->name('catalog.')->group(function () {
     Route::get('produse/{id}', [ProductController::class, 'edit'])->whereNumber('id')->middleware('permission:catalog.view')->name('product');
     Route::post('produse/{id}', [ProductController::class, 'update'])->whereNumber('id')->middleware('permission:catalog.edit')->name('product.update');
     Route::post('produse/{id}/stare', [ProductController::class, 'publish'])->whereNumber('id')->middleware('permission:catalog.publish')->name('product.status');
+    // 1.0.24: ștergerea definitivă (doar nepublicate și fără comenzi)
+    Route::post('produse/{id}/sterge', [\App\Modules\Catalog\Http\Controllers\Panel\ProductEditorController::class, 'destroy'])->whereNumber('id')->middleware('permission:catalog.publish')->name('product.delete');
     Route::post('produse/{id}/variante', [ProductController::class, 'variants'])->whereNumber('id')->middleware('permission:catalog.prices')->name('product.variants');
     Route::middleware('permission:catalog.edit')->group(function () {
         // 1.0.20: produse noi din panou, copiere, variante, poze

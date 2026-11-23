@@ -1,7 +1,7 @@
 @extends('layouts.panou')
 @section('title', 'Produse')
 @section('content')
-    <x-panou.page-head title="Produse" sub="Rame și accesorii. Lentilele produse în laborator se administrează în „Lentile”.">
+    <x-panou.page-head title="Produse" sub="Rame și accesorii. Lentilele produse în laborator se administrează în „Lentile”. Stări: publicat = pe site · ciornă = încă nepublicat · retras = scos de pe site, dar păstrat în panou (se poate republica sau, dacă nu are comenzi, șterge definitiv din pagina lui).">
         <x-slot:actions>@can('catalog.edit')<a class="btn btn--primary" href="{{ route('panou.catalog.product.create') }}"><x-panou.icon name="plus" />Ramă nouă</a>@endcan</x-slot:actions>
     </x-panou.page-head>
     <x-panou.panel :flush="true">

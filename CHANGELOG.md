@@ -3,6 +3,16 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.24] — 2026-11-23
+
+Se poate instala direct peste 1.0.0 – 1.0.23.
+
+- **„Șterge definitiv”** în pagina unui produs din panou (Catalog → Produse → Editează), pentru ramele care nu sunt
+  publicate (ciornă sau retrase) și nu apar în nicio comandă. Se șterg variantele, filtrele, dimensiunile și
+  legăturile cu pozele (fișierele rămân în biblioteca media). Dacă rama a fost publicată vreodată, adresa ei veche
+  duce automat la lista de rame. O ramă publicată trebuie întâi retrasă; o ramă cu comenzi rămâne „retrasă”.
+- În lista de produse este explicat ce înseamnă fiecare stare (publicat, ciornă, retras).
+
 ## [1.0.23] — 2026-11-23
 
 Se poate instala direct peste 1.0.0 – 1.0.22.

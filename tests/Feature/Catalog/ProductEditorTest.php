@@ -135,6 +135,43 @@ class ProductEditorTest extends TestCase
         $this->assertSame(1, ProductImage::where('product_id', $copy->id)->where('variant_id', $copyHavana->id)->count());
     }
 
+    public function test_unpublished_frame_without_orders_can_be_deleted_for_good(): void
+    {
+        // 1.0.24: „Șterge definitiv” — doar nepublicat și fără comenzi
+        $this->actingAsRole(Roles::MANAGER);
+        $frame = $this->frame(36000);
+        $product = $frame->product;
+        $product->update(['published_at' => now()]);
+        $this->post('/panou/catalog/produse/'.$product->id.'/poze', ['poze' => [UploadedFile::fake()->image('a.jpg', 800, 600)]]);
+        $mediaId = ProductImage::where('product_id', $product->id)->value('media_id');
+
+        $this->post('/panou/catalog/produse/'.$product->id.'/sterge')->assertSessionHas('warning');
+        $this->assertNotNull($product->fresh(), 'publicat: întâi se retrage');
+
+        $this->post('/panou/catalog/produse/'.$product->id.'/stare', ['stare' => 'archived']);
+        $this->get('/panou/catalog/produse/'.$product->id)->assertOk()->assertSee('Șterge definitiv');
+        $this->post('/panou/catalog/produse/'.$product->id.'/sterge')->assertRedirect(route('panou.catalog.products'));
+        $this->assertNull(Product::find($product->id));
+        $this->assertNull(ProductVariant::find($frame->id));
+        $this->assertSame(0, ProductImage::where('product_id', $product->id)->count());
+        $this->assertNotNull(Media::find($mediaId), 'fișierul rămâne în biblioteca media');
+        $this->assertSame('/rame/', \App\Modules\Cms\Models\Redirect::where('source_path', '/produs/'.$product->slug.'/')->value('target'));
+        $this->assertTrue(\App\Core\Audit\AuditLog::where('action', 'catalog.product_deleted')->exists());
+
+        // cu comenzi: nu se șterge
+        $ordered = $this->frame(20000);
+        $ordered->product->update(['status' => Product::STATUS_ARCHIVED]);
+        $order = \App\Modules\Orders\Models\Order::create(['number' => 'OP-2026-66666', 'uuid' => (string) \Illuminate\Support\Str::uuid(), 'email' => 'x@demo.optoplus.invalid',
+            'payment_method' => 'ramburs', 'subtotal' => 20000, 'total' => 20000, 'billing_address' => [], 'idempotency_key' => \Illuminate\Support\Str::random(40), 'pricing_version' => '1.0']);
+        \Illuminate\Support\Facades\DB::table('order_items')->insert(['order_id' => $order->id, 'variant_id' => $ordered->id, 'kind' => 'product', 'name' => 'Ramă', 'quantity' => 1, 'unit_price' => 20000, 'line_total' => 20000, 'vat_rate_bp' => 0, 'vat_amount' => 0, 'snapshot' => '{}', 'created_at' => now(), 'updated_at' => now()]);
+        $this->post('/panou/catalog/produse/'.$ordered->product_id.'/sterge')->assertSessionHas('warning');
+        $this->assertNotNull(Product::find($ordered->product_id));
+
+        // fără drept de publicare: interzis
+        $this->actingAsRole(Roles::SPECIALIST_OPTIC);
+        $this->post('/panou/catalog/produse/'.$ordered->product_id.'/sterge')->assertForbidden();
+    }
+
     public function test_without_prices_right_the_new_frame_waits_for_a_price_and_cannot_be_published(): void
     {
         $this->actingAsRole(Roles::EDITOR_SITE);

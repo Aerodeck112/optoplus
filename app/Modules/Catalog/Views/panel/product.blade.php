@@ -10,8 +10,11 @@
                 <form method="post" action="{{ route('panou.catalog.product.status', $product->id) }}" class="cluster">@csrf
                     @if ($product->status !== 'published')<button class="btn btn--primary" name="stare" value="published">Publică</button>@endif
                     @if ($product->status === 'published')<button class="btn" name="stare" value="draft">Trece în ciornă</button>@endif
-                    @if ($product->status !== 'archived')<button class="btn btn--danger" name="stare" value="archived">Retrage</button>@endif
+                    @if ($product->status !== 'archived')<button class="btn btn--danger" name="stare" value="archived" title="Produsul dispare de pe site, dar rămâne în panou">Retrage</button>@endif
                 </form>
+                @if ($product->status !== 'published')
+                    <form method="post" action="{{ route('panou.catalog.product.delete', $product->id) }}" data-confirm="Ștergeți definitiv „{{ $product->name }}”? Se șterg variantele, legăturile cu pozele și filtrele. Nu se poate anula.">@csrf<button class="btn btn--danger" type="submit">Șterge definitiv</button></form>
+                @endif
             @endcan
         </x-slot:actions>
     </x-panou.page-head>
