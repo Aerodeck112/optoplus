@@ -121,7 +121,7 @@ class ProductEditorTest extends TestCase
         $this->assertStringContainsString('data-variant="'.$havana->id.'"', $html);
         $this->assertStringContainsString('class="variants__photo"', $html);
         // imaginea mare inițială este a primei culori (Negru)
-        preg_match('/data-gallery-main>\s*<img[^>]+src="([^"]+)"/', $html, $m);
+        preg_match('/data-gallery-main[^>]*>\s*<img[^>]+src="([^"]+)"/', $html, $m);
         $this->assertSame($blackImg->media->bestUrl(960), $m[1] ?? null);
 
         // în coș: poza culorii alese
@@ -170,6 +170,36 @@ class ProductEditorTest extends TestCase
         // fără drept de publicare: interzis
         $this->actingAsRole(Roles::SPECIALIST_OPTIC);
         $this->post('/panou/catalog/produse/'.$ordered->product_id.'/sterge')->assertForbidden();
+    }
+
+    public function test_single_colour_frame_shows_its_colour_and_photos_zoom_in_high_resolution(): void
+    {
+        // 1.0.25: culoarea ramei cu o singură variantă (nume + mostră) și mărirea pozei la rezoluție mare
+        $this->actingAsRole(Roles::MANAGER);
+        $frame = $this->frame(30000);
+        $product = $frame->product;
+        $this->post('/panou/catalog/produse/'.$product->id.'/poze', ['poze' => [UploadedFile::fake()->image('mare.jpg', 2400, 1800), UploadedFile::fake()->image('b.jpg', 800, 600)]]);
+
+        $this->get('/panou/catalog/produse/'.$product->id)->assertOk()->assertSee('Culoarea ramei')->assertSee('Arată mostra pe site');
+        $this->post('/panou/catalog/produse/'.$product->id.'/culori', ['c' => [$frame->id => ['nume' => 'Negru mat', 'hex' => '#zz0000', 'mostra' => '1']]])->assertSessionHasErrors();
+        $this->post('/panou/catalog/produse/'.$product->id.'/culori', ['c' => [$frame->id => ['nume' => 'Negru mat', 'hex' => '#1A1A1A', 'mostra' => '1']]])->assertSessionHasNoErrors();
+        $this->assertSame(['Negru mat', '#1a1a1a'], [$frame->fresh()->name, $frame->fresh()->color_hex]);
+        $this->assertTrue(\App\Core\Audit\AuditLog::where('action', 'catalog.colors_updated')->exists());
+
+        $html = $this->get($product->url())->assertOk()->assertSee('class="variant-one"', false)->assertSee('Negru mat')
+            ->assertSee('style="--c: #1a1a1a"', false)->assertSee('data-gallery-lightbox', false)->getContent();
+        $big = ProductImage::with('media')->where('product_id', $product->id)->orderBy('sort')->first()->media;
+        $this->assertSame($big->url(), $big->zoomUrl(), 'originalul (2400 px) e mai mare decât varianta de 1600 px');
+        $this->assertStringContainsString('data-zoom="'.$big->url().'"', $html);
+
+        // fără bifa „Arată mostra” → doar numele
+        $this->post('/panou/catalog/produse/'.$product->id.'/culori', ['c' => [$frame->id => ['nume' => 'Negru mat', 'hex' => '#1a1a1a']]]);
+        $this->assertNull($frame->fresh()->color_hex);
+        $this->get($product->url())->assertOk()->assertSee('Negru mat')->assertDontSee('class="color-dot"', false);
+
+        // varianta altui produs nu se poate modifica de aici
+        $other = $this->frame(10000);
+        $this->post('/panou/catalog/produse/'.$product->id.'/culori', ['c' => [$other->id => ['nume' => 'X']]])->assertNotFound();
     }
 
     public function test_without_prices_right_the_new_frame_waits_for_a_price_and_cannot_be_published(): void

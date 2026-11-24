@@ -50,12 +50,31 @@
             </x-panou.panel>
         </div>
         <div class="stack">
+            <x-panou.panel title="Culoarea ramei">
+                <p class="small muted">Numele culorii apare pe site lângă poze și în coș. Mostra de culoare (opțională) arată clientului nuanța reală, când în poză nu se vede bine.</p>
+                @can('catalog.edit')
+                <form method="post" action="{{ route('panou.catalog.product.colors', $product->id) }}" class="stack">@csrf
+                    @foreach ($product->variants as $v)
+                        <div class="color-row">
+                            <x-panou.field :name="'c['.$v->id.'][nume]'" :label="$product->variants->count() > 1 ? 'Culoarea ('.$v->sku.')' : 'Culoarea'" :value="$v->name" hint="ex. Negru mat, Havana, Auriu" />
+                            <div class="field"><label class="field__label" for="hex-{{ $v->id }}">Mostră</label>
+                                <input id="hex-{{ $v->id }}" type="color" name="c[{{ $v->id }}][hex]" value="{{ $v->color_hex ?? '#1f2933' }}"></div>
+                            <label class="check"><input type="checkbox" name="c[{{ $v->id }}][mostra]" value="1" @checked($v->color_hex)><span>Arată mostra pe site</span></label>
+                        </div>
+                    @endforeach
+                    @error('c.*.hex')<p class="field__error">{{ $message }}</p>@enderror
+                    <button class="btn" type="submit">Salvează culoarea</button>
+                </form>
+                @else
+                    <p>@foreach ($product->variants as $v){{ $v->name ?: '—' }}@unless($loop->last), @endunless @endforeach</p>
+                @endcan
+            </x-panou.panel>
             <x-panou.panel title="Variante, prețuri și stoc">
                 <form method="post" action="{{ route('panou.catalog.product.variants', $product->id) }}" class="stack">@csrf
                     @foreach ($product->variants as $v)
                         <fieldset class="stack" style="border:1px solid var(--line);border-radius:8px;padding:.6rem">
                             <legend class="small">{{ $v->sku }}@if($v->sku_generated) <x-panou.badge tone="warn">SKU generat</x-panou.badge>@endif</legend>
-                            <x-panou.field :name="'v['.$v->id.'][nume]'" label="Nume (ex. culoarea)" :value="$v->name" />
+                            @if ($v->name)<p class="small"><strong>{{ $v->name }}</strong> <span class="muted">(culoarea se schimbă mai jos, la „Culoarea ramei”)</span></p>@endif
                             <div class="cluster">
                                 <x-panou.field :name="'v['.$v->id.'][pret]'" label="Preț cu TVA (lei)" :value="number_format($v->price / 100, 2, ',', '')" required />
                                 <x-panou.field :name="'v['.$v->id.'][cost]'" label="Cost (lei)" :value="$v->cost !== null ? number_format($v->cost / 100, 2, ',', '') : ''" />

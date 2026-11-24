@@ -3,6 +3,19 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.25] — 2026-11-24
+
+Se poate instala direct peste 1.0.0 – 1.0.24.
+
+- **Culoarea ramei**, și la ramele cu o singură culoare: în panou (Catalog → Produse → rama → „Culoarea ramei”) se
+  scrie numele culorii (ex. „Negru mat”) și, opțional, se alege o **mostră de culoare**. Pe site apare în dreptul
+  butoanelor („Culoare ● Negru mat”) și în lista de detalii; la ramele cu mai multe culori, mostra apare lângă
+  fiecare culoare. Util când în poză nuanța nu se vede bine. Nu cere dreptul „Prețuri”.
+- **Mărirea pozelor la calitate mare**: la mărire se încarcă poza originală (până la 2560 px), nu varianta mică, iar
+  mărirea se oprește la mărimea reală a pozei, ca să nu apară pixeli. Pe telefon, poza mărită se mută cu degetul.
+- **Poza pe tot ecranul**: butonul cu lupa din colțul pozei o deschide mare, pe tot ecranul; o atingere o arată la
+  mărime reală (se derulează), Esc sau ✕ închide.
+
 ## [1.0.24] — 2026-11-23
 
 Se poate instala direct peste 1.0.0 – 1.0.23.

@@ -23,13 +23,24 @@
             @php($byColor = $variants->count() > 1 && $gallery->contains(fn ($i) => $i->variant_id !== null))
             <div class="gallery" data-module="gallery" @if($byColor) data-by-color data-default-variant="{{ $defaultId }}" @endif>
                 @php($first = $gallery->first())
-                <div class="gallery__main" data-gallery-main>
+                <div class="gallery__main" data-gallery-main @if($first?->media) data-zoom="{{ $first->media->zoomUrl() }}" data-zoom-w="{{ $first->media->width }}" @endif>
                     <x-site.picture :media="$first?->media" :alt="$product->name" :eager="true" sizes="(min-width: 1000px) 640px, 100vw" />
+                    @if ($first?->media)
+                        <button type="button" class="gallery__full" data-gallery-full aria-label="Mărește pe tot ecranul" title="Mărește pe tot ecranul"><x-site.icon name="search" /></button>
+                    @endif
                 </div>
+                @if ($first?->media)
+                    {{-- 1.0.25: poza la rezoluție mare, pe tot ecranul; un clic o arată la mărime reală (se derulează) --}}
+                    <dialog class="lightbox" data-gallery-lightbox aria-label="Imaginea mărită">
+                        <div class="lightbox__frame" data-lightbox-frame><img alt="" data-lightbox-img></div>
+                        <p class="lightbox__hint small">Atingeți imaginea pentru mărime reală · Esc pentru închidere</p>
+                        <form method="dialog"><button class="lightbox__close" aria-label="Închide">✕</button></form>
+                    </dialog>
+                @endif
                 @if ($gallery->count() > 1)
                     <div class="gallery__thumbs" role="list" aria-label="Alte imagini">
                         @foreach ($gallery as $i => $image)
-                            <button type="button" role="listitem" data-gallery-thumb data-variant="{{ $image->variant_id }}" aria-current="{{ $i === 0 ? 'true' : 'false' }}"
+                            <button type="button" role="listitem" data-gallery-thumb data-variant="{{ $image->variant_id }}" data-zoom="{{ $image->media->zoomUrl() }}" data-zoom-w="{{ $image->media->width }}" aria-current="{{ $i === 0 ? 'true' : 'false' }}"
                                     data-src="{{ $image->media->bestUrl(960) }}" data-srcset="{{ $image->media->srcset() }}" data-alt="{{ $product->name }} — imaginea {{ $i + 1 }}">
                                 <img src="{{ $image->media->bestUrl(320) }}" alt="" width="76" height="64" loading="lazy">
                                 <span class="sr-only">Arată imaginea {{ $i + 1 }}</span>
@@ -58,11 +69,15 @@
                             <legend>Culoare</legend>
                             @foreach ($variants as $v)
                                 @php($swatch = $byColor ? $product->imageFor($v['model']->id)?->media : null)
-                                <label @if($swatch) class="variants__photo" @endif><input type="radio" name="varianta" value="{{ $v['model']->id }}" @checked($loop->first) required>@if($swatch)<img src="{{ $swatch->bestUrl(320) }}" alt="" width="44" height="30" loading="lazy">@endif{{ $v['model']->name ?: $v['model']->sku }} · <x-site.price :amount="$v['price']" /></label>
+                                <label @if($swatch) class="variants__photo" @endif><input type="radio" name="varianta" value="{{ $v['model']->id }}" @checked($loop->first) required>@if($swatch)<img src="{{ $swatch->bestUrl(320) }}" alt="" width="44" height="30" loading="lazy">@endif<x-site.color-dot :hex="$v['model']->color_hex" />{{ $v['model']->name ?: $v['model']->sku }} · <x-site.price :amount="$v['price']" /></label>
                             @endforeach
                         </fieldset>
                     @else
                         <input type="hidden" name="varianta" value="{{ $default['model']->id ?? '' }}">
+                        {{-- 1.0.25: rama cu o singură culoare își arată culoarea (numele și mostra), ca în poză să nu fie ghicită --}}
+                        @if ($default && ($default['model']->name || $default['model']->color_hex))
+                            <p class="variant-one"><span class="variant-one__label">Culoare</span><x-site.color-dot :hex="$default['model']->color_hex" /><strong>{{ $default['model']->name }}</strong></p>
+                        @endif
                     @endif
                     <input type="hidden" name="intrare" value="cu_rama">
                     @if ($product->configurable_with_lenses)
@@ -73,6 +88,7 @@
                 </form>
                 <dl class="facts">
                     <dt>Disponibilitate</dt><dd>{{ $product->availabilityLabel() }}@if($product->lead_time_days_max) · pregătire {{ $product->lead_time_days_min }}–{{ $product->lead_time_days_max }} zile lucrătoare @endif</dd>
+                    @if ($default && $variants->count() === 1 && $default['model']->name)<dt>Culoare</dt><dd>{{ $default['model']->name }}</dd>@endif
                     @if ($default)<dt>Cod produs</dt><dd>{{ $default['model']->sku_generated ? '—' : $default['model']->sku }}</dd>@endif
                     @foreach ($attrs as $a)<dt>{{ $a['label'] }}</dt><dd>{{ implode(', ', $a['values']) }}</dd>@endforeach
                     @if ($spec?->sizeNotation())<dt>Mărime</dt><dd>{{ $spec->sizeNotation() }}@if($spec->size_label) ({{ $spec->size_label }})@endif</dd>@endif

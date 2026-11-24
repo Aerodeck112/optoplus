@@ -74,6 +74,21 @@ class Media extends Model
         return $variants ? end($variants) : $this->url();
     }
 
+    /**
+     * 1.0.25: imaginea pentru mărire (zoom): fișierul original, dacă e mai mare decât cea mai mare variantă WebP
+     * (pozele de produs au variante până la 1600 px, originalele ajung la 2560 px); altfel cea mai mare variantă.
+     */
+    public function zoomUrl(): string
+    {
+        $variants = $this->webpVariants();
+        $largest = $variants ? (int) array_key_last($variants) : 0;
+        if ($this->isImage() && $this->mime !== 'image/gif' && (int) $this->width > $largest) {
+            return $this->url();
+        }
+
+        return $variants ? end($variants) : $this->url();
+    }
+
     public function isImage(): bool
     {
         return str_starts_with($this->mime, 'image/');

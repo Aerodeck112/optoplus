@@ -180,6 +180,35 @@ class ProductEditorController extends Controller
         return redirect()->route('panou.catalog.products')->with('status', "Produsul „{$name}” a fost șters definitiv.");
     }
 
+    /**
+     * 1.0.25: culoarea fiecărei variante: numele (ex. „Negru mat”) și, opțional, o mostră de culoare afișată pe site
+     * lângă nume — utilă când în poză culoarea nu se vede bine. Fără dreptul „Prețuri”.
+     */
+    public function colors(Request $request, int $id)
+    {
+        $product = Product::with('variants')->findOrFail($id);
+        $data = $request->validate([
+            'c' => ['required', 'array'], 'c.*.nume' => ['nullable', 'string', 'max:160'],
+            'c.*.hex' => ['nullable', 'regex:/^#[0-9a-fA-F]{6}$/'], 'c.*.mostra' => ['nullable', 'boolean'],
+        ], ['c.*.hex.regex' => 'Culoarea aleasă nu este validă.']);
+        $changes = [];
+        foreach ($data['c'] as $variantId => $row) {
+            $variant = $product->variants->firstWhere('id', (int) $variantId) ?? abort(404);
+            $new = ['name' => trim((string) ($row['nume'] ?? '')) ?: null,
+                'color_hex' => ! empty($row['mostra']) && ! empty($row['hex']) ? strtolower($row['hex']) : null];
+            if ($variant->name !== $new['name'] || $variant->color_hex !== $new['color_hex']) {
+                $variant->update($new);
+                $changes[] = ['sku' => $variant->sku] + $new;
+            }
+        }
+        if ($changes) {
+            $product->touch(); // golește cache-ul paginilor
+            Audit::log('catalog.colors_updated', $product, ['modificari' => $changes]);
+        }
+
+        return back()->with('status', $changes ? 'Culoarea a fost salvată.' : 'Nicio modificare.');
+    }
+
     /** O variantă (culoare) nouă. Prețul doar cu dreptul „Prețuri”. */
     public function addVariant(Request $request, int $id)
     {
