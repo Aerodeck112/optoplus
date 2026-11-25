@@ -37,6 +37,28 @@ class SettingsController extends Controller
         ]);
     }
 
+    /** 1.0.27: cheia Stripe pusă în câmpul greșit sau incompletă → mesaj clar (fără a afișa cheia). */
+    private function stripeKeyProblem(string $key, string $value): ?string
+    {
+        if ($key === 'payments.stripe.secret_key') {
+            return match (true) {
+                (bool) preg_match('/^(sk|rk)_(test|live)_[A-Za-z0-9]{10,}$/', $value) => null,
+                str_starts_with($value, 'pk_') => 'Ați lipit cheia publică (Publishable key, pk_…). Aici trebuie cheia secretă: sk_live_… sau cheia restricționată rk_live_….',
+                str_starts_with($value, 'whsec_') => 'Acesta este secretul webhookului (whsec_…): puneți-l în câmpul „Secretul de semnare al webhookului”, iar aici cheia sk_live_… sau rk_live_….',
+                default => 'Cheia Stripe nu pare completă: trebuie să înceapă cu sk_live_, rk_live_ (sau sk_test_ / rk_test_ pentru teste) și să fie copiată întreagă.',
+            };
+        }
+        if ($key === 'payments.stripe.webhook_secret') {
+            return match (true) {
+                (bool) preg_match('/^whsec_[A-Za-z0-9]{10,}$/', $value) => null,
+                (bool) preg_match('/^(sk|rk|pk)_/', $value) => 'Aceasta este o cheie API, nu secretul webhookului. Secretul webhookului începe cu whsec_ (Stripe → Developers → Webhooks → destinația voastră → „Signing secret”).',
+                default => 'Secretul webhookului trebuie să înceapă cu whsec_ și să fie copiat întreg.',
+            };
+        }
+
+        return null;
+    }
+
     /** Starea fluxurilor Google Merchant, pentru tabul din Setări. */
     private function merchantReport(): array
     {
@@ -77,6 +99,15 @@ class SettingsController extends Controller
                 $input = $code;
             }
             if ($type === 'secret') {
+                if (is_string($input) && str_starts_with($key, 'payments.stripe.')) {
+                    // 1.0.27: cheile Stripe nu conțin spații; la copiere vin uneori cu spații sau rânduri noi
+                    $input = preg_replace('/\s+/u', '', $input);
+                    if ($input !== '' && ($problem = $this->stripeKeyProblem($key, $input))) {
+                        $errors[$key] = $problem;
+
+                        continue;
+                    }
+                }
                 if (is_string($input) && $input !== '') {
                     $settings->setSecret($key, $input);
                     $changed[] = $key;

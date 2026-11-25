@@ -50,21 +50,32 @@ class StripeGateway implements PaymentGateway
 
     public function unavailableReason(): ?string
     {
-        $key = (string) $this->settings->secret('payments.stripe.secret_key');
+        $key = $this->secretKey();
         if ($key === '' || ! preg_match('/^(sk|rk)_(test|live)_[A-Za-z0-9]+$/', $key)) {
-            return 'Completați cheia secretă Stripe (începe cu sk_live_ sau sk_test_) în Setări → Plăți.';
+            return 'Completați cheia secretă Stripe (sk_live_… sau cheia restricționată rk_live_…; pentru teste sk_test_…) în Setări → Plăți.';
         }
-        if (! str_starts_with((string) $this->settings->secret('payments.stripe.webhook_secret'), 'whsec_')) {
+        if (! str_starts_with($this->webhookSecret(), 'whsec_')) {
             return 'Completați secretul de semnare al webhookului Stripe (începe cu whsec_) în Setări → Plăți.';
         }
 
         return null;
     }
 
+    /** 1.0.27: cheile se citesc fără spații / rânduri noi copiate odată cu ele. */
+    private function secretKey(): string
+    {
+        return (string) preg_replace('/\s+/u', '', (string) $this->settings->secret('payments.stripe.secret_key'));
+    }
+
+    private function webhookSecret(): string
+    {
+        return (string) preg_replace('/\s+/u', '', (string) $this->settings->secret('payments.stripe.webhook_secret'));
+    }
+
     /** Mod test sau live, după cheia salvată. */
     public function mode(): ?string
     {
-        $key = (string) $this->settings->secret('payments.stripe.secret_key');
+        $key = $this->secretKey();
 
         return preg_match('/^(?:sk|rk)_(test|live)_/', $key, $m) ? $m[1] : null;
     }
@@ -79,7 +90,7 @@ class StripeGateway implements PaymentGateway
 
     private function http(?string $idempotencyKey = null): PendingRequest
     {
-        $http = Http::withToken((string) $this->settings->secret('payments.stripe.secret_key'))
+        $http = Http::withToken($this->secretKey())
             ->asForm()->acceptJson()->timeout(25)->connectTimeout(10);
 
         return $idempotencyKey ? $http->withHeaders(['Idempotency-Key' => $idempotencyKey]) : $http;
@@ -153,7 +164,7 @@ class StripeGateway implements PaymentGateway
     public function parseNotification(Request $request): Notification
     {
         $payload = (string) $request->getContent();
-        $valid = self::verifySignature($payload, (string) $request->header('Stripe-Signature'), (string) $this->settings->secret('payments.stripe.webhook_secret'));
+        $valid = self::verifySignature($payload, (string) $request->header('Stripe-Signature'), $this->webhookSecret());
         $event = json_decode($payload, true);
         $eventId = is_array($event) && is_string($event['id'] ?? null) ? 'stripe:'.$event['id'] : 'stripe:invalid:'.hash('sha256', $payload);
         $type = is_array($event) ? (string) ($event['type'] ?? '') : '';
@@ -259,7 +270,7 @@ class StripeGateway implements PaymentGateway
     /** Verifică cheia secretă (citirea soldului contului; nu creează nimic). */
     public function testConnection(): array
     {
-        $key = (string) $this->settings->secret('payments.stripe.secret_key');
+        $key = $this->secretKey();
         if (! preg_match('/^(sk|rk)_(test|live)_/', $key)) {
             return ['ok' => false, 'message' => 'Completați întâi cheia secretă Stripe.'];
         }
@@ -270,7 +281,7 @@ class StripeGateway implements PaymentGateway
         if (isset($res['_error'])) {
             return ['ok' => false, 'message' => 'Stripe a refuzat cheia: '.mb_substr((string) $res['_error'], 0, 160)];
         }
-        $webhook = str_starts_with((string) $this->settings->secret('payments.stripe.webhook_secret'), 'whsec_') ? '' : ' Mai completați secretul webhookului (whsec_…).';
+        $webhook = str_starts_with($this->webhookSecret(), 'whsec_') ? '' : ' Mai completați secretul webhookului (whsec_…).';
 
         return ['ok' => true, 'message' => 'Conexiunea la Stripe funcționează (mod '.($this->mode() === 'live' ? 'live — plăți reale' : 'test').').'.$webhook];
     }

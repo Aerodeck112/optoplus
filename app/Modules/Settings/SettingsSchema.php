@@ -73,7 +73,7 @@ final class SettingsSchema
                     ],
                     'Card online pentru comenzile în euro și forinți — Stripe' => [
                         'payments.stripe.enabled' => ['Plata prin Stripe este activă', 'bool'],
-                        'payments.stripe.secret_key' => ['Cheia secretă (Secret key: sk_live_… sau, pentru teste, sk_test_…)', 'secret'],
+                        'payments.stripe.secret_key' => ['Cheia secretă (Secret key sk_live_… sau cheia restricționată rk_live_…; pentru teste sk_test_…)', 'secret'],
                         'payments.stripe.webhook_secret' => ['Secretul de semnare al webhookului (Signing secret: whsec_…)', 'secret'],
                         'payments.stripe.currencies' => ['Valutele plătite prin Stripe (ex. EUR, HUF)', 'text'],
                     ],
