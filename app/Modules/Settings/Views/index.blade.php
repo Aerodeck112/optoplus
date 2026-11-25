@@ -46,6 +46,15 @@
                 @if ($section === 'email' && $mailStatus)
                     <div class="alert alert--{{ $mailStatus[0] }}">{{ $mailStatus[1] }}</div>
                 @endif
+                @if ($section === 'google' && $title === 'Conectare')
+                    @if (! empty($values['site.prelaunch']))<div class="alert alert--warn">Siteul este în „mod lucru” (Setări → Lansare): Google nu poate vedea paginile produselor și nu poate verifica siteul. Conectați Merchant Center după lansare (sau opriți temporar modul lucru).</div>@endif
+                    <ol class="small muted">
+                        <li>Intrați pe <a href="https://merchants.google.com" rel="noopener" target="_blank">merchants.google.com</a> cu contul Google al firmei și creați contul Merchant Center (țara: România, siteul: {{ rtrim((string) config('optoplus.site.canonical_host'), '/') }}).</li>
+                        <li>La verificarea siteului alegeți „Adăugați o etichetă HTML” (HTML tag), copiați eticheta, lipiți-o mai jos și apăsați „Salvează”; apoi apăsați „Verificați” în Merchant Center.</li>
+                        <li>Bifați „Fluxul de produse … este activ”, salvați, apoi în Merchant Center: Produse → Adăugați produse → „Dintr-un fișier” → „Introduceți linkul fișierului” și lipiți linkul fluxului de mai jos (preluare zilnică). Pentru Ungaria și pentru celelalte țări adăugați câte un flux separat, cu țara și limba lui.</li>
+                        <li>În Merchant Center completați politica de retur (14 zile pentru ramele fără lentile) și verificați costurile de livrare; fluxul trimite deja costul livrării pentru fiecare produs.</li>
+                    </ol>
+                @endif
                 @if ($section === 'firma')
                     <div class="alert alert--info">Conform ANAF (interogare din {{ now()->format('d.m.Y') }}, serviciul public „PlatitorTvaRest”), OFA SRL nu figurează înregistrată în scopuri de TVA. Verificați cu contabilul: dacă firma nu este plătitoare de TVA, debifați „Firma este înregistrată în scopuri de TVA”; prețurile rămân aceleași, dar nu se mai afișează „din care TVA”.</div>
                 @endif
@@ -77,6 +86,31 @@
         @endforeach
         <div class="form-actions"><button class="btn btn--primary" type="submit">Salvează</button></div>
     </form>
+    @if ($section === 'google' && $merchant)
+        <x-panou.panel title="Fluxurile de produse" class="merchant-feeds">
+            <div class="table-wrap"><table class="table">
+                <thead><tr><th>Piața</th><th>Linkul pentru Merchant Center</th><th class="num">Produse trimise</th><th>Ultima citire</th></tr></thead>
+                <tbody>
+                @foreach ($merchant as $key => $m)
+                    <tr>
+                        <td><strong>{{ $m['label'] }}</strong><br><span class="small muted">{{ ['ro' => 'română', 'hu' => 'maghiară', 'en' => 'engleză'][$m['locale']] }} · {{ $m['currency'] }}</span></td>
+                        <td>@if ($m['reason'])<span class="small muted">{{ $m['reason'] }}</span>@else<code class="copy-me">{{ $m['url'] }}</code> <a class="small" href="{{ $m['url'] }}" target="_blank" rel="noopener">deschide</a>@endif</td>
+                        <td class="num">{{ $m['reason'] ? '—' : $m['items'] }}</td>
+                        <td class="small">@if ($m['last']){{ \Illuminate\Support\Carbon::parse($m['last']['at'])->timezone(config('app.timezone'))->format('d.m.Y H:i') }}{{ $m['last']['google'] ? ' (Google)' : '' }}@else<span class="muted">încă nu</span>@endif</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table></div>
+            @php($excluded = collect($merchant)->flatMap(fn ($m) => $m['excluded'])->unique(fn ($x) => $x['product_id'].$x['reason'])->take(50))
+            @if ($excluded->isNotEmpty())
+                <h3 class="h-reset" style="margin-top:1rem">Produse care nu se trimit ({{ $excluded->count() }})</h3>
+                <ul class="small">
+                    @foreach ($excluded as $x)<li><a href="{{ route('panou.catalog.product', $x['product_id']) }}">{{ $x['name'] }}</a> — {{ $x['reason'] }}</li>@endforeach
+                </ul>
+            @endif
+            <p class="small muted">Fluxul conține ramele și accesoriile publicate, câte un rând pe culoare, cu prețul calculat de site (inclusiv promoțiile active), poza la rezoluție mare, disponibilitatea și costul livrării. Lentilele (făcute după rețetă) nu se trimit. Se actualizează automat; Google îl citește la intervalul ales în Merchant Center.</p>
+        </x-panou.panel>
+    @endif
     @if ($section === 'plati')
         <div class="cluster" style="margin-top:1rem">
             <form method="post" action="{{ route('panou.settings.test-bt') }}">@csrf<button class="btn" type="submit">Testează conexiunea BT iPay</button></form>

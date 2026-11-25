@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PreLaunch
 {
-    private const OPEN = ['panou', 'panou/*', 'webhook/*', 'plati/*', 'up', 'build/*', 'media/*', 'images/*', 'robots.txt', 'favicon.ico'];
+    private const OPEN = ['panou', 'panou/*', 'webhook/*', 'plati/*', 'up', 'build/*', 'media/*', 'images/*', 'robots.txt', 'favicon.ico', 'feed/*'];
 
     public function __construct(private Settings $settings) {}
 

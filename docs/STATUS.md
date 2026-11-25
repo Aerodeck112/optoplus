@@ -54,6 +54,7 @@ Legendă: ✅ da · ⚠️ parțial / cu condiții · ❌ nu · 🔒 blocat de a
 | Garanția legală: notificarea armonizată UE (RO/EN/HU), caseta „Înainte să comandați”, butonul „Comandă cu obligație de plată” | ✅ 1.0.22 | ✅ | ❌ | — | Regulamentul (UE) 2025/1960, din 27.09.2026 |
 | Fără redirecționare după țară (doar propunere), SOL scos, date producător pe produs (GPSR) | ✅ 1.0.22 | ✅ | ❌ | — | ⚠️ datele producătorilor se completează la Catalog → Mărci; ⚠️ pictograma oficială SAL (ANPC) de primit |
 | Poza ramei după culoarea aleasă (pagina produsului, coș, catalog) + legarea pozelor de culori în panou | ✅ 1.0.23 | ✅ | ❌ | — | la ramele importate, pozele fără culoare sunt arătate la culorile fără poze proprii |
+| Google Merchant: verificarea siteului + fluxuri de produse RO (lei) / HU (forinți) / alte țări (euro), raport în panou | ✅ 1.0.26 | ✅ | ❌ | 🔒 contul Merchant Center al Optoplus | se activează din Setări → Google Merchant; Google verifică siteul doar după lansare (fără „mod lucru”) |
 | Texte juridice | ⚠️ ciorne (actualizate 1.0.22) | ✅ | ❌ | — | de verificat și publicat de Optoplus (Site → Pagini → Juridice) |
 | Emailuri comenzi | ✅ | ✅ | ❌ | 🔒 | serverul SMTP se configurează în `shared/.env` la instalare |
 | Asistent AI | ❌ | ❌ | ❌ | — | urmează |

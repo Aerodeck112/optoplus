@@ -64,6 +64,6 @@ class DetectRegion
         }
         $path = ltrim(Locales::split('/'.ltrim($request->getPathInfo(), '/'))[1], '/');
 
-        return ! preg_match('#^(panou|portal|webhook|plati|api|build|media|up|comanda|cont/(resetare|confirmare)|robots\.txt|sitemap)#', $path);
+        return ! preg_match('#^(panou|portal|webhook|plati|api|build|media|up|comanda|cont/(resetare|confirmare)|robots\.txt|sitemap|feed/)#', $path);
     }
 }

@@ -4,6 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+@if ($gsv = app(\App\Core\Settings\Settings::class)->get('merchant.verification'))<meta name="google-site-verification" content="{{ $gsv }}">@endif
 <title>Optoplus — noul magazin online este în lucru</title>
 <meta name="robots" content="noindex">
 <meta name="description" content="Noul magazin online Optoplus este în pregătire. Între timp ne găsiți la telefon și email.">

@@ -34,6 +34,7 @@
     <meta property="og:type" content="@yield('og_type', 'website')">
     @hasSection('og_image')<meta property="og:image" content="@yield('og_image')">@endif
     <meta name="theme-color" content="#053b5e">
+    @if ($gsv = app(\App\Core\Settings\Settings::class)->get('merchant.verification'))<meta name="google-site-verification" content="{{ $gsv }}">@endif
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
     @vite(['resources/css/site.css', 'resources/js/site.js'])

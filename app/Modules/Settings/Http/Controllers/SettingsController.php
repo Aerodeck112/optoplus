@@ -33,7 +33,27 @@ class SettingsController extends Controller
             'stripeMode' => $section === 'plati' ? app(\App\Modules\Payments\Gateways\StripeGateway::class)->mode() : null,
             'rates' => $section === 'valute' ? app(\App\Modules\Regions\Services\ExchangeRates::class) : null,
             'mailStatus' => $section === 'email' ? MailSettings::status($settings->all()) : null,
+            'merchant' => $section === 'google' ? $this->merchantReport() : null,
         ]);
+    }
+
+    /** Starea fluxurilor Google Merchant, pentru tabul din Setări. */
+    private function merchantReport(): array
+    {
+        $feed = app(\App\Modules\Merchant\Services\MerchantFeed::class);
+        $out = [];
+        foreach (\App\Modules\Merchant\Services\MerchantFeed::FEEDS as $key => $def) {
+            $reason = $feed->unavailableReason($key);
+            $data = $reason === null ? $feed->cachedBuild($key) : null;
+            $out[$key] = $def + [
+                'url' => \App\Modules\Merchant\Services\MerchantFeed::url($key), 'reason' => $reason,
+                'items' => $data ? count($data['items']) : 0,
+                'excluded' => $data ? collect($data['excluded'])->unique(fn ($x) => $x['product_id'].$x['reason'])->values()->all() : [],
+                'last' => \App\Modules\Merchant\Services\MerchantFeed::lastFetch($key),
+            ];
+        }
+
+        return $out;
     }
 
     public function save(Request $request, Settings $settings, ApplySettings $apply, string $section)
@@ -46,6 +66,16 @@ class SettingsController extends Controller
             [$label, $type] = $f;
             $required = ($f[2] ?? null) === 'required';
             $input = $request->input(str_replace('.', '__', $key));
+            if ($key === 'merchant.verification' && is_string($input) && trim($input) !== '') {
+                // se acceptă eticheta întreagă <meta name="google-site-verification" content="…"> sau doar codul
+                $code = preg_match('/content\s*=\s*["\']([^"\']+)["\']/i', $input, $m) ? $m[1] : trim($input);
+                if (! preg_match('/^[A-Za-z0-9_-]{10,120}$/', $code)) {
+                    $errors[$key] = 'Codul de verificare Google nu este valid: copiați eticheta HTML din Merchant Center.';
+
+                    continue;
+                }
+                $input = $code;
+            }
             if ($type === 'secret') {
                 if (is_string($input) && $input !== '') {
                     $settings->setSecret($key, $input);

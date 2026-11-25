@@ -3,6 +3,22 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.26] — 2026-11-25
+
+Se poate instala direct peste 1.0.0 – 1.0.25.
+
+- **Google Merchant** (Setări → Google Merchant): conectarea magazinului la Google Merchant Center, ca ramele să
+  apară în Google Shopping.
+  - **Verificarea siteului**: lipiți eticheta HTML din Merchant Center; siteul o pune automat în pagini.
+  - **Fluxurile de produse**, câte unul pe piață, citite zilnic de Google dintr-un link:
+    România (română, lei), Ungaria (maghiară, forinți) și celelalte țări (engleză, euro).
+    Conțin ramele și accesoriile publicate, câte un rând pe culoare (grupate pe ramă), cu prețul calculat de site
+    (inclusiv promoțiile active, ca preț redus), poza la rezoluție mare și pozele culorii, marca, codul,
+    disponibilitatea și costul livrării pentru fiecare țară. Lentilele nu se trimit.
+  - În tab: pașii de conectare, linkurile fluxurilor, câte produse se trimit, când le-a citit Google ultima dată
+    și lista produselor care nu se trimit, cu motivul (ex. fără poză).
+  - Fluxul este **oprit** până îl activați.
+
 ## [1.0.25] — 2026-11-24
 
 Se poate instala direct peste 1.0.0 – 1.0.24.

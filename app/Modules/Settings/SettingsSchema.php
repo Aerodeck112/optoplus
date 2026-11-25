@@ -129,6 +129,20 @@ final class SettingsSchema
                     ],
                 ],
             ],
+            'google' => [
+                'label' => 'Google Merchant', 'permission' => 'cms.settings',
+                'intro' => 'Produsele din magazin apar în Google Shopping (rezultatele cu poze și prețuri) prin Google Merchant Center. Siteul pregătește automat lista de produse (fluxul), pe care Google o citește zilnic dintr-un link; prețurile, pozele, disponibilitatea și costul livrării se actualizează singure.',
+                'groups' => [
+                    'Conectare' => [
+                        'merchant.enabled' => ['Fluxul de produse pentru Google Merchant este activ', 'bool'],
+                        'merchant.verification' => ['Codul de verificare a siteului (din Merchant Center: „Adăugați o etichetă HTML”; lipiți eticheta întreagă sau doar codul)', 'text'],
+                    ],
+                    'Ce se trimite la Google' => [
+                        'merchant.unconfirmed_stock' => ['Ramele fără stoc gestionat („disponibil la comandă”, „de confirmat”)', 'select', null, ['in_stock' => 'Apar ca disponibile (in stock)', 'exclude' => 'Nu se trimit la Google']],
+                        'merchant.google_category' => ['Categoria Google (opțional: ID-ul sau calea din taxonomia Google; gol = Google o alege singur)', 'text'],
+                    ],
+                ],
+            ],
             'valute' => [
                 'label' => 'Valute și țări', 'permission' => 'pricing.manage',
                 'intro' => 'Prețurile se păstrează în lei. Pe siteul în maghiară se afișează în forinți, pe cel în engleză în euro, calculate din lei la cursul de referință BNR (citit automat în fiecare zi lucrătoare) sau la cursul introdus aici. Fără curs, siteul rămâne în lei. La prima vizită, siteul propune limba țării vizitatorului (Ungaria → maghiară, alte țări → engleză, România → română); vizitatorul alege, iar regulile UE (geo-blocking) nu permit mutarea lui automată fără acord.',
