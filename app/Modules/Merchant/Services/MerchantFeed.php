@@ -165,9 +165,11 @@ class MerchantFeed
                     'google_product_category' => $googleCategory !== '' ? $googleCategory : null,
                     'shipping' => $this->shipping($feed, $quote->totalGross),
                 ];
-                if ($quote->discountTotal > 0 && $quote->subtotal > $quote->totalGross) {
-                    $item['price'] = $this->money($quote->subtotal, $def['currency']);
-                    $item['sale_price'] = $this->money($quote->totalGross, $def['currency']);
+                // 1.0.27: „preț redus” doar pentru reducerile datate, cu prețul anterior = cel mai mic din ultimele 30 de zile
+                $reduced = app(\App\Modules\Pricing\Services\ReducedPrice::class)->fromQuote($variant->id, $quote, $ctx);
+                if ($reduced) {
+                    $item['price'] = $this->money($reduced['was'], $def['currency']);
+                    $item['sale_price'] = $this->money($reduced['now'], $def['currency']);
                     $item['sale_price_effective_date'] = $this->saleDates($quote->appliedPromotionIds);
                 } else {
                     $item['price'] = $this->money($quote->totalGross, $def['currency']);

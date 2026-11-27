@@ -5,6 +5,12 @@ use App\Modules\Pricing\Http\Controllers\PromotionController as P;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('preturi')->name('pricing.')->group(function () {
+    // 1.0.27: gestionarea prețurilor (modificări în masă, reduceri rapide, istoric cu anulare)
+    Route::middleware('permission:catalog.prices')->group(function () {
+        Route::get('gestionare', [\App\Modules\Pricing\Http\Controllers\PriceToolController::class, 'index'])->name('tools');
+        Route::post('gestionare', [\App\Modules\Pricing\Http\Controllers\PriceToolController::class, 'apply'])->middleware('throttle:20,1')->name('tools.apply');
+        Route::post('gestionare/{id}/anuleaza', [\App\Modules\Pricing\Http\Controllers\PriceToolController::class, 'revert'])->whereNumber('id')->name('tools.revert');
+    });
     Route::middleware('permission:pricing.view')->group(function () {
         Route::get('promotii', [P::class, 'index'])->name('promotions.index');
         Route::get('promotii/{id}', [P::class, 'edit'])->whereNumber('id')->name('promotions.edit');

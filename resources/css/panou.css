@@ -1207,3 +1207,14 @@ body.auth {
 .color-row { display: grid; grid-template-columns: 1fr auto; gap: .3rem .75rem; align-items: end; padding-bottom: .5rem; border-bottom: 1px solid var(--line); }
 .color-row .check { grid-column: 1 / -1; }
 .color-row input[type="color"] { width: 3.2rem; height: 2.4rem; padding: 2px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+/* 1.0.27: recenzii */
+.review-stars { color: #e0a030; letter-spacing: 1px; margin-right: .3rem; }
+.review-table td { vertical-align: top; }
+/* 1.0.27: gestionarea prețurilor */
+.price-tools select[multiple] { min-height: 8rem; }
+.mode-pick { border: 0; padding: 0; margin: 0 0 .8rem; display: grid; gap: .4rem; }
+.grid-2-panels { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.mode-box { border: 1px solid var(--line); border-radius: 10px; padding: .8rem 1rem; }
+.mode-box h3 { margin: 0 0 .5rem; font-size: 1rem; }
+td.up { color: #a4421c; } td.down { color: #1f7a4d; }
+.row--warn td { background: #fff7e6; }

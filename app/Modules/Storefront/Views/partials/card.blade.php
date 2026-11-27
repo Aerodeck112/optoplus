@@ -10,6 +10,6 @@
         <a class="card__edit" href="{{ route('panou.catalog.product', $card['product']->id) }}" data-no-localize translate="no" lang="ro" title="Editează rama în panou">✎ Editează</a>
     @endif
     @if ($card['price'] !== null)
-        <span class="card__price">@if($card['variants'] > 1)<span class="price__from">de la</span> @endif<x-site.price :amount="$card['price']" /><span class="price__unit"> rama</span></span>
+        <span class="card__price">@if($card['variants'] > 1)<span class="price__from">de la</span> @endif @if (! empty($card['reduced']))<del class="price-was"><x-site.price :amount="$card['reduced']['was']" /></del> @endif<x-site.price :amount="$card['price']" /><span class="price__unit"> rama</span>@if (! empty($card['reduced']))<span class="sale-badge">−{{ $card['reduced']['percent'] }}%</span>@endif</span>
     @endif
 </article>

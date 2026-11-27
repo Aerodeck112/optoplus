@@ -36,6 +36,8 @@ class ProductController extends Controller
             'price' => $prices->displayPrice($v, $ctx),
         ]);
         $default = $variants->first();
+        // 1.0.27: prețul anterior (cel mai mic din ultimele 30 de zile) doar la reducerile care îl permit
+        $reduced = $default ? app(\App\Modules\Pricing\Services\ReducedPrice::class)->forVariant($default['model'], $ctx) : null;
 
         // „Cu lentile de la”: rama + cea mai ieftină lentilă vandabilă, calculat de motorul de preț.
         $withLenses = null;
@@ -48,6 +50,7 @@ class ProductController extends Controller
             'product' => $product,
             'variants' => $variants,
             'default' => $default,
+            'reduced' => $reduced,
             'withLenses' => $withLenses,
             'spec' => $product->frameSpec,
             'attrs' => collect(['gen' => 'Pentru', 'material' => 'Material', 'forma' => 'Formă', 'tip_rama' => 'Tip ramă', 'constructie' => 'Construcție'])

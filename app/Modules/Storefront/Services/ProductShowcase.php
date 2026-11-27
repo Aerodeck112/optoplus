@@ -31,7 +31,9 @@ class ProductShowcase
 
         return collect($products)->map(function (Product $p) use ($ctx) {
             $variant = $p->defaultVariant();
-            $price = $variant ? $this->prices->displayPrice($variant, $ctx) : null;
+            $quote = $variant ? $this->prices->quote([\App\Modules\Pricing\Support\PriceLine::product('p', $variant->id)], $ctx) : null;
+            $price = $quote?->totalGross;
+            $reduced = $quote ? app(\App\Modules\Pricing\Services\ReducedPrice::class)->fromQuote($variant->id, $quote, $ctx) : null;
             $image = $p->imageFor($variant?->id);
 
             return [
@@ -44,6 +46,7 @@ class ProductShowcase
                 'image' => $image?->media,
                 'variants' => $p->variants->count(),
                 'size' => $p->frameSpec?->sizeNotation(),
+                'reduced' => $reduced,
             ];
         });
     }

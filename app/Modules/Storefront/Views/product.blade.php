@@ -57,7 +57,11 @@
             @if ($product->brand)<p class="buy__brand"><a class="buy__brand-chip" href="{{ $product->brand->url() }}">{{ $product->brand->name }}</a>@if($product->brand->is_own_brand)<span class="buy__own">marcă proprie</span>@endif</p>@endif
             <h1>{{ $product->name }}</h1>
             <div class="buy__price">
-                @if ($price !== null)<x-site.price :amount="$price" /><small>prețul ramei, fără lentile</small>@endif
+                @if ($price !== null)
+                    @if (! empty($reduced))<del class="price-was"><x-site.price :amount="$reduced['was']" /></del>@endif
+                    <x-site.price :amount="$price" />@if (! empty($reduced))<span class="sale-badge">−{{ $reduced['percent'] }}%</span>@endif<small>prețul ramei, fără lentile</small>
+                    @if (! empty($reduced))<span class="price-note small muted">Prețul tăiat este cel mai mic preț din ultimele 30 de zile înainte de reducere.</span>@endif
+                @endif
             </div>
             @if ($withLenses)
                 <p class="split-note"><x-site.icon name="lens" /><span>Cu lentile produse în laboratorul nostru: de la <strong>{{ \App\Core\Support\Money::format($withLenses, true, app(\App\Modules\Regions\Services\Regions::class)->currency()) }}</strong> (rama + o pereche de lentile monofocale). Prețul final îl vedeți la fiecare pas al configurării.</span></p>
@@ -144,6 +148,8 @@
             </div>
         </section>
     @endif
+    @php($reviews = app(\App\Modules\Reviews\Services\Reviews::class)->summary($product->id))
+    @include('reviews::partials.section', ['reviewsProduct' => $product, 'reviewsTitle' => 'Recenzii'])
 </div>
 @php($ld = ['@context' => 'https://schema.org', '@type' => 'Product', 'name' => $product->name, 'url' => url($product->url()),
     'brand' => $product->brand ? ['@type' => 'Brand', 'name' => $product->brand->name] : null,
@@ -152,6 +158,9 @@
     'sku' => ($default && ! $default['model']->sku_generated) ? $default['model']->sku : null,
     'offers' => $variants->map(fn ($v) => ['@type' => 'Offer', 'price' => number_format($v['price'] / 100, 2, '.', ''), 'priceCurrency' => app(\App\Modules\Regions\Services\Regions::class)->currency(), 'sku' => $v['model']->sku_generated ? null : $v['model']->sku, 'url' => url($product->url()),
         'availability' => match ($product->availability_mode) { 'stoc_propriu' => 'https://schema.org/InStock', 'furnizor', 'la_comanda' => 'https://schema.org/BackOrder', 'indisponibil' => 'https://schema.org/OutOfStock', default => null }])->all()])
+{{-- 1.0.27: nota medie și recenziile publicate (doar dacă există) --}}
+@php($ld += \App\Modules\Reviews\Services\Reviews::jsonLd($reviews))
+
 @push('jsonld')
 <script type="application/ld+json" nonce="{{ app('csp-nonce') }}">{!! json_encode(array_filter($ld, fn ($v) => $v !== null && $v !== []), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
 <script type="application/ld+json" nonce="{{ app('csp-nonce') }}">{!! json_encode(['@context' => 'https://schema.org', '@type' => 'BreadcrumbList', 'itemListElement' => array_values(array_filter([

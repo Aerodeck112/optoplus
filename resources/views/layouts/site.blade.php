@@ -121,7 +121,7 @@
 </header>
 
 <main id="continut" tabindex="-1">
-    @if (session('status'))
+    @if (session('status') && ! session('review_sent'))
         <div class="wrap"><div class="notice notice--ok" role="status"><x-site.icon name="check" />{{ session('status') }}</div></div>
     @endif
     @yield('content')

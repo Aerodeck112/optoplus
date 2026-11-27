@@ -55,6 +55,8 @@ Legendă: ✅ da · ⚠️ parțial / cu condiții · ❌ nu · 🔒 blocat de a
 | Fără redirecționare după țară (doar propunere), SOL scos, date producător pe produs (GPSR) | ✅ 1.0.22 | ✅ | ❌ | — | ⚠️ datele producătorilor se completează la Catalog → Mărci; ⚠️ pictograma oficială SAL (ANPC) de primit |
 | Poza ramei după culoarea aleasă (pagina produsului, coș, catalog) + legarea pozelor de culori în panou | ✅ 1.0.23 | ✅ | ❌ | — | la ramele importate, pozele fără culoare sunt arătate la culorile fără poze proprii |
 | Google Merchant: verificarea siteului + fluxuri de produse RO (lei) / HU (forinți) / alte țări (euro), raport în panou | ✅ 1.0.26 | ✅ | ❌ | 🔒 contul Merchant Center al Optoplus | se activează din Setări → Google Merchant; Google verifică siteul doar după lansare (fără „mod lucru”) |
+| Recenzii fără cont (produs + prima pagină), moderare în panou, „cumpărare verificată” | ✅ 1.0.27 | ✅ | ❌ | — | ⚠️ politica de confidențialitate trebuie să menționeze recenziile (nume, email opțional) |
+| Gestionare prețuri: modificări în masă cu previzualizare și anulare, reduceri datate, istoric prețuri (Omnibus 30 de zile) | ✅ 1.0.27 | ✅ | ❌ | — | prețul tăiat apare doar după 30 de zile de istoric (de la instalarea 1.0.27) |
 | Texte juridice | ⚠️ ciorne (actualizate 1.0.22) | ✅ | ❌ | — | de verificat și publicat de Optoplus (Site → Pagini → Juridice) |
 | Emailuri comenzi | ✅ | ✅ | ❌ | 🔒 | serverul SMTP se configurează în `shared/.env` la instalare |
 | Asistent AI | ❌ | ❌ | ❌ | — | urmează |

@@ -3,6 +3,34 @@
 Formatul: o secțiune `## [versiune] — dată` pentru fiecare release. Textul secțiunii este inclus în pachetul de
 actualizare și afișat administratorului înainte de instalare.
 
+## [1.0.27] — 2026-11-27
+
+Se poate instala direct peste 1.0.0 – 1.0.26.
+
+- **Recenzii fără cont**, pe pagina fiecărei rame („Recenzii”) și pe prima pagină („Părerile clienților”, despre
+  magazin): nota cu stele, titlu, mesaj, nume și, opțional, emailul.
+  - Recenziile **se publică doar după verificare**, din panou: Clienți → **Recenzii** (Publică, Ascunde, Respinge cu
+    motiv, Răspunde public, Șterge). Primiți alertă pe email la fiecare recenzie nouă.
+  - „**Cumpărare verificată**” apare automat când emailul are o comandă cu acel produs.
+  - Pe site apare doar prenumele și inițiala numelui; emailul nu se afișează niciodată.
+  - Sub recenzii este explicat cum le verificăm (obligatoriu din 2022, Directiva Omnibus).
+  - Protecție anti-spam: câmp-capcană, limită de trimiteri, fără linkuri. Nota medie apare și pentru Google
+    (date structurate).
+- **Prețuri → Gestionare prețuri** (în meniul Catalog):
+  - **Schimbarea prețului de bază pentru mai multe rame deodată**: toate ramele, anumite mărci, categorii sau
+    produse (coduri ori linkuri), opțional doar într-un interval de preț. Puteți crește sau scădea cu un procent ori
+    cu o sumă în lei, sau seta un preț fix, cu rotunjire (ex. „terminat în 9 lei”: 349,00).
+  - Vedeți întâi lista cu prețul vechi și cel nou (și avertisment dacă un preț ar coborî sub cost), apoi aplicați.
+  - **Istoric cu „Anulează”**: orice modificare în masă se poate întoarce.
+  - **Reducere pe o perioadă** (ex. Black Friday): procent sau sumă, cu dată de început și de sfârșit, pentru aceeași
+    selecție. Prețul de bază rămâne neschimbat. Reducerea apare și în Promoții și cupoane.
+- **Prețul tăiat la reduceri, conform legii**: prețul anterior afișat este cel mai mic preț din ultimele 30 de zile
+  înainte de reducere. Siteul ține de acum istoricul prețurilor. Prețul tăiat și procentul apar doar la reducerile
+  cu dată de sfârșit și doar după ce istoricul acoperă 30 de zile; până atunci reducerea se aplică, dar se afișează
+  doar prețul nou. Fluxul Google Merchant urmează aceeași regulă.
+- Stripe: cheile copiate cu spații în plus funcționează, iar dacă o cheie e pusă în câmpul greșit (cheia publică
+  pk_… sau secretul webhookului) panoul spune clar ce lipsește. Cheia restricționată rk_live_… este acceptată.
+
 ## [1.0.26] — 2026-11-25
 
 Se poate instala direct peste 1.0.0 – 1.0.25.

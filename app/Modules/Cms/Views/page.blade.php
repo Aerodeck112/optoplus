@@ -23,4 +23,11 @@
         @includeIf('cms::blocks.'.$block['type'], ['d' => $block['data'], 'index' => $i, 'media' => $media, 'first' => $i === 0, 'breadcrumbs' => $breadcrumbs ?? []])
     @endforeach
     </div>
+    @if ($kind === 'home' && ! $preview)
+        {{-- 1.0.27: părerile clienților despre magazin, cu formular fără cont --}}
+        @php($reviews = app(\App\Modules\Reviews\Services\Reviews::class)->summary(null, 6))
+        <div class="section section--reviews"><div class="wrap">
+            @include('reviews::partials.section', ['reviewsProduct' => null, 'reviewsTitle' => 'Părerile clienților'])
+        </div></div>
+    @endif
 @endsection
